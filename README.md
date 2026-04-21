@@ -23,6 +23,8 @@ The main operational flow is:
 - `src/` - extracted object-level XPO files for review and editing assistance.
 - `tools/extract-xpo.ps1` - repeatable extraction script.
 - `docs/project-knowledge.md` - consolidated living knowledge base.
+- `docs/external-systems-context.md` - frontend/backend/SQL/Excel Add-in context.
+- `docs/roadmap-todo.md` - shared roadmap and TODO tracker.
 - `ax-xpo-agent-handoff-prompt.md` - original workflow instructions for future agents.
 
 ## Refreshing Extracted Source
@@ -37,7 +39,9 @@ The script currently extracts classes, tables, forms, enums, EDTs, menu items, t
 
 ## Where To Start
 
-Start with `docs/project-knowledge.md`, then inspect the relevant object files in `src/`. The most central objects are:
+Start with `docs/project-knowledge.md`, then inspect the relevant object files in `src/`. For planned work, use `docs/roadmap-todo.md`.
+
+The most central objects are:
 
 - `FIN_GroupEntities`
 - `FIN_GroupPeriod`
