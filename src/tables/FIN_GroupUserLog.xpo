@@ -1,0 +1,106 @@
+﻿  TABLE #FIN_GroupUserLog
+    Id 50048
+    PROPERTIES
+      Name                #FIN_GroupUserLog
+      Label               #User Log
+      PrimaryIndex        #UserNameIdx
+      ModifiedDateTime    #Yes
+      ModifiedBy          #Yes
+      CreatedDateTime     #Yes
+      CreatedBy           #Yes
+    ENDPROPERTIES
+    
+    FIELDS
+      FIELD #EventType
+        Id 50001
+        STRING
+        PROPERTIES
+          Name                #EventType
+          Label               #EventSubject
+          Table               #FIN_GroupUserLog
+          ExtendedDataType    
+            ARRAY 
+              #EventSubject
+              #
+            ENDARRAY
+          StringSize          #128
+        ENDPROPERTIES
+        
+      FIELD #EventMessage
+        Id 50002
+        STRING
+        PROPERTIES
+          Name                #EventMessage
+          Table               #FIN_GroupUserLog
+          ExtendedDataType    
+            ARRAY 
+              #EventMessage
+              #
+            ENDARRAY
+          StringSize          #255
+        ENDPROPERTIES
+        
+      FIELD #UserName
+        Id 50003
+        STRING
+        PROPERTIES
+          Name                #UserName
+          Table               #FIN_GroupUserLog
+          ExtendedDataType    
+            ARRAY 
+              #FIN_UserName
+              #
+            ENDARRAY
+          StringSize          #60
+        ENDPROPERTIES
+        
+      FIELD #EventData
+        Id 50004
+        STRING
+        PROPERTIES
+          Name                #EventData
+          Label               #Data
+          Table               #FIN_GroupUserLog
+          StringSize          #3000
+        ENDPROPERTIES
+        
+    ENDFIELDS
+    GROUPS
+    ENDGROUPS
+    
+    INDICES
+      #UserNameIdx
+      Id 50001
+      PROPERTIES
+        Name                #UserNameIdx
+        AllowDuplicates     #No
+      ENDPROPERTIES
+      
+      INDEXFIELDS
+        #UserName
+        #createdDateTime
+      ENDINDEXFIELDS
+      
+    ENDINDICES
+    REFERENCES
+      REFERENCE #FIN_GroupUsers
+        PROPERTIES
+          Name                #FIN_GroupUsers
+          Table               #FIN_GroupUsers
+        ENDPROPERTIES
+        
+        FIELDREFERENCES
+          REFERENCETYPE NORMAL
+          PROPERTIES
+            Field               #UserName
+            RelatedField        #UserName
+          ENDPROPERTIES
+          
+        ENDFIELDREFERENCES
+      ENDREFERENCE
+    ENDREFERENCES
+    
+    DELETEACTIONS
+    ENDDELETEACTIONS
+    
+  ENDTABLE

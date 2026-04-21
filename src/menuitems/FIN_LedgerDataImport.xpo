@@ -1,0 +1,10 @@
+﻿  MENUITEM #FIN_LedgerDataImport
+    Type: 1
+    PROPERTIES
+      Name                #FIN_LedgerDataImport
+      Label               #Data Import
+      HelpText            #Bulk data import
+      Object              #FIN_DataImport
+    ENDPROPERTIES
+    
+  ENDMENUITEM

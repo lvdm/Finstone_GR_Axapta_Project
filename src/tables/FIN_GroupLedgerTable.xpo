@@ -1,0 +1,1169 @@
+﻿  TABLE #FIN_GroupLedgerTable
+    Id 50020
+    PROPERTIES
+      Name                #FIN_GroupLedgerTable
+      Label               #Group Ledger Table
+      TitleField1         #AccountNum
+      TitleField2         #AccountName
+      TableContents       #Default data
+      PrimaryIndex        #EntityCode_AccountNumIdx
+      ModifiedDateTime    #Yes
+      ModifiedBy          #Yes
+      CreatedDateTime     #Yes
+      CreatedBy           #Yes
+    ENDPROPERTIES
+    
+    FIELDS
+      FIELD #EntityCode
+        Id 50001
+        STRING
+        PROPERTIES
+          Name                #EntityCode
+          Mandatory           #Yes
+          Table               #FIN_GroupLedgerTable
+          ExtendedDataType    
+            ARRAY 
+              #FIN_EntityCode
+              #
+            ENDARRAY
+        ENDPROPERTIES
+        
+      FIELD #AccountNum
+        Id 50002
+        STRING
+        PROPERTIES
+          Name                #AccountNum
+          Mandatory           #Yes
+          Table               #FIN_GroupLedgerTable
+          ExtendedDataType    
+            ARRAY 
+              #FIN_AccountNum
+              #
+            ENDARRAY
+          StringSize          #30
+        ENDPROPERTIES
+        
+      FIELD #AccountName
+        Id 50003
+        STRING
+        PROPERTIES
+          Name                #AccountName
+          Mandatory           #Yes
+          Table               #FIN_GroupLedgerTable
+          ExtendedDataType    
+            ARRAY 
+              #AccountName
+              #
+            ENDARRAY
+          StringSize          #60
+        ENDPROPERTIES
+        
+      FIELD #AccountPlType
+        Id 50004
+        ENUM
+        PROPERTIES
+          Name                #AccountPlType
+          Table               #FIN_GroupLedgerTable
+          EnumType            #LedgerAccountType
+        ENDPROPERTIES
+        
+      FIELD #AccountCategoryRef
+        Id 50005
+        INT
+        PROPERTIES
+          Name                #AccountCategoryRef
+          Table               #FIN_GroupLedgerTable
+          ExtendedDataType    
+            ARRAY 
+              #AccountCategoryRef
+              #
+            ENDARRAY
+        ENDPROPERTIES
+        
+      FIELD #Type
+        Id 50006
+        STRING
+        PROPERTIES
+          Name                #Type
+          Table               #FIN_GroupLedgerTable
+        ENDPROPERTIES
+        
+      FIELD #Level0
+        Id 50007
+        STRING
+        PROPERTIES
+          Name                #Level0
+          Label               #Level 0
+          Table               #FIN_GroupLedgerTable
+          ExtendedDataType    
+            ARRAY 
+              #Description
+              #
+            ENDARRAY
+          StringSize          #60
+        ENDPROPERTIES
+        
+      FIELD #Level0_Sort
+        Id 50008
+        INT
+        PROPERTIES
+          Name                #Level0_Sort
+          Label               #Level 0 Sort
+          Table               #FIN_GroupLedgerTable
+        ENDPROPERTIES
+        
+      FIELD #Level1
+        Id 50009
+        STRING
+        PROPERTIES
+          Name                #Level1
+          Label               #Level 1
+          Table               #FIN_GroupLedgerTable
+          ExtendedDataType    
+            ARRAY 
+              #Description
+              #
+            ENDARRAY
+          StringSize          #60
+        ENDPROPERTIES
+        
+      FIELD #Level1_Sort
+        Id 50010
+        INT
+        PROPERTIES
+          Name                #Level1_Sort
+          Label               #Level 1 Sort
+          Table               #FIN_GroupLedgerTable
+        ENDPROPERTIES
+        
+      FIELD #Level2
+        Id 50011
+        STRING
+        PROPERTIES
+          Name                #Level2
+          Label               #Level 2
+          Table               #FIN_GroupLedgerTable
+          ExtendedDataType    
+            ARRAY 
+              #Description
+              #
+            ENDARRAY
+          StringSize          #60
+        ENDPROPERTIES
+        
+      FIELD #Level2_Sort
+        Id 50012
+        INT
+        PROPERTIES
+          Name                #Level2_Sort
+          Label               #Level 2 Sort
+          Table               #FIN_GroupLedgerTable
+        ENDPROPERTIES
+        
+      FIELD #Level3
+        Id 50013
+        STRING
+        PROPERTIES
+          Name                #Level3
+          Label               #Level 3
+          Table               #FIN_GroupLedgerTable
+          ExtendedDataType    
+            ARRAY 
+              #Description
+              #
+            ENDARRAY
+          StringSize          #60
+        ENDPROPERTIES
+        
+      FIELD #Level3_Sort
+        Id 50014
+        INT
+        PROPERTIES
+          Name                #Level3_Sort
+          Label               #Level 3 Sort
+          Table               #FIN_GroupLedgerTable
+        ENDPROPERTIES
+        
+      FIELD #Level4
+        Id 50015
+        STRING
+        PROPERTIES
+          Name                #Level4
+          Label               #Level 4
+          Table               #FIN_GroupLedgerTable
+          ExtendedDataType    
+            ARRAY 
+              #Description
+              #
+            ENDARRAY
+          StringSize          #60
+        ENDPROPERTIES
+        
+      FIELD #Level4_Sort
+        Id 50016
+        INT
+        PROPERTIES
+          Name                #Level4_Sort
+          Label               #Level 4 Sort
+          Table               #FIN_GroupLedgerTable
+        ENDPROPERTIES
+        
+      FIELD #IsHeading
+        Id 50017
+        ENUM
+        PROPERTIES
+          Name                #IsHeading
+          Label               #Is Heading
+          Table               #FIN_GroupLedgerTable
+          EnumType            #NoYes
+        ENDPROPERTIES
+        
+      FIELD #IsTotal
+        Id 50018
+        ENUM
+        PROPERTIES
+          Name                #IsTotal
+          Label               #Is Total
+          Table               #FIN_GroupLedgerTable
+          EnumType            #NoYes
+        ENDPROPERTIES
+        
+      FIELD #ExchAdjType
+        Id 50019
+        ENUM
+        PROPERTIES
+          Name                #ExchAdjType
+          Table               #FIN_GroupLedgerTable
+          EnumType            #FIN_ExchAdjType
+        ENDPROPERTIES
+        
+      FIELD #Locked
+        Id 50020
+        ENUM
+        PROPERTIES
+          Name                #Locked
+          Table               #FIN_GroupLedgerTable
+          EnumType            #NoYes
+        ENDPROPERTIES
+        
+    ENDFIELDS
+    GROUPS
+    ENDGROUPS
+    
+    INDICES
+      #EntityCode_AccountNumIdx
+      Id 50001
+      PROPERTIES
+        Name                #EntityCode_AccountNumIdx
+        AllowDuplicates     #No
+      ENDPROPERTIES
+      
+      INDEXFIELDS
+        #AccountNum
+        #EntityCode
+      ENDINDEXFIELDS
+      
+    ENDINDICES
+    REFERENCES
+      REFERENCE #Entities
+        PROPERTIES
+          Name                #Entities
+          Table               #FIN_GroupEntities
+        ENDPROPERTIES
+        
+        FIELDREFERENCES
+          REFERENCETYPE NORMAL
+          PROPERTIES
+            Field               #EntityCode
+            RelatedField        #EntityCode
+          ENDPROPERTIES
+          
+        ENDFIELDREFERENCES
+      ENDREFERENCE
+    ENDREFERENCES
+    
+    DELETEACTIONS
+      #FIN_GroupLedgerData
+      PROPERTIES
+        Table               #FIN_GroupLedgerData
+        DeleteAction        #Restricted
+      ENDPROPERTIES
+      
+    ENDDELETEACTIONS
+    
+    METHODS
+      Version: 3
+      SOURCE #ImportAccountsFromExcel
+        #void ImportAccountsFromExcel(FIN_EntityCode _entityCode = "")
+        #{
+        #    SysExcelApplication             application;
+        #    SysExcelWorkbooks               workbooks;
+        #    SysExcelWorkbook                workbook;
+        #    SysExcelWorksheets              worksheets;
+        #    SysExcelWorksheet               worksheet;
+        #    SysExcelCells                   cells;
+        #    COMVariantType                  type;
+        #    System.DateTime                 ShlefDate;
+        #
+        #    FilenameOpen                    filename;
+        #    int                             sheetNum = 1;
+        #    FIN_EntityCode                  entityCode;
+        #    dialogField                     dialogFilename;
+        #    dialogField                     dialogSheetNum;
+        #    dialogField                     dialogEnityCode;
+        #    Dialog                          dialog;
+        #
+        #    #AviFiles
+        #    // Progress Bar
+        #    SysOperationProgress progress = new SysOperationProgress(1, NoYes::Yes);
+        #
+        #
+        #    FIN_GroupLedgerTable            _ledgerTable;  // Table name and decleration
+        #    FIN_GroupLedgerMapping          _ledgerMapping;
+        #
+        #    str                             x_entityCode;
+        #    str                             x_accountNo;
+        #    str                             x_accountName;
+        #    str                             x_type;
+        #    str                             x_level0;
+        #    str                             x_level0_sort;
+        #    str                             x_level1;
+        #    str                             x_level1_sort;
+        #    str                             x_level2;
+        #    str                             x_level3;
+        #    str                             x_level4;
+        #
+        #    str                             x_toZHAccount;
+        #    str                             x_toMainAccount;
+        #
+        #
+        #    //str                             effectiveDate;
+        #    int                             datevalue,
+        #                                    row = 0;
+        #
+        #
+        #    Date                            dater;
+        #
+        #    #Excel
+        #
+        #    str COMVariant2Str(COMVariant _cv,
+        #                       int _decimals = 2,
+        #                       int _characters = 0,
+        #                       int _separator1 = 0,
+        #                       int _separator2 = 0)
+        #    {
+        #        switch(_cv.variantType())
+        #        {
+        #            case (COMVariantType::VT_BSTR):
+        #                return _cv.bStr();
+        #
+        #            case (COMVariantType::VT_R4):
+        #                return num2str(_cv.float(),
+        #                                _characters,
+        #                                _decimals,
+        #                                _separator1,
+        #                                _separator2);
+        #
+        #            case (COMVariantType::VT_R8):
+        #                return num2str(_cv.double(),
+        #                                _characters,
+        #                                _decimals,
+        #                                _separator1,
+        #                                _separator2);
+        #
+        #            case (COMVariantType::VT_DECIMAL):
+        #                return num2str(_cv.decimal(),
+        #                                _characters,
+        #                                _decimals,
+        #                                _separator1,
+        #                                _separator2);
+        #
+        #            case (COMVariantType::VT_DATE):
+        #                return date2str(_cv.date(),
+        #                                123,
+        #                                2,
+        #                                1,
+        #                                2,
+        #                                1,
+        #                                4);
+        #
+        #            case (COMVariantType::VT_EMPTY):
+        #                return "";
+        #
+        #            default:
+        #                throw error(strfmt("@SYS26908",
+        #                                    _cv.variantType()));
+        #
+        #        }
+        #
+        #        return "";
+        #    }
+        #    ;
+        #
+        #    dialog = new Dialog("ExcelUpload");
+        #    dialog.caption("Excel Upload");
+        #
+        #    //dialogEnityCode     =   dialog.addField(typeId(FIN_EntityCode));
+        #
+        #    dialogFilename      =   dialog.addField(typeId(FilenameOpen));
+        #    dialog.filenameLookupFilter([ "@SYS28576",#XLSX,"@SYS28576",#XLS]);
+        #    dialog.filenameLookupTitle("Upload from Excel");
+        #
+        #    dialogSheetNum      =   dialog.addField(types::Integer,"Sheet Number");
+        #
+        #    //dialogEnityCode.value(_entityCode);
+        #    dialogFilename.value(filename);
+        #    dialogSheetNum.value(sheetNum);
+        #
+        #
+        #
+        #    if(!dialog.run())
+        #        return;
+        #
+        #    filename            =   dialogFilename.value();
+        #    sheetNum            =   dialogSheetNum.value();
+        #    //entityCode          =   dialogEnityCode.value();
+        #    application         =   SysExcelApplication::construct();
+        #    workbooks           =   application.workbooks();
+        #
+        #    //if (!entityCode)
+        #    //   throw error('Entity must bes specified.');
+        #
+        #    if (sheetNum < 1)
+        #       throw error('Sheet Number cannot be smaller than 1.');
+        #
+        #
+        #
+        #    try
+        #    {
+        #        workbooks.open(filename);
+        #    }
+        #
+        #    catch (Exception::Error)
+        #    {
+        #        throw error("File cannot be opened.");
+        #    }
+        #
+        #    workbook    = workbooks.item(1);
+        #    worksheets  = workbook.worksheets();
+        #    worksheet   = worksheets.itemFromNum(sheetNum);
+        #    cells       = worksheet.cells();
+        #
+        #    info(worksheet.name());
+        #    info(workbook.name());
+        #
+        #    // Progress Caption & Animation
+        #    progress.setCaption("Copying..");
+        #    progress.setAnimation(#AviUpdate);
+        #
+        #    row = 1; // First row has heading so skip
+        #    ttsbegin;
+        #    do
+        #    {
+        #        try
+        #        {
+        #
+        #            row++;
+        #
+        #            // Getting Entity value form Excel Row wise and assigning as str
+        #            x_entityCode = COMVariant2Str(cells.item(row,1).value());
+        #
+        #            // Getting AccountNum value form Excel Row wise and assigning as str
+        #            x_accountNo = COMVariant2Str(cells.item(row,2).value(),0,0,0,0);
+        #
+        #            // Getting AccountName value form Excel Row wise and assigning as str
+        #            x_accountName = COMVariant2Str(cells.item(row,4).value());
+        #
+        #            // Getting Account type value form Excel Row wise and assigning as str
+        #            x_type = COMVariant2Str(cells.item(row,9).value());
+        #
+        #             // Getting Level0 value form Excel Row wise and assigning as str
+        #            x_level0    = COMVariant2Str(cells.item(row,10).value());
+        #
+        #            // Getting Level0 Sort value form Excel Row wise and assigning as str
+        #            x_level0_sort    = COMVariant2Str(cells.item(row,11).value());
+        #
+        #            // Getting Level1 value form Excel Row wise and assigning as str
+        #            x_level1    = COMVariant2Str(cells.item(row,13).value());
+        #
+        #            // Getting Level1 Sort value form Excel Row wise and assigning as str
+        #            x_level1_sort    = COMVariant2Str(cells.item(row,14).value());
+        #
+        #            // Getting Level2 value form Excel Row wise and assigning as str
+        #            x_level2    = COMVariant2Str(cells.item(row,16).value());
+        #
+        #            // Getting Level3 value form Excel Row wise and assigning as str
+        #            x_level3    = COMVariant2Str(cells.item(row,17).value());
+        #
+        #            // Getting Level4 value form Excel Row wise and assigning as str
+        #            x_level4    = COMVariant2Str(cells.item(row,18).value());
+        #
+        #
+        #            // Getting To ZH Account value form Excel Row wise and assigning as str
+        #            x_toZHAccount = COMVariant2Str(cells.item(row,5).value());
+        #
+        #            // Getting To Main Account value form Excel Row wise and assigning as str
+        #            x_toMainAccount = COMVariant2Str(cells.item(row,7).value());
+        #
+        #            // Getting Date value form Excel Row wise and assigning as str
+        #            //effectiveDate = COMVariant2Str(cells.item(row,3).value());
+        #
+        #            //  Converting String to Date
+        #            //dater = str2Date(effectiveDate,123);
+        #
+        #
+        #            if (row > 1)
+        #            {
+        #                // Progress bar Text and Total
+        #                progress.setText(strfmt("Importing to Ax Table : %1", row));
+        #                progress.setTotal(row, 1);
+        #
+        #                _ledgerTable.initValue();
+        #                _ledgerTable.EntityCode    = x_entityCode;
+        #                _ledgerTable.AccountNum     = x_accountNo;
+        #                _ledgerTable.AccountName   = x_accountName;
+        #                _ledgerTable.Type          = x_type;
+        #                _ledgerTable.Level0        = x_level0;
+        #                _ledgerTable.Level0_Sort   = any2int(x_level0_sort);
+        #                _ledgerTable.Level1        = x_level1;
+        #                _ledgerTable.Level1_Sort   = any2int(x_level1_sort);
+        #                _ledgerTable.Level2        = x_level2;
+        #                _ledgerTable.Level3        = x_level3;
+        #                _ledgerTable.Level4        = x_level4;
+        #
+        #                _ledgerTable.insert();
+        #
+        #                //Insert Mannacs Mapping for all
+        #                _ledgerMapping.initValue();
+        #                _ledgerMapping.ToEntityCode     = "_002";
+        #                _ledgerMapping.ToAcountNum      = x_toMainAccount;
+        #                _ledgerMapping.FromEntityCode   = x_entityCode;
+        #                _ledgerMapping.FromAcountNum    = x_accountNo;
+        #                _ledgerMapping.insert();
+        #
+        #                //Do CH Mapping for Brazil
+        #                if (x_entityCode == 'DOR')
+        #                {
+        #                _ledgerMapping.initValue();
+        #                _ledgerMapping.ToEntityCode     = "MQ";
+        #                _ledgerMapping.ToAcountNum      = x_toZHAccount;
+        #                _ledgerMapping.FromEntityCode   = x_entityCode;
+        #                _ledgerMapping.FromAcountNum    = x_accountNo;
+        #                _ledgerMapping.insert();
+        #
+        #                }
+        #
+        #
+        #            }
+        #
+        #        }
+        #
+        #        catch
+        #        {
+        #            Error(strfmt("Upload Failed in row %1", row));
+        #        }
+        #
+        #        // Check if next row first column is EMPTY
+        #        type = cells.item(row + 1, 1).value().variantType();
+        #
+        #    } while (type!= COMVariantType::VT_EMPTY );
+        #
+        #    ttscommit;
+        #
+        #
+        #    info(strfmt("Ledger Accounts Uploaded Successfully.  Rows %1",int2str(row)));
+        #
+        #    application.displayAlerts(false);
+        #    application.quit();
+        #
+        #
+        #
+        #
+        #
+        #
+        #
+        #}
+      ENDSOURCE
+      SOURCE #ImportManacFromExcel
+        #void ImportManacFromExcel(FIN_EntityCode _entityCode = "")
+        #{
+        #    SysExcelApplication             application;
+        #    SysExcelWorkbooks               workbooks;
+        #    SysExcelWorkbook                workbook;
+        #    SysExcelWorksheets              worksheets;
+        #    SysExcelWorksheet               worksheet;
+        #    SysExcelCells                   cells;
+        #    COMVariantType                  type;
+        #    System.DateTime                 ShlefDate;
+        #
+        #    FilenameOpen                    filename;
+        #    int                             sheetNum = 1;
+        #    FIN_EntityCode                  entityCode;
+        #    dialogField                     dialogFilename;
+        #    dialogField                     dialogSheetNum;
+        #    dialogField                     dialogEnityCode;
+        #    Dialog                          dialog;
+        #
+        #    #AviFiles
+        #    // Progress Bar
+        #    SysOperationProgress progress = new SysOperationProgress(1, NoYes::Yes);
+        #
+        #
+        #    FIN_GroupLedgerTable            _ledgerTable;  // Table name and decleration
+        #    FIN_GroupLedgerMapping          _ledgerMapping;
+        #
+        #    str                             x_entityCode;
+        #    str                             x_accountNo;
+        #    str                             x_accountName;
+        #    str                             x_type;
+        #    str                             x_level0;
+        #    str                             x_level0_sort;
+        #    str                             x_level1;
+        #    str                             x_level1_sort;
+        #    str                             x_level2;
+        #    str                             x_level3;
+        #    str                             x_level4;
+        #
+        #    str                             x_toZHAccount;
+        #    str                             x_toMainAccount;
+        #
+        #
+        #    //str                             effectiveDate;
+        #    int                             datevalue,
+        #                                    row = 0;
+        #
+        #
+        #    Date                            dater;
+        #
+        #    #Excel
+        #
+        #    str COMVariant2Str(COMVariant _cv,
+        #                       int _decimals = 2,
+        #                       int _characters = 0,
+        #                       int _separator1 = 0,
+        #                       int _separator2 = 0)
+        #    {
+        #        switch(_cv.variantType())
+        #        {
+        #            case (COMVariantType::VT_BSTR):
+        #                return _cv.bStr();
+        #
+        #            case (COMVariantType::VT_R4):
+        #                return num2str(_cv.float(),
+        #                                _characters,
+        #                                _decimals,
+        #                                _separator1,
+        #                                _separator2);
+        #
+        #            case (COMVariantType::VT_R8):
+        #                return num2str(_cv.double(),
+        #                                _characters,
+        #                                _decimals,
+        #                                _separator1,
+        #                                _separator2);
+        #
+        #            case (COMVariantType::VT_DECIMAL):
+        #                return num2str(_cv.decimal(),
+        #                                _characters,
+        #                                _decimals,
+        #                                _separator1,
+        #                                _separator2);
+        #
+        #            case (COMVariantType::VT_DATE):
+        #                return date2str(_cv.date(),
+        #                                123,
+        #                                2,
+        #                                1,
+        #                                2,
+        #                                1,
+        #                                4);
+        #
+        #            case (COMVariantType::VT_EMPTY):
+        #                return "";
+        #
+        #            default:
+        #                throw error(strfmt("@SYS26908",
+        #                                    _cv.variantType()));
+        #
+        #        }
+        #
+        #        return "";
+        #    }
+        #    ;
+        #
+        #    dialog = new Dialog("ExcelUpload");
+        #    dialog.caption("Excel Upload");
+        #
+        #   // dialogEnityCode     =   dialog.addField(typeId(FIN_EntityCode));
+        #
+        #    dialogFilename      =   dialog.addField(typeId(FilenameOpen));
+        #    dialog.filenameLookupFilter([ "@SYS28576",#XLSX,"@SYS28576",#XLS]);
+        #    dialog.filenameLookupTitle("Upload from Excel");
+        #
+        #    dialogSheetNum      =   dialog.addField(types::Integer,"Sheet Number");
+        #
+        #    //dialogEnityCode.value(_entityCode);
+        #    dialogFilename.value(filename);
+        #    dialogSheetNum.value(sheetNum);
+        #
+        #
+        #
+        #    if(!dialog.run())
+        #        return;
+        #
+        #    filename            =   dialogFilename.value();
+        #    sheetNum            =   dialogSheetNum.value();
+        #   // entityCode          =   dialogEnityCode.value();
+        #    application         =   SysExcelApplication::construct();
+        #    workbooks           =   application.workbooks();
+        #
+        #    //if (!entityCode)
+        #    //   throw error('Entity must bes specified.');
+        #
+        #    if (sheetNum < 1)
+        #       throw error('Sheet Number cannot be smaller than 1.');
+        #
+        #
+        #
+        #    try
+        #    {
+        #        workbooks.open(filename);
+        #    }
+        #
+        #    catch (Exception::Error)
+        #    {
+        #        throw error("File cannot be opened.");
+        #    }
+        #
+        #    workbook    = workbooks.item(1);
+        #    worksheets  = workbook.worksheets();
+        #    worksheet   = worksheets.itemFromNum(sheetNum);
+        #    cells       = worksheet.cells();
+        #
+        #    info(worksheet.name());
+        #    info(workbook.name());
+        #
+        #    // Progress Caption & Animation
+        #    progress.setCaption("Copying..");
+        #    progress.setAnimation(#AviUpdate);
+        #
+        #    row = 1; // First row has heading so skip
+        #    ttsbegin;
+        #    do
+        #    {
+        #        try
+        #        {
+        #
+        #            row++;
+        #
+        #            // Getting Entity value form Excel Row wise and assigning as str
+        #            x_entityCode = "_002";//COMVariant2Str(cells.item(row,1).value());
+        #
+        #            // Getting AccountNum value form Excel Row wise and assigning as str
+        #            x_accountNo = COMVariant2Str(cells.item(row,2).value(),0,0,0,0);
+        #
+        #            // Getting AccountName value form Excel Row wise and assigning as str
+        #            x_accountName = COMVariant2Str(cells.item(row,3).value());
+        #
+        #            // Getting Account type value form Excel Row wise and assigning as str
+        #            x_type = COMVariant2Str(cells.item(row,5).value());
+        #
+        #             // Getting Level0 value form Excel Row wise and assigning as str
+        #            x_level0    = COMVariant2Str(cells.item(row,6).value());
+        #
+        #            // Getting Level0 Sort value form Excel Row wise and assigning as str
+        #            x_level0_sort    = COMVariant2Str(cells.item(row,7).value());
+        #
+        #            // Getting Level1 value form Excel Row wise and assigning as str
+        #            x_level1    = COMVariant2Str(cells.item(row,9).value());
+        #
+        #            // Getting Level1 Sort value form Excel Row wise and assigning as str
+        #            x_level1_sort    = COMVariant2Str(cells.item(row,10).value());
+        #
+        #            // Getting Level2 value form Excel Row wise and assigning as str
+        #            x_level2    = COMVariant2Str(cells.item(row,12).value());
+        #
+        #            // Getting Level3 value form Excel Row wise and assigning as str
+        #            x_level3    = COMVariant2Str(cells.item(row,13).value());
+        #
+        #            // Getting Level4 value form Excel Row wise and assigning as str
+        #            x_level4    = COMVariant2Str(cells.item(row,14).value());
+        #
+        #
+        #            // Getting To ZH Account value form Excel Row wise and assigning as str
+        #           // x_toZHAccount = COMVariant2Str(cells.item(row,5).value());
+        #
+        #            // Getting To Main Account value form Excel Row wise and assigning as str
+        #            //x_toMainAccount = COMVariant2Str(cells.item(row,7).value());
+        #
+        #            // Getting Date value form Excel Row wise and assigning as str
+        #            //effectiveDate = COMVariant2Str(cells.item(row,3).value());
+        #
+        #            //  Converting String to Date
+        #            //dater = str2Date(effectiveDate,123);
+        #
+        #
+        #            if (row > 1)
+        #            {
+        #                // Progress bar Text and Total
+        #                progress.setText(strfmt("Importing to Ax Table : %1", row));
+        #                progress.setTotal(row, 1);
+        #
+        #                _ledgerTable.initValue();
+        #                _ledgerTable.EntityCode    = x_entityCode;
+        #                _ledgerTable.AccountNum    = x_accountNo;
+        #                _ledgerTable.AccountName   = x_accountName;
+        #                _ledgerTable.Type          = x_type;
+        #                _ledgerTable.Level0        = x_level0;
+        #                _ledgerTable.Level0_Sort   = any2int(x_level0_sort);
+        #                _ledgerTable.Level1        = x_level1;
+        #                _ledgerTable.Level1_Sort   = any2int(x_level1_sort);
+        #                _ledgerTable.Level2        = x_level2;
+        #                _ledgerTable.Level3        = x_level3;
+        #                _ledgerTable.Level4        = x_level4;
+        #
+        #                _ledgerTable.insert();
+        #
+        #
+        #            }
+        #
+        #        }
+        #
+        #        catch
+        #        {
+        #            Error(strfmt("Upload Failed in row %1", row));
+        #        }
+        #
+        #        // Check if next row first column is EMPTY
+        #        type = cells.item(row + 1, 1).value().variantType();
+        #
+        #    } while (type!= COMVariantType::VT_EMPTY );
+        #
+        #    ttscommit;
+        #
+        #
+        #    info(strfmt("Ledger Accounts Uploaded Successfully.  Rows %1",int2str(row)));
+        #
+        #    application.displayAlerts(false);
+        #    application.quit();
+        #
+        #
+        #
+        #
+        #
+        #
+        #
+        #}
+      ENDSOURCE
+      SOURCE #initValue
+        #public void initValue()
+        #{
+        #    super();
+        #}
+      ENDSOURCE
+      SOURCE #insert
+        #public void insert()
+        #{
+        #    super();
+        #
+        #    FIN_GroupEntityLog::addEntry(this.EntityCode,FIN_LogEntryType::Accounts_Inserted);
+        #
+        #}
+      ENDSOURCE
+      SOURCE #update
+        #public void update()
+        #{
+        #    super();
+        #
+        #    FIN_GroupEntityLog::addEntry(this.EntityCode,FIN_LogEntryType::Accounts_Updated);
+        #    if (this.Locked)
+        #    {
+        #        FIN_GroupEntityLog::addEntry(this.EntityCode,FIN_LogEntryType::Accounts_Locked);
+        #    }
+        #    else
+        #    {
+        #        FIN_GroupEntityLog::addEntry(this.EntityCode,FIN_LogEntryType::Accounts_UnLock);
+        #    }
+        #}
+      ENDSOURCE
+      SOURCE #validateDelete
+        #public boolean validateDelete()
+        #{
+        #    boolean ret;
+        #
+        #    if (this.Locked && this.orig().Locked)
+        #        return checkFailed("Account cannot be changed or deleted as record has been locked.");
+        #
+        #    ret = super();
+        #
+        #    return ret;
+        #}
+      ENDSOURCE
+      SOURCE #validateWrite
+        #public boolean validateWrite()
+        #{
+        #    boolean ret;
+        #
+        #    if (this.Locked && this.orig().Locked)
+        #        return checkFailed("Account cannot be changed or deleted as record has been locked.");
+        #
+        #    ret = super();
+        #
+        #    return ret;
+        #}
+      ENDSOURCE
+      SOURCE #existForEntity
+        #static NoYes existForEntity(FIN_EntityCode entityCode)
+        #{
+        #    FIN_GroupLedgerTable  fin_GroupLedgerTable;
+        #
+        #    if (entityCode)
+        #    {
+        #        select firstonly RecId
+        #            from fin_GroupLedgerTable
+        #                where fin_GroupLedgerTable.entityCode == entityCode;
+        #    }
+        #
+        #    return fin_GroupLedgerTable.RecId ? NoYes::Yes : NoYes::No;
+        #}
+      ENDSOURCE
+      SOURCE #find
+        #static FIN_GroupLedgerTable find(FIN_EntityCode entityCode , FIN_AccountNum accountNum,
+        #                             boolean         _forUpdate = false)
+        #{
+        #    FIN_GroupLedgerTable  fin_GroupLedgerTable;
+        #
+        #    if (entityCode && accountNum)
+        #    {
+        #        fin_GroupLedgerTable.selectForUpdate(_forUpdate);
+        #
+        #        select firstonly *
+        #            from fin_GroupLedgerTable
+        #                where fin_GroupLedgerTable.entityCode == entityCode
+        #                    && fin_GroupLedgerTable.AccountNum == accountNum;
+        #    }
+        #
+        #    return fin_GroupLedgerTable;
+        #}
+      ENDSOURCE
+      SOURCE #getAccountBalance
+        #//Get Balance returns the YTD Balance of an Account for
+        #//both Balance sheet OR Income statement
+        #public static Container getAccountBalance(FIN_EntityCode _entityCode,
+        #                                            FIN_AccountNum _accountNum,
+        #                                            FIN_PeriodStart _period,
+        #                                            FIN_Category    _category,
+        #                                            FIN_ScenarioCode _scenario = "",
+        #                                            str 10          _costCenter = "",
+        #                                            str 10          _department = "",
+        #                                            str 10          _purpose = "")
+        #{
+        #
+        #    FIN_GroupLedgerData         tabData;
+        #    FIN_GroupLedgerTable        tabLedgerTable;
+        #    FIN_GroupPeriod             tabPeriod;
+        #    Date                        yearStart;
+        #
+        #    Container                   retCon;
+        #
+        #    boolean                       flagScenario, flagCostCenter, flagDepartment, flagPurpose;
+        #
+        #    ;
+        #
+        #
+        #    tabPeriod       = FIN_GroupPeriod::find(_period);
+        #  //  tabLedgerTable  = FIN_GroupLedgerTable::find(_entityCode,_accountNum);
+        #    yearStart       = DateStartYr(tabPeriod.PeriodStart);
+        #
+        #    flagScenario    = _scenario == "";
+        #    flagCostCenter  = _costCenter == "";
+        #    flagDepartment  = _department == "";
+        #    flagPurpose     = _purpose == "";
+        #
+        #    //Balance sheet accounts get balance from start of year till period
+        #
+        #    select SUM(Amount),SUM(AmountMst) from tabData index hint AccountBalanceIdx
+        #        where   tabData.EntityCode      == _entityCode &&
+        #            tabData.AccountNum      == _accountNum &&
+        #            tabData.Category        == _category &&
+        #            tabData.PeriodStart     >= yearStart &&
+        #            tabData.PeriodStart     <= tabPeriod.PeriodStart &&
+        #            (tabData.ScenarioCode    == _scenario    ||  flagScenario) &&
+        #            (tabData.CostCenter      == _costCenter ||  flagCostCenter) &&
+        #            (tabData.Department      == _department ||  flagDepartment) &&
+        #            (tabData.Purpose         == _purpose ||  flagPurpose);
+        #
+        #
+        #    retCon = conins(retCon,1,tabData.Amount,tabData.AmountMST);
+        #
+        #    return retCon;
+        #
+        #}
+      ENDSOURCE
+      SOURCE #getAccountMovement
+        #//Get Movement returns the Period Movement of an Account for
+        #//both Balance sheet OR Income statement
+        #public static Container getAccountMovement(FIN_EntityCode _entityCode,
+        #                                            FIN_AccountNum _accountNum,
+        #                                            FIN_PeriodStart _period,
+        #                                            FIN_ScenarioCode _scenario,
+        #                                            FIN_Category    _category,
+        #                                            str 10          _costCenter,
+        #                                            str 10          _department,
+        #                                            str 10          _purpose)
+        #{
+        #
+        #    FIN_GroupLedgerData         tabData;
+        #    FIN_GroupLedgerTable        tabLedgerTable;
+        #    FIN_GroupPeriod             tabPeriod;
+        #    Date                        yearStart;
+        #    Container                   retCon;
+        #
+        #    ;
+        #
+        #
+        #    tabPeriod       = FIN_GroupPeriod::find(_period);
+        #    tabLedgerTable  = FIN_GroupLedgerTable::find(_entityCode,_accountNum);
+        #
+        #    //Balance sheet accounts get balance from start of year till period
+        #
+        #    select SUM(Amount),SUM(AmountMst) from tabData
+        #        where   tabData.EntityCode      == _entityCode &&
+        #            tabData.AccountNum      == _accountNum &&
+        #            tabData.Category        == _category &&
+        #            tabData.ScenarioCode    == _scenario &&
+        #            tabData.PeriodStart     == tabPeriod.PeriodStart &&
+        #            tabData.CostCenter      == _costCenter &&
+        #            tabData.Department      == _department &&
+        #            tabData.Purpose         == _purpose;
+        #
+        #
+        #    retCon = conins(retCon,1,tabData.Amount, tabData.AmountMST);
+        #
+        #    return retCon;
+        #
+        #}
+      ENDSOURCE
+      SOURCE #getAmountMSTBalance
+        #//Get Balance returns the YTD Balance of an Account for
+        #//both Balance sheet OR Income statement
+        #public static AmountMST getAmountMSTBalance(FIN_EntityCode _entityCode,
+        #                                            FIN_AccountNum _accountNum,
+        #                                            FIN_PeriodStart _period,
+        #                                            FIN_ScenarioCode _scenario,
+        #                                            FIN_Category    _category,
+        #                                            str 10          _costCenter,
+        #                                            str 10          _department,
+        #                                            str 10          _purpose)
+        #{
+        #
+        #    FIN_GroupLedgerData         tabData;
+        # //   FIN_GroupLedgerTable        tabLedgerTable;
+        #    FIN_GroupPeriod             tabPeriod;
+        #    Date                        yearStart;
+        #
+        #    AmountMST                   retAmountMST;
+        #    ;
+        #
+        #
+        #    tabPeriod       = FIN_GroupPeriod::find(_period);
+        #   // tabLedgerTable  = FIN_GroupLedgerTable::find(_entityCode,_accountNum);
+        #    yearStart       = DateStartYr(tabPeriod.PeriodStart);
+        #
+        #    //Balance sheet accounts get balance from start of year till period
+        #
+        #    select SUM(AmountMst) from tabData
+        #        where   tabData.EntityCode      == _entityCode &&
+        #            tabData.AccountNum      == _accountNum &&
+        #            tabData.Category        == _category &&
+        #            tabData.ScenarioCode    == _scenario &&
+        #            tabData.PeriodStart     >= yearStart &&
+        #            tabData.PeriodStart     <= tabPeriod.PeriodStart &&
+        #            tabData.CostCenter      == _costCenter &&
+        #            tabData.Department      == _department &&
+        #            tabData.Purpose         == _purpose;
+        #
+        #
+        #    retAmountMST = tabData.AmountMST;
+        #
+        #    return retAmountMST;
+        #
+        #}
+      ENDSOURCE
+      SOURCE #getAmountMSTMovement
+        #//Get Movement returns the Period Movement of an Account for
+        #//both Balance sheet OR Income statement
+        #public static AmountMST getAmountMSTMovement(FIN_EntityCode _entityCode,
+        #                                            FIN_AccountNum _accountNum,
+        #                                            FIN_PeriodStart _period,
+        #                                            FIN_ScenarioCode _scenario,
+        #                                            FIN_Category    _category,
+        #                                            str 10          _costCenter,
+        #                                            str 10          _department,
+        #                                            str 10          _purpose)
+        #{
+        #
+        #    FIN_GroupLedgerData         tabData;
+        #    FIN_GroupLedgerTable        tabLedgerTable;
+        #    FIN_GroupPeriod             tabPeriod;
+        #    Date                        yearStart;
+        #
+        #    AmountMST                   retAmountMST;
+        #    ;
+        #
+        #
+        #    tabPeriod       = FIN_GroupPeriod::find(_period);
+        #    tabLedgerTable  = FIN_GroupLedgerTable::find(_entityCode,_accountNum);
+        #
+        #    //Balance sheet accounts get balance from start of year till period
+        #
+        #    select SUM(AmountMst) from tabData
+        #        where   tabData.EntityCode      == _entityCode &&
+        #            tabData.AccountNum      == _accountNum &&
+        #            tabData.Category        == _category &&
+        #            tabData.ScenarioCode    == _scenario &&
+        #            tabData.PeriodStart     == tabPeriod.PeriodStart &&
+        #            tabData.CostCenter      == _costCenter &&
+        #            tabData.Department      == _department &&
+        #            tabData.Purpose         == _purpose;
+        #
+        #
+        #    retAmountMST = tabData.AmountMST;
+        #
+        #    return retAmountMST;
+        #
+        #}
+      ENDSOURCE
+      SOURCE #lookupAccountNum
+        #public static void lookupAccountNum(FormControl _callingControl,FIN_EntityCode _entityCode)
+        #{
+        #  Query                   query = new Query();
+        #  QueryBuildDataSource    dsGroupLedgerTable;
+        #  QueryBuildRange      qbr_EntityCode;
+        #
+        #  // Instantiate sysTableLookup object using table which will provide the visible fields
+        #  SysTableLookup  sysTableLookup = sysTableLookup::newParameters(tableNum(FIN_GroupLedgerTable), _callingControl);
+        #  ;
+        #
+        #
+        #  dsGroupLedgerTable = query.addDataSource(tableNum(FIN_GroupLedgerTable));
+        #
+        #
+        #  qbr_EntityCode = dsGroupLedgerTable.addRange(fieldNum(FIN_GroupLedgerTable ,EntityCode));
+        #  qbr_EntityCode.value(queryvalue(_entityCode));
+        #
+        #  // Set the query to be used by the lookup form
+        #  sysTableLookup.parmQuery(query);
+        #
+        #  // Specify the fields to show in the form.  In this case we have chosen
+        #
+        #  sysTableLookup.addLookupfield(fieldNum(FIN_GroupLedgerTable, AccountNum));
+        #  sysTableLookup.addLookupfield(fieldNum(FIN_GroupLedgerTable, AccountName));
+        #  sysTableLookup.addLookupfield(fieldNum(FIN_GroupLedgerTable, EntityCode));
+        #
+        #  // Perform the lookup
+        #  sysTableLookup.performFormLookup();
+        #}
+      ENDSOURCE
+    ENDMETHODS
+  ENDTABLE

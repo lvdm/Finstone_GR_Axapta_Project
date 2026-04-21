@@ -1,0 +1,576 @@
+﻿FORM #FIN_EntityPeriod
+  PROPERTIES
+    Name                #FIN_EntityPeriod
+  ENDPROPERTIES
+  
+  METHODS
+    Version: 3
+    SOURCE #classDeclaration
+      #public class FormRun extends ObjectRun
+      #{
+      #    QueryBuildRange qbr_PeriodEnd;
+      #
+      #}
+    ENDSOURCE
+    SOURCE #fillPeriodCombox
+      #void fillPeriodCombox()
+      #{
+      #    FIN_GroupPeriod tabPeriod;
+      #    FIN_PeriodEnd   minPeriodEnd;
+      #    int             selectPosition;
+      #
+      #    ;
+      #
+      #    minPeriodEnd = str2date('31 Dec 2015',123);
+      #
+      #    While select * from tabPeriod order by tabPeriod.PeriodEnd desc where tabPeriod.PeriodEnd > minPeriodEnd
+      #    {
+      #
+      #        PeriodComboBox.add(date2str(tabPeriod.PeriodEnd,123,2,1,3,1,4));
+      #
+      #        if (tabPeriod.PeriodEnd > endMth(today()))
+      #        {
+      #            selectPosition ++;
+      #        }
+      #
+      #
+      #    }
+      #
+      #    PeriodComboBox.selection( selectPosition);
+      #
+      #}
+    ENDSOURCE
+    SOURCE #init
+      #public void init()
+      #{
+      #    super();
+      #
+      #    qbr_PeriodEnd.value(queryValue(endMth(today())));
+      #
+      #    this.fillPeriodCombox();
+      #
+      #    //FIN_GroupEntityPeriod_ds.executeQuery();
+      #}
+    ENDSOURCE
+  ENDMETHODS
+  OBJECTBANK
+    PROPERTIES
+    ENDPROPERTIES
+    
+    DATASOURCE
+      OBJECTPOOL
+        PROPERTIES
+          Name                #FIN_GroupEntityPeriod
+          Table               #FIN_GroupEntityPeriod
+          LinkType            #Active
+          InsertAtEnd         #No
+          InsertIfEmpty       #No
+        ENDPROPERTIES
+        
+        FIELDLIST
+        ENDFIELDLIST
+      ENDOBJECTPOOL
+      METHODS
+        Version: 3
+        SOURCE #displayOption
+          #public void displayOption(Common _record, FormRowDisplayOption _options)
+          #{
+          #   FIN_GroupEntityPeriod tabEntityPeriod = _record;
+          #
+          #    ;
+          #    if (tabEntityPeriod.LockedByAdmin)
+          #    {
+          #         _options.backColor(WINAPI::rgb2int(110,170,210));
+          #
+          #    }
+          #    else if (tabEntityPeriod.LockedByUser)
+          #    {
+          #        _options.backColor(WINAPI::rgb2int(150,240,130));
+          #    }
+          #    else if (!tabEntityPeriod.HasData)
+          #    {
+          #        // If no data exists mark line
+          #         _options.backColor(WINAPI::rgb2int(240,203,210));
+          #
+          #
+          #    }
+          #    super(_record, _options);
+          #}
+        ENDSOURCE
+        SOURCE #active
+          #public int active()
+          #{
+          #
+          #    int ret;
+          #
+          #    ret = super();
+          #
+          #    ButtonUnlockUser.visible(FIN_GroupEntityPeriod.LockedByUser);
+          #    ButtonUnlockAdmin.visible(FIN_GroupEntityPeriod.LockedByAdmin);
+          #
+          #    ButtonLockUser.visible(!FIN_GroupEntityPeriod.LockedByUser);
+          #    ButtonLockAdmin.visible(!FIN_GroupEntityPeriod.LockedByAdmin);
+          #
+          #
+          #
+          #
+          #
+          #    return ret;
+          #}
+        ENDSOURCE
+        SOURCE #init
+          #public void init()
+          #{
+          #    super();
+          #    qbr_PeriodEnd = this.query().dataSourceName('FIN_GroupEntityPeriod').addRange(fieldNum(FIN_GroupEntityPeriod ,PeriodEnd));
+          #}
+        ENDSOURCE
+        SOURCE #executeQuery
+          #public void executeQuery()
+          #{
+          #    super();
+          #}
+        ENDSOURCE
+      ENDMETHODS
+    ENDDATASOURCE
+    DATASOURCE
+      OBJECTPOOL
+        PROPERTIES
+          Name                #FIN_GroupEntities
+          Table               #FIN_GroupEntities
+          AllowEdit           #No
+          AllowCreate         #No
+          AllowDelete         #No
+          LinkType            #InnerJoin
+          InsertAtEnd         #No
+          InsertIfEmpty       #No
+        ENDPROPERTIES
+        
+        FIELDLIST
+        ENDFIELDLIST
+      ENDOBJECTPOOL
+    ENDDATASOURCE
+    DATASOURCE
+      OBJECTPOOL
+        PROPERTIES
+          Name                #FIN_GroupPeriod
+          Table               #FIN_GroupPeriod
+          StartPosition       #Last
+          InsertIfEmpty       #No
+        ENDPROPERTIES
+        
+        FIELDLIST
+        ENDFIELDLIST
+      ENDOBJECTPOOL
+    ENDDATASOURCE
+  ENDOBJECTBANK
+  
+  JOINS
+  ENDJOINS
+  
+  DESIGN
+    PROPERTIES
+      Caption             #Enitity Periods
+    ENDPROPERTIES
+    
+    CONTAINER
+      CONTROL COMBOBOX
+        PROPERTIES
+          Name                #PeriodComboBox
+          AutoDeclaration     #Yes
+          Selection           #5
+          Label               #Period
+        ENDPROPERTIES
+        
+        METHODS
+          Version: 3
+          SOURCE #selectionChange
+            #public int selectionChange()
+            #{
+            #    FIN_PeriodEnd newDate;
+            #    int ret;
+            #    ;
+            #
+            #    ret = super();
+            #
+            #
+            #
+            #    newDate = str2date(this.valueStr(),123);
+            #
+            #    qbr_PeriodEnd.value(queryValue(newDate));
+            #    FIN_GroupEntityPeriod_ds.executeQuery();
+            #
+            #
+            #
+            #    return ret;
+            #}
+          ENDSOURCE
+        ENDMETHODS
+      ENDCONTROL 
+      
+      CONTROL TAB
+        PROPERTIES
+          Name                #Tab
+          Width               #Column width
+          Height              #Column height
+        ENDPROPERTIES
+        
+        CONTAINER
+          CONTROL TABPAGE
+            PROPERTIES
+              Name                #TabPage
+              Caption             #Entities
+            ENDPROPERTIES
+            
+            CONTAINER
+              CONTROL GRID
+                PROPERTIES
+                  Name                #Grid
+                  Width               #Column width
+                  Height              #Column height
+                  DataSource          #FIN_GroupEntityPeriod
+                ENDPROPERTIES
+                
+                  CONTAINER
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupEntityPeriod_EntityCode
+                        DataSource          #FIN_GroupEntityPeriod
+                        DataField           #EntityCode
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupEntities_EntityName
+                        AllowEdit           #No
+                        DataSource          #FIN_GroupEntityPeriod
+                        DataMethod          #EntityName
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL DATEEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupEntityPeriod_PeriodStart
+                        DataSource          #FIN_GroupEntityPeriod
+                        DataField           #PeriodStart
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL DATEEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupEntityPeriod_PeriodEnd
+                        DataSource          #FIN_GroupEntityPeriod
+                        DataField           #PeriodEnd
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL COMBOBOX
+                      PROPERTIES
+                        Name                #FIN_GroupEntityPeriod_PeriodStatus
+                        DataSource          #FIN_GroupEntityPeriod
+                        DataField           #PeriodStatus
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL CHECKBOX
+                      PROPERTIES
+                        Name                #FIN_GroupEntityPeriod_Active
+                        BackgroundColor     #Window background
+                        DataSource          #FIN_GroupEntityPeriod
+                        DataField           #Active
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL CHECKBOX
+                      PROPERTIES
+                        Name                #FIN_GroupEntityPeriod_HasData
+                        AllowEdit           #No
+                        BackgroundColor     #Window background
+                        DataSource          #FIN_GroupEntityPeriod
+                        DataField           #HasData
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL CHECKBOX
+                      PROPERTIES
+                        Name                #FIN_GroupEntityPeriod_HasAdjustments
+                        AllowEdit           #No
+                        BackgroundColor     #Window background
+                        DataSource          #FIN_GroupEntityPeriod
+                        DataField           #HasAdjustments
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL CHECKBOX
+                      PROPERTIES
+                        Name                #FIN_GroupEntityPeriod_HasForex
+                        Visible             #No
+                        AllowEdit           #No
+                        BackgroundColor     #Window background
+                        DataSource          #FIN_GroupEntityPeriod
+                        DataField           #HasForex
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL CHECKBOX
+                      PROPERTIES
+                        Name                #FIN_GroupEntityPeriod_LockedByUser
+                        AllowEdit           #No
+                        BackgroundColor     #Window background
+                        DataSource          #FIN_GroupEntityPeriod
+                        DataField           #LockedByUser
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL UTCDATETIMEEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupEntityPeriod_LockedByUserOn
+                        AllowEdit           #No
+                        DataSource          #FIN_GroupEntityPeriod
+                        DataField           #LockedByUserOn
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL CHECKBOX
+                      PROPERTIES
+                        Name                #FIN_GroupEntityPeriod_LockedByAdmin
+                        AllowEdit           #No
+                        BackgroundColor     #Window background
+                        DataSource          #FIN_GroupEntityPeriod
+                        DataField           #LockedByAdmin
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL UTCDATETIMEEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupEntityPeriod_LockedByAdminOn
+                        AllowEdit           #No
+                        DataSource          #FIN_GroupEntityPeriod
+                        DataField           #LockedByAdminOn
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                  ENDCONTAINER
+                  
+              ENDCONTROL 
+              
+              CONTROL BUTTONGROUP
+                PROPERTIES
+                  Name                #ButtonGroup
+                ENDPROPERTIES
+                
+                CONTAINER
+                  CONTROL BUTTON
+                    PROPERTIES
+                      Name                #ButtonValidate
+                      Text                #Update All Status
+                    ENDPROPERTIES
+                    
+                    METHODS
+                      Version: 3
+                      SOURCE #clicked
+                        #void clicked()
+                        #{
+                        #    super();
+                        #    FIN_GroupEntityPeriod::updateEntityStatusByPeriod(FIN_GroupEntityPeriod.PeriodEnd);
+                        #
+                        #    FIN_GroupEntityPeriod_ds.executeQuery();
+                        #}
+                      ENDSOURCE
+                    ENDMETHODS
+                  ENDCONTROL 
+                  
+                  CONTROL BUTTON
+                    PROPERTIES
+                      Name                #ButtonUnlockUser
+                      AutoDeclaration     #Yes
+                      Visible             #No
+                      Text                #Unlock (User)
+                    ENDPROPERTIES
+                    
+                    METHODS
+                      Version: 3
+                      SOURCE #clicked
+                        #void clicked()
+                        #{
+                        #    super();
+                        #
+                        #    FIN_GroupEntityPeriod.unlockByUser();
+                        #    FIN_GroupEntityPeriod_ds.executeQuery();
+                        #
+                        #}
+                      ENDSOURCE
+                    ENDMETHODS
+                  ENDCONTROL 
+                  
+                  CONTROL BUTTON
+                    PROPERTIES
+                      Name                #ButtonLockUser
+                      AutoDeclaration     #Yes
+                      Visible             #No
+                      Text                #Lock (User)
+                    ENDPROPERTIES
+                    
+                    METHODS
+                      Version: 3
+                      SOURCE #clicked
+                        #void clicked()
+                        #{
+                        #    super();
+                        #
+                        #    FIN_GroupEntityPeriod.LockByUser();
+                        #    FIN_GroupEntityPeriod_ds.executeQuery();
+                        #}
+                      ENDSOURCE
+                    ENDMETHODS
+                  ENDCONTROL 
+                  
+                  CONTROL BUTTON
+                    PROPERTIES
+                      Name                #ButtonUnlockAdmin
+                      AutoDeclaration     #Yes
+                      Visible             #No
+                      Text                #Unlock (Admin)
+                    ENDPROPERTIES
+                    
+                    METHODS
+                      Version: 3
+                      SOURCE #clicked
+                        #void clicked()
+                        #{
+                        #    super();
+                        #
+                        #    FIN_GroupEntityPeriod.unlockByAdmin();
+                        #    FIN_GroupEntityPeriod_ds.executeQuery();
+                        #}
+                      ENDSOURCE
+                    ENDMETHODS
+                  ENDCONTROL 
+                  
+                  CONTROL BUTTON
+                    PROPERTIES
+                      Name                #ButtonLockAdmin
+                      AutoDeclaration     #Yes
+                      Visible             #No
+                      Text                #Lock (Admin)
+                    ENDPROPERTIES
+                    
+                    METHODS
+                      Version: 3
+                      SOURCE #clicked
+                        #void clicked()
+                        #{
+                        #    super();
+                        #
+                        #    FIN_GroupEntityPeriod.LockByAdmin();
+                        #    FIN_GroupEntityPeriod_ds.executeQuery();
+                        #}
+                      ENDSOURCE
+                    ENDMETHODS
+                  ENDCONTROL 
+                  
+                ENDCONTAINER
+                
+              ENDCONTROL 
+              
+            ENDCONTAINER
+            
+          ENDCONTROL 
+          
+          CONTROL TABPAGE
+            PROPERTIES
+              Name                #TabPagePeriods
+              Caption             #All Periods
+            ENDPROPERTIES
+            
+            CONTAINER
+              CONTROL GRID
+                PROPERTIES
+                  Name                #Grid3
+                  Width               #Column width
+                  Height              #Column height
+                  DataSource          #FIN_GroupPeriod
+                ENDPROPERTIES
+                
+                  CONTAINER
+                    CONTROL DATEEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupPeriod_PeriodStart
+                        Width               #120
+                        DataSource          #FIN_GroupPeriod
+                        DataField           #PeriodStart
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL DATEEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupPeriod_PeriodEnd
+                        Width               #120
+                        DataSource          #FIN_GroupPeriod
+                        DataField           #PeriodEnd
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL COMBOBOX
+                      PROPERTIES
+                        Name                #FIN_GroupPeriod_PeriodStatus
+                        Width               #100
+                        DataSource          #FIN_GroupPeriod
+                        DataField           #PeriodStatus
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL CHECKBOX
+                      PROPERTIES
+                        Name                #FIN_GroupPeriod_Active
+                        BackgroundColor     #Window background
+                        DataSource          #FIN_GroupPeriod
+                        DataField           #Active
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupPeriod_Commentaries
+                        Width               #200
+                        DataSource          #FIN_GroupPeriod
+                        DataField           #Commentaries
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                  ENDCONTAINER
+                  
+              ENDCONTROL 
+              
+            ENDCONTAINER
+            
+          ENDCONTROL 
+          
+        ENDCONTAINER
+        
+      ENDCONTROL 
+      
+    ENDCONTAINER
+    
+  ENDDESIGN
+  
+ENDFORM

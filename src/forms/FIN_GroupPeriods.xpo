@@ -1,0 +1,118 @@
+﻿FORM #FIN_GroupPeriods
+  PROPERTIES
+    Name                #FIN_GroupPeriods
+  ENDPROPERTIES
+  
+  METHODS
+    Version: 3
+    SOURCE #classDeclaration
+      #public class FormRun extends ObjectRun
+      #{
+      #}
+    ENDSOURCE
+  ENDMETHODS
+  OBJECTBANK
+    PROPERTIES
+    ENDPROPERTIES
+    
+    DATASOURCE
+      OBJECTPOOL
+        PROPERTIES
+          Name                #FIN_GroupPeriod
+          Table               #FIN_GroupPeriod
+          StartPosition       #Last
+        ENDPROPERTIES
+        
+        FIELDLIST
+        ENDFIELDLIST
+      ENDOBJECTPOOL
+    ENDDATASOURCE
+  ENDOBJECTBANK
+  
+  JOINS
+  ENDJOINS
+  
+  DESIGN
+    PROPERTIES
+    ENDPROPERTIES
+    
+    CONTAINER
+      CONTROL TAB
+        PROPERTIES
+          Name                #Tab
+          Width               #Column width
+          Height              #Column height
+        ENDPROPERTIES
+        
+        CONTAINER
+          CONTROL TABPAGE
+            PROPERTIES
+              Name                #TabPage
+              Width               #Column width
+              Height              #Column height
+              Caption             #General
+            ENDPROPERTIES
+            
+            CONTAINER
+              CONTROL GRID
+                PROPERTIES
+                  Name                #Grid
+                  Width               #Column width
+                  Height              #Column height
+                  DataSource          #FIN_GroupPeriod
+                ENDPROPERTIES
+                
+                  CONTAINER
+                    CONTROL DATEEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupPeriod_PeriodStart
+                        DataSource          #FIN_GroupPeriod
+                        DataField           #PeriodStart
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL DATEEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupPeriod_PeriodEnd
+                        DataSource          #FIN_GroupPeriod
+                        DataField           #PeriodEnd
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL COMBOBOX
+                      PROPERTIES
+                        Name                #FIN_GroupPeriod_PeriodStatus
+                        DataSource          #FIN_GroupPeriod
+                        DataField           #PeriodStatus
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupPeriod_Commentaries
+                        DataSource          #FIN_GroupPeriod
+                        DataField           #Commentaries
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                  ENDCONTAINER
+                  
+              ENDCONTROL 
+              
+            ENDCONTAINER
+            
+          ENDCONTROL 
+          
+        ENDCONTAINER
+        
+      ENDCONTROL 
+      
+    ENDCONTAINER
+    
+  ENDDESIGN
+  
+ENDFORM

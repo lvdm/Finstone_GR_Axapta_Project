@@ -1,0 +1,92 @@
+﻿  CLASS #FIN_CCADOField
+    Id 50042
+    PROPERTIES
+      Name                #FIN_CCADOField
+      Extends             #
+      RunOn               #Called from
+    ENDPROPERTIES
+    
+    METHODS
+      Version: 3
+      SOURCE #classDeclaration
+        #class FIN_CCADOField
+        #{
+        #    COM field;
+        #}
+      ENDSOURCE
+      SOURCE #name
+        #str name()
+        #{
+        #
+        #    InteropPermission _perm;
+        #;
+        #    _perm = new InteropPermission(InteropKind::ComInterop);
+        #    _perm.assert();
+        #
+        #
+        #    return field.name();
+        #}
+      ENDSOURCE
+      SOURCE #new
+        #void new(COM _field)
+        #{
+        #;
+        #    field = _field;
+        #}
+      ENDSOURCE
+      SOURCE #value
+        #anytype value()
+        #{
+        #    InteropPermission _perm;
+        #    COMVariant  value;
+        #;
+        #    _perm = new InteropPermission(InteropKind::ComInterop);
+        #    _perm.assert();
+        #
+        #
+        #
+        #    value = field.value();
+        #    switch (value.variantType())
+        #    {
+        #        case COMVariantType::VT_I2:
+        #            return value.byte();
+        #
+        #        case COMVariantType::VT_I4:
+        #            return value.int();
+        #
+        #        case COMVariantType::VT_R4, COMVariantType::VT_R8:
+        #            return value.double();
+        #
+        #        case COMVariantType::VT_CY:
+        #            return value.currency();
+        #
+        #        case COMVariantType::VT_DATE:
+        #            return value.date();
+        #
+        #        case COMVariantType::VT_BSTR:
+        #            return value.bStr();
+        #
+        #        case COMVariantType::VT_BOOL:
+        #            return value.boolean();
+        #
+        #        case COMVariantType::VT_DECIMAL:
+        #            return value.decimal();
+        #
+        #        case COMVariantType::VT_I1:
+        #            return value.byte();
+        #
+        #        case COMVariantType::VT_UI1:
+        #            return value.uInt();
+        #
+        #        case COMVariantType::VT_UI2:
+        #            return value.uShort();
+        #
+        #        case COMVariantType::VT_UI4:
+        #            return value.uLong();
+        #
+        #    }
+        #    return '';
+        #}
+      ENDSOURCE
+    ENDMETHODS
+  ENDCLASS

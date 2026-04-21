@@ -1,0 +1,338 @@
+﻿  CLASS #FIN_DataConnection
+    Id 50035
+    PROPERTIES
+      Name                #FIN_DataConnection
+      Extends             #
+      RunOn               #Called from
+    ENDPROPERTIES
+    
+    METHODS
+      Version: 3
+      SOURCE #classDeclaration
+        #class FIN_DataConnection
+        #{
+        #
+        #   FIN_CCADOConnection      connection;
+        #   FIN_CCADOCommand         command;
+        #   FIN_CCADORecordSet       recordSet;
+        #   FIN_CCADOFields          fields;
+        #
+        #   Com                  Coms;
+        #   Str                  sqlQuery1;
+        #   Str 200              connectionString;
+        #
+        #   boolean              isOpen;
+        #
+        #   FIN_GroupEntityDataSet   tabDataSet;
+        #
+        #   date                 startDate;
+        #   date                 endDate;
+        #
+        #   //Field mapping used to convert imported data to DataSet record
+        #   Map             fieldMap;
+        #   Common          record;
+        #   DictTable       dictTable;
+        #   MapEnumerator   mapEnumerator;
+        #
+        #}
+      ENDSOURCE
+      SOURCE #closeConnection
+        #void closeConnection()
+        #{
+        #    ;
+        #    connection.close();
+        #    connection = null;
+        #    isOpen = false;
+        #
+        #}
+      ENDSOURCE
+      SOURCE #descruct
+        #private FIN_DataConnection descruct()
+        #{
+        #    ;
+        #    if (connection)
+        #        this.closeConnection();
+        #
+        #
+        #
+        #}
+      ENDSOURCE
+      SOURCE #executeQuery
+        #FIN_CCADORecordSet executeQuery(int _returnRows = 0)
+        #{
+        #    Notes   query;
+        #    ;
+        #
+        #    if (isOpen)
+        #    {
+        #
+        #        query = tabDataSet.SQLQuery;
+        #
+        #        // If GL Data or Ajustments replace <STARTDATE> and <ENDDATE> in query
+        #        if (tabDataSet.DataSet == FIN_DataSet::LedgerAdjustments || tabDataSet.DataSet == FIN_DataSet::LedgerData || tabDataSet.DataSet == FIN_DataSet::InventoryData)
+        #        {
+        #            if (!startDate || !endDate)
+        #                throw error('No start date <STARTDATE> or end date <ENDDATE> specified!');
+        #
+        #
+        #            query = strReplace(query,"<STARTDATE>",date2str(startDate,123,2,1,3,1,4));
+        #            query = strReplace(query,"<ENDDATE>",date2str(endDate,123,2,1,3,1,4));
+        #
+        #        }
+        #
+        #         // Return rows will issue a TOP statement to only return the first x rows
+        #        if (_returnRows > 0)
+        #        {
+        #            query = strReplace(query,"Select ",strfmt("Select TOP %1 ",int2str(_returnRows)));
+        #        }
+        #
+        #        command.commandText(query);
+        #
+        #        recordSet = command.execute();
+        #        Coms = recordSet.recordSet();
+        #
+        #        // update the executed date time
+        #        FIN_GroupEntityDataSet::updateExecutedDateTime(tabDataSet.DataSource,tabDataSet.EntityCode,tabDataSet.DataSet);
+        #
+        #    }
+        #    else
+        #        throw error ('Data connection not open!');
+        #
+        #
+        #    return recordSet;
+        #}
+      ENDSOURCE
+      SOURCE #getQueryFieldMap
+        #public map getQueryFieldMap()
+        #{
+        #    Map         fieldsMap   = new Map(TYPES::Integer,TYPES::String);
+        #    int                  fieldCount, i;
+        #    object         val;
+        #    ;
+        #
+        #    if (!isOpen)
+        #        this.openConnection();
+        #
+        #    startDate = str2date('01.01.2020',123);
+        #    endDate = startDate;
+        #
+        #    this.executeQuery(1);
+        #
+        #    if (!recordSet)
+        #        return null;
+        #
+        #    fieldCount = recordSet.fields().count();
+        #
+        #    i = 0;
+        #
+        #    while (i < fieldCount)
+        #    {
+        #   //     val = recordSet.fields().itemIdx(i).value();
+        #   //     info (int2str(i) + " - " + any2str(recordSet.fields().itemIdx(i).value()));
+        #        fieldsMap.insert(i, recordSet.fields().itemIdx(i).name());
+        #        i++;
+        #
+        #    }
+        #
+        #    return fieldsMap;
+        #}
+      ENDSOURCE
+      SOURCE #isEOF
+        #boolean isEOF()
+        #{
+        #    ;
+        #    return recordSet.EOF();
+        #}
+      ENDSOURCE
+      SOURCE #mapToDataSetRecord
+        #public Common mapToDataSetRecord()
+        #{
+        #
+        #    DictField       dictField;
+        #
+        #   // MapIterator     mi;
+        #    Container       con;
+        #    ;
+        #
+        #    if (!isOpen)
+        #        throw error ('Data connection not open!');
+        #
+        #    if (!recordSet)
+        #        return null;
+        #
+        #    if (!dictTable)
+        #        dictTable = FIN_GroupEntityDataSet::dataSetToDictTable(tabDataSet);
+        #
+        #
+        #    if (!record)
+        #        record = dictTable.makeRecord();
+        #    else
+        #        record.clear();
+        #
+        #
+        #    if (!fieldMap)
+        #        fieldMap = FIN_GroupEntityDataSet::getFieldMap(tabDataSet);
+        #
+        #    //mi = new MapIterator(fieldMap);
+        #
+        #    if (!mapEnumerator)
+        #        mapEnumerator = new MapEnumerator(fieldMap);
+        #
+        #
+        #    while (mapEnumerator.moveNext())//(mi.more())
+        #    {
+        #        con = mapEnumerator.currentValue(); //mi.value();
+        #        // If a from fieldID is specified use that
+        #        if (conpeek(con,1) > -1)
+        #            record.(mapEnumerator.currentKey()) = recordSet.fields().itemIdx(conpeek(con,1)).value();  //mi.key()
+        #        // If no from fieldId but default value was specified, use that.
+        #        else if (conpeek(con,2))
+        #            record.(mapEnumerator.currentKey()) = conpeek(con,2);  //mi.key()
+        #
+        #
+        #        //mi.next();
+        #    }
+        #
+        #    mapEnumerator.reset();
+        #
+        #    return record;
+        #
+        #}
+      ENDSOURCE
+      SOURCE #new
+        #protected void new()
+        #{
+        #}
+      ENDSOURCE
+      SOURCE #nextRecord
+        #void nextRecord()
+        #{
+        #    InteropPermission _perm;
+        #;
+        #    _perm = new InteropPermission(InteropKind::ComInterop);
+        #    _perm.assert();
+        #
+        #    Coms.moveNext();
+        #}
+      ENDSOURCE
+      SOURCE #openConnection
+        #void openConnection()
+        #{
+        #
+        #    FIN_GroupDataSource     tabDataSource;
+        #    str 30                  pwdPassword;
+        #
+        #    ;
+        #
+        #    if (!tabDataSet || !tabDataSet.SQLQuery)
+        #        throw error ('Entity DataSet required to execute query.');
+        #
+        #    //Do some checking in the query to not allow deletes drops etc.
+        #    if (strscan(tabDataSet.SQLQuery,'drop',0,0))
+        #        throw error ('DROP not allowed in query!');
+        #
+        #    if (strscan(tabDataSet.SQLQuery,'delete',0,0))
+        #        throw error ('DROP not allowed in query!');
+        #
+        #
+        #
+        #    tabDataSource    = FIN_GroupDataSource::find(tabDataSet.DataSource,tabDataSet.EntityCode);
+        #
+        #    pwdPassword      = FIN_GroupDataSource::password(tabDataSet.EntityCode,tabDataSet.DataSource);
+        #
+        #    if (!tabDataSource)
+        #        throw error (strfmt('Unable to find DataSource %1 for Entity %2', tabDataSet.DataSource,tabDataSet.EntityCode));
+        #
+        #    if (!pwdPassword)
+        #        throw error (strfmt('Unable to find Password for DataSource %1 for Entity %2', tabDataSet.DataSource,tabDataSet.EntityCode));
+        #
+        #
+        #
+        #    ConnectionString =  strfmt("Provider=SQLNCLI11;server=%1;  Initial catalog=%2;user id=%3;password='%4';Encrypt=False;TrustServerCertificate=False;"
+        #                                ,tabDataSource.DBServer
+        #                                ,tabDataSource.DBName
+        #                                ,tabDataSource.DBUserId
+        #                                ,pwdPassword);
+        #     /*
+        #     ConnectionString =  strfmt("Provider=SqlOledb;server=%1; trusted_Connection=false; Initial catalog=%2;user id=%3;password='%4';"
+        #                                ,tabDataSource.DBServer
+        #                                ,tabDataSource.DBName
+        #                                ,tabDataSource.DBUserId
+        #                                ,pwdPassword);
+        #     */
+        #
+        #
+        #    try
+        #    {
+        #        connection = new FIN_CCADOConnection();
+        #        connection.open(connectionString);
+        #
+        #
+        #        command = new FIN_CCADOCommand();
+        #        command.activeConnection(connection);
+        #
+        #        recordSet = new FIN_CCADORecordSet();
+        #
+        #        isOpen = true;
+        #
+        #    }
+        #    catch
+        #    {
+        #        isOpen = false;
+        #        throw error('Unable to execute query!');
+        #    }
+        #
+        #    return;
+        #}
+      ENDSOURCE
+      SOURCE #parmDataSet
+        #public FIN_GroupEntityDataSet parmDataSet(FIN_GroupEntityDataSet _dataSet = tabDataSet)
+        #{
+        #    ;
+        #    tabDataSet = _dataSet;
+        #
+        #    return tabDataSet;
+        #}
+      ENDSOURCE
+      SOURCE #parmEndDate
+        #public date parmEndDate(date _endDate = endDate)
+        #{
+        #    ;
+        #    endDate = _endDate;
+        #
+        #    return endDate;
+        #}
+      ENDSOURCE
+      SOURCE #parmStartDate
+        #public date parmStartDate(date _startDate = startDate)
+        #{
+        #    ;
+        #    startDate = _startDate;
+        #
+        #    return startDate;
+        #}
+      ENDSOURCE
+      SOURCE #construct
+        #server private static FIN_DataConnection construct()
+        #{
+        #    ;
+        #    return new FIN_DataConnection();
+        #}
+      ENDSOURCE
+      SOURCE #newFromDataSet
+        #server public static FIN_DataConnection newFromDataSet(FIN_GroupEntityDataSet _dataSet)
+        #{
+        #    FIN_DataConnection clsDC;
+        #
+        #    ;
+        #
+        #    clsDC = FIN_DataConnection::construct();
+        #    clsDC.parmDataSet(_dataSet);
+        #
+        #
+        #    return clsDC;
+        #
+        #}
+      ENDSOURCE
+    ENDMETHODS
+  ENDCLASS

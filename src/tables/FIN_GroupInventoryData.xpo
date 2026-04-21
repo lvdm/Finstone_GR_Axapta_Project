@@ -1,0 +1,679 @@
+﻿  TABLE #FIN_GroupInventoryData
+    Id 50050
+    PROPERTIES
+      Name                #FIN_GroupInventoryData
+      Label               #Finstone Group Inventory Data
+      ModifiedDateTime    #Yes
+      ModifiedBy          #Yes
+      CreatedDateTime     #Yes
+      CreatedBy           #Yes
+    ENDPROPERTIES
+    
+    FIELDS
+      FIELD #ScenarioCode
+        Id 50001
+        STRING
+        PROPERTIES
+          Name                #ScenarioCode
+          Label               #Scenario
+          Table               #FIN_GroupInventoryData
+          ExtendedDataType    
+            ARRAY 
+              #FIN_ScenarioCode
+              #
+            ENDARRAY
+        ENDPROPERTIES
+        
+      FIELD #TransDate
+        Id 50002
+        DATE
+        PROPERTIES
+          Name                #TransDate
+          Table               #FIN_GroupInventoryData
+          ExtendedDataType    
+            ARRAY 
+              #TransDate
+              #
+            ENDARRAY
+        ENDPROPERTIES
+        
+      FIELD #Amount
+        Id 50003
+        REAL
+        PROPERTIES
+          Name                #Amount
+          Table               #FIN_GroupInventoryData
+          ExtendedDataType    
+            ARRAY 
+              #Amount
+              #
+            ENDARRAY
+        ENDPROPERTIES
+        
+      FIELD #EntityCode
+        Id 50004
+        STRING
+        PROPERTIES
+          Name                #EntityCode
+          Table               #FIN_GroupInventoryData
+          ExtendedDataType    
+            ARRAY 
+              #FIN_EntityCode
+              #
+            ENDARRAY
+        ENDPROPERTIES
+        
+      FIELD #CostCenter
+        Id 50005
+        STRING
+        PROPERTIES
+          Name                #CostCenter
+          Label               #Cost Center
+          Table               #FIN_GroupInventoryData
+        ENDPROPERTIES
+        
+      FIELD #Department
+        Id 50006
+        STRING
+        PROPERTIES
+          Name                #Department
+          Table               #FIN_GroupInventoryData
+        ENDPROPERTIES
+        
+      FIELD #Purpose
+        Id 50007
+        STRING
+        PROPERTIES
+          Name                #Purpose
+          Table               #FIN_GroupInventoryData
+        ENDPROPERTIES
+        
+      FIELD #AccountNum
+        Id 50008
+        STRING
+        PROPERTIES
+          Name                #AccountNum
+          Label               #Account Number
+          Table               #FIN_GroupInventoryData
+          ExtendedDataType    
+            ARRAY 
+              #FIN_AccountNum
+              #
+            ENDARRAY
+          StringSize          #30
+        ENDPROPERTIES
+        
+      FIELD #AmountMST
+        Id 50009
+        REAL
+        PROPERTIES
+          Name                #AmountMST
+          Label               #Amount MST
+          Table               #FIN_GroupInventoryData
+          ExtendedDataType    
+            ARRAY 
+              #AmountMST
+              #
+            ENDARRAY
+        ENDPROPERTIES
+        
+      FIELD #CurrencyCode
+        Id 50010
+        STRING
+        PROPERTIES
+          Name                #CurrencyCode
+          Table               #FIN_GroupInventoryData
+          ExtendedDataType    
+            ARRAY 
+              #CurrencyCode
+              #
+            ENDARRAY
+          StringSize          #3
+        ENDPROPERTIES
+        
+      FIELD #PeriodStart
+        Id 50011
+        DATE
+        PROPERTIES
+          Name                #PeriodStart
+          Label               #Period
+          Table               #FIN_GroupInventoryData
+          ExtendedDataType    
+            ARRAY 
+              #FIN_PeriodStart
+              #
+            ENDARRAY
+        ENDPROPERTIES
+        
+      FIELD #PeriodClosed
+        Id 50012
+        ENUM
+        PROPERTIES
+          Name                #PeriodClosed
+          Label               #Period Closed
+          Table               #FIN_GroupInventoryData
+          EnumType            #NoYes
+        ENDPROPERTIES
+        
+      FIELD #Category
+        Id 50013
+        STRING
+        PROPERTIES
+          Name                #Category
+          Table               #FIN_GroupInventoryData
+          ExtendedDataType    
+            ARRAY 
+              #FIN_Category
+              #
+            ENDARRAY
+        ENDPROPERTIES
+        
+      FIELD #LockedByUser
+        Id 50014
+        ENUM
+        PROPERTIES
+          Name                #LockedByUser
+          Label               #Locked User
+          Table               #FIN_GroupInventoryData
+          EnumType            #NoYes
+        ENDPROPERTIES
+        
+      FIELD #LockedByAdmin
+        Id 50015
+        ENUM
+        PROPERTIES
+          Name                #LockedByAdmin
+          Label               #Locked Admin
+          Table               #FIN_GroupInventoryData
+          EnumType            #NoYes
+        ENDPROPERTIES
+        
+      FIELD #Qty
+        Id 50016
+        REAL
+        PROPERTIES
+          Name                #Qty
+          Table               #FIN_GroupInventoryData
+          ExtendedDataType    
+            ARRAY 
+              #Qty
+              #
+            ENDARRAY
+        ENDPROPERTIES
+        
+      FIELD #QtyUnits
+        Id 50017
+        STRING
+        PROPERTIES
+          Name                #QtyUnits
+          Label               #Units
+          Table               #FIN_GroupInventoryData
+          StringSize          #5
+        ENDPROPERTIES
+        
+      FIELD #ProducerCountry
+        Id 50018
+        STRING
+        PROPERTIES
+          Name                #ProducerCountry
+          Label               #Producer Country
+          Table               #FIN_GroupInventoryData
+          ExtendedDataType    
+            ARRAY 
+              #Name
+              #
+            ENDARRAY
+          StringSize          #60
+        ENDPROPERTIES
+        
+      FIELD #ProducerName
+        Id 50019
+        STRING
+        PROPERTIES
+          Name                #ProducerName
+          Label               #Producer Name
+          Table               #FIN_GroupInventoryData
+          ExtendedDataType    
+            ARRAY 
+              #Name
+              #
+            ENDARRAY
+          StringSize          #60
+        ENDPROPERTIES
+        
+      FIELD #RegionName
+        Id 50020
+        STRING
+        PROPERTIES
+          Name                #RegionName
+          Label               #Region Name
+          Table               #FIN_GroupInventoryData
+        ENDPROPERTIES
+        
+      FIELD #ProductName
+        Id 50021
+        STRING
+        PROPERTIES
+          Name                #ProductName
+          Label               #Product Name
+          Table               #FIN_GroupInventoryData
+          ExtendedDataType    
+            ARRAY 
+              #Name
+              #
+            ENDARRAY
+          StringSize          #60
+        ENDPROPERTIES
+        
+      FIELD #SizeCategory
+        Id 50022
+        STRING
+        PROPERTIES
+          Name                #SizeCategory
+          Label               #Size Category
+          Table               #FIN_GroupInventoryData
+          StringSize          #5
+        ENDPROPERTIES
+        
+      FIELD #Grade
+        Id 50023
+        STRING
+        PROPERTIES
+          Name                #Grade
+          Table               #FIN_GroupInventoryData
+          StringSize          #15
+        ENDPROPERTIES
+        
+      FIELD #VendorName
+        Id 50024
+        STRING
+        PROPERTIES
+          Name                #VendorName
+          Label               #Vendor Name
+          Table               #FIN_GroupInventoryData
+          ExtendedDataType    
+            ARRAY 
+              #Name
+              #
+            ENDARRAY
+          StringSize          #60
+        ENDPROPERTIES
+        
+      FIELD #CustomerName
+        Id 50025
+        STRING
+        PROPERTIES
+          Name                #CustomerName
+          Label               #Customer Name
+          Table               #FIN_GroupInventoryData
+          ExtendedDataType    
+            ARRAY 
+              #Name
+              #
+            ENDARRAY
+          StringSize          #60
+        ENDPROPERTIES
+        
+      FIELD #MarketArea
+        Id 50026
+        STRING
+        PROPERTIES
+          Name                #MarketArea
+          Label               #Market Area
+          Table               #FIN_GroupInventoryData
+          ExtendedDataType    
+            ARRAY 
+              #Name
+              #
+            ENDARRAY
+          StringSize          #60
+        ENDPROPERTIES
+        
+      FIELD #ColorName
+        Id 50029
+        STRING
+        PROPERTIES
+          Name                #ColorName
+          Label               #Color Name
+          Table               #FIN_GroupInventoryData
+          ExtendedDataType    
+            ARRAY 
+              #Name
+              #
+            ENDARRAY
+          StringSize          #60
+        ENDPROPERTIES
+        
+      FIELD #LockedByUser1
+        Id 50030
+        ENUM
+        PROPERTIES
+          Name                #LockedByUser1
+          Label               #Locked User
+          Table               #FIN_GroupInventoryData
+          EnumType            #NoYes
+        ENDPROPERTIES
+        
+      FIELD #LockedByAdmin1
+        Id 50031
+        ENUM
+        PROPERTIES
+          Name                #LockedByAdmin1
+          Label               #Locked Admin
+          Table               #FIN_GroupInventoryData
+          EnumType            #NoYes
+        ENDPROPERTIES
+        
+    ENDFIELDS
+    GROUPS
+    ENDGROUPS
+    
+    INDICES
+      #EntityCodeIdx
+      Id 50001
+      PROPERTIES
+        Name                #EntityCodeIdx
+      ENDPROPERTIES
+      
+      INDEXFIELDS
+        #TransDate
+        #EntityCode
+      ENDINDEXFIELDS
+      
+      #AccountBalanceIdx
+      Id 50002
+      PROPERTIES
+        Name                #AccountBalanceIdx
+      ENDPROPERTIES
+      
+      INDEXFIELDS
+        #EntityCode
+        #AccountNum
+        #Category
+        #PeriodStart
+        #ScenarioCode
+        #CostCenter
+        #Department
+        #Purpose
+      ENDINDEXFIELDS
+      
+    ENDINDICES
+    REFERENCES
+      REFERENCE #LedgerTable
+        PROPERTIES
+          Name                #LedgerTable
+          Table               #FIN_GroupLedgerTable
+        ENDPROPERTIES
+        
+        FIELDREFERENCES
+          REFERENCETYPE NORMAL
+          PROPERTIES
+            Field               #EntityCode
+            RelatedField        #EntityCode
+          ENDPROPERTIES
+          
+          REFERENCETYPE NORMAL
+          PROPERTIES
+            Field               #AccountNum
+            RelatedField        #AccountNum
+          ENDPROPERTIES
+          
+        ENDFIELDREFERENCES
+      ENDREFERENCE
+    ENDREFERENCES
+    
+    DELETEACTIONS
+    ENDDELETEACTIONS
+    
+    METHODS
+      Version: 3
+      SOURCE #dataExist
+        #NoYes dataExist(FIN_EntityCode _entity,FIN_PeriodStart _period, NoYes _promtToDelete = NoYes::Yes,FIN_ScenarioCode _scenario = "")
+        #{
+        #    FIN_GroupInventoryData     tabData;
+        #    FIN_GroupPeriod         tabPeriod;
+        #    ;
+        #
+        #
+        #    tabPeriod = FIN_GroupPeriod::find(_period,true);
+        #
+        #    if (!_entity)
+        #        throw error('In order to check data an Entity must be specified!');
+        #
+        #    if (!tabPeriod.RecId)
+        #        throw error('In order to check data a Period must be specified!');
+        #
+        #
+        #
+        #    if (_scenario == "")
+        #    {
+        #        //Check for all scenarios
+        #        select  recid from tabData where tabData.EntityCode == _entity
+        #                && tabData.TransDate >= tabPeriod.PeriodStart
+        #                && tabData.TransDate <= tabPeriod.PeriodEnd;
+        #    }
+        #    else
+        #    {
+        #        //Check for specified scenarios
+        #        select  recid from tabData where tabData.EntityCode == _entity
+        #                && tabData.TransDate >= tabPeriod.PeriodStart
+        #                && tabData.TransDate <= tabPeriod.PeriodEnd
+        #                && tabData.ScenarioCode == _scenario;
+        #
+        #    }
+        #
+        #    if (tabData.RecId)
+        #    {
+        #        if (_promtToDelete)
+        #        {
+        #            if (box::yesNo('Data already exist for specified period. Should it be DELETED?',
+        #                        dialogButton::Yes, 'Confirmation') == dialogButton::Yes)
+        #            {
+        #                this.DeleteDatainPeriod(_entity,tabPeriod.PeriodStart,_scenario);
+        #                return NoYes::No;  // When data deleted return NO as no data should exist anymore.
+        #            }
+        #            else
+        #                return NoYes::Yes; // When user said NO return YES as data still exist.
+        #        }
+        #
+        #        return NoYes::Yes;
+        #
+        #
+        #
+        #    }
+        #    else
+        #        return NoYes::No;
+        #
+        #}
+      ENDSOURCE
+      SOURCE #DeleteDatainPeriod
+        #void DeleteDatainPeriod(FIN_EntityCode _entity,FIN_PeriodStart _period,FIN_ScenarioCode _scenario = "")
+        #{
+        #    FIN_GroupInventoryData  tabData;
+        #    FIN_GroupPeriod         tabPeriod;
+        #
+        #    ;
+        #
+        #    tabPeriod = FIN_GroupPeriod::find(_period,true);
+        #
+        #    if (!_entity)
+        #        throw error('In order to delete data an Entity must be specified!');
+        #
+        #    if (!tabPeriod.RecId)
+        #        throw error('In order to delete data a Period must be specified!');
+        #
+        #    if (_scenario == "")
+        #    {
+        #
+        #        Delete_from tabData where tabData.EntityCode == _entity
+        #                && tabData.TransDate >= tabPeriod.PeriodStart
+        #                && tabData.TransDate <= tabPeriod.PeriodEnd
+        #                && tabData.PeriodClosed != NoYes::Yes
+        #                && tabData.LockedByAdmin != NoYes::Yes
+        #                && tabData.LockedByUser != NoYes::Yes;
+        #
+        #    }
+        #    else
+        #    {
+        #        Delete_from tabData where tabData.EntityCode == _entity
+        #                && tabData.TransDate >= tabPeriod.PeriodStart
+        #                && tabData.TransDate <= tabPeriod.PeriodEnd
+        #                && tabData.ScenarioCode == _scenario
+        #                && tabData.PeriodClosed != NoYes::Yes
+        #                && tabData.LockedByAdmin != NoYes::Yes
+        #                && tabData.LockedByUser != NoYes::Yes;
+        #
+        #    }
+        #}
+      ENDSOURCE
+      SOURCE #initValue
+        #public void initValue()
+        #{
+        #    super();
+        #
+        #    this.AccountNum          = "";
+        #    this.Department         = "";
+        #    this.Purpose            = "";
+        #    this.CostCenter         = "";
+        #    this.CurrencyCode       = "";
+        #    this.EntityCode         = "";
+        #    this.ScenarioCode       = "";
+        #    this.Category           = "MAIN";
+        #    this.LockedByAdmin      = NoYes::No;
+        #    this.LockedByUser       = Noyes::No;
+        #
+        #    this.PeriodClosed       = NoYes::No;
+        #
+        #
+        #    this.Amount             = 0;
+        #    this.AmountMST          = 0;
+        #
+        #    this.MarketArea         = "";
+        #    this.VendorName         = "";
+        #    this.CustomerName       = "";
+        #    this.Grade              = "";
+        #    this.SizeCategory       = "";
+        #    this.RegionName         = "";
+        #    this.ProducerCountry    = "";
+        #    this.ProducerName       = "";
+        #    this.ProductName        = "";
+        #    this.QtyUnits           = "";
+        #    this.Qty                = 0;
+        #}
+      ENDSOURCE
+      SOURCE #insert
+        #public void insert()
+        #{
+        #    ;
+        #    if (!this.PeriodStart)
+        #        this.PeriodStart = Datestartmth(this.TransDate);
+        #
+        #    super();
+        #}
+      ENDSOURCE
+      SOURCE #validateDelete
+        #public boolean validateDelete()
+        #{
+        #    boolean ret;
+        #
+        #    if (this.PeriodClosed && this.orig().PeriodClosed)
+        #        return checkFailed("Data cannot be changed as record has been locked due to period closed.");
+        #
+        #    if (this.LockedByAdmin && this.orig().LockedByAdmin)
+        #        return checkFailed("Data cannot be changed as record has been locked by Admin.");
+        #
+        #     if (this.LockedByUser && this.orig().LockedByUser)
+        #        return checkFailed("Data cannot be changed as record has been locked by User.");
+        #
+        #
+        #    ret = super();
+        #
+        #    return ret;
+        #}
+      ENDSOURCE
+      SOURCE #validateWrite
+        #public boolean validateWrite()
+        #{
+        #    boolean ret;
+        #
+        #    if (this.PeriodClosed && this.orig().PeriodClosed)
+        #        return checkFailed("Data cannot be changed as record has been locked due to period closed.");
+        #
+        #
+        #    if (!this.PeriodStart)
+        #        this.PeriodStart = Datestartmth(this.TransDate);
+        #
+        #
+        #    ret = super();
+        #
+        #    return ret;
+        #}
+      ENDSOURCE
+      SOURCE #lockData_Admin
+        #public static void lockData_Admin(FIN_EntityCode _entityCode,FIN_PeriodStart _period )
+        #{
+        #    FIN_GroupInventoryData tabInventData;
+        #
+        #    ;
+        #
+        #    if (!_entityCode)
+        #        throw error('Entity Code required to Lock Data');
+        #
+        #    if (!_period)
+        #        throw error('Period required to Lock Data');
+        #
+        #
+        #    ttsbegin;
+        #    startlengthyoperation();
+        #
+        #    while select * from tabInventData
+        #        where tabInventData.EntityCode == _entityCode
+        #                && tabInventData.PeriodStart == _period
+        #    {
+        #
+        #        tabInventData.LockedByAdmin = NoYes::Yes;
+        #
+        #    }
+        #
+        #    FIN_GroupEntityLog::addEntry(_entityCode,FIN_LogEntryType::InventData_LockAdmin,curUserId(),_period,_period);
+        #
+        #    endlengthyoperation();
+        #    ttscommit;
+        #
+        #
+        #}
+      ENDSOURCE
+      SOURCE #lockData_User
+        #public static void lockData_User(FIN_EntityCode _entityCode,FIN_PeriodStart _period )
+        #{
+        #    FIN_GroupInventoryData tabInventData;
+        #
+        #    ;
+        #
+        #    if (!_entityCode)
+        #        throw error('Entity Code required to Lock Data');
+        #
+        #    if (!_period)
+        #        throw error('Period required to Lock Data');
+        #
+        #
+        #    ttsbegin;
+        #    startlengthyoperation();
+        #
+        #    while select * from tabInventData
+        #        where tabInventData.EntityCode == _entityCode
+        #                && tabInventData.PeriodStart == _period
+        #    {
+        #
+        #        tabInventData.LockedByUser = NoYes::Yes;
+        #
+        #    }
+        #
+        #    FIN_GroupEntityLog::addEntry(_entityCode,FIN_LogEntryType::InventData_LockUser,curUserId(),_period,_period);
+        #
+        #    endlengthyoperation();
+        #    ttscommit;
+        #}
+      ENDSOURCE
+    ENDMETHODS
+  ENDTABLE

@@ -1,0 +1,472 @@
+﻿  TABLE #FIN_GroupDataSource
+    Id 50031
+    PROPERTIES
+      Name                #FIN_GroupDataSource
+      Label               #Group Datasources
+      ModifiedDateTime    #Yes
+      ModifiedBy          #Yes
+      CreatedDateTime     #Yes
+      CreatedBy           #Yes
+    ENDPROPERTIES
+    
+    FIELDS
+      FIELD #EntityCode
+        Id 50001
+        STRING
+        PROPERTIES
+          Name                #EntityCode
+          Mandatory           #Yes
+          Table               #FIN_GroupDataSource
+          ExtendedDataType    
+            ARRAY 
+              #FIN_EntityCode
+              #
+            ENDARRAY
+        ENDPROPERTIES
+        
+      FIELD #DataSource
+        Id 50002
+        STRING
+        PROPERTIES
+          Name                #DataSource
+          Label               #Data source
+          Mandatory           #Yes
+          Table               #FIN_GroupDataSource
+          ExtendedDataType    
+            ARRAY 
+              #FIN_DataSource
+              #
+            ENDARRAY
+          StringSize          #60
+        ENDPROPERTIES
+        
+      FIELD #Description
+        Id 50003
+        STRING
+        PROPERTIES
+          Name                #Description
+          Table               #FIN_GroupDataSource
+          ExtendedDataType    
+            ARRAY 
+              #Notes
+              #
+            ENDARRAY
+          StringSize          #(Memo)
+        ENDPROPERTIES
+        
+      FIELD #DSNName
+        Id 50004
+        STRING
+        PROPERTIES
+          Name                #DSNName
+          Label               #DSN Name
+          Table               #FIN_GroupDataSource
+          ExtendedDataType    
+            ARRAY 
+              #Name
+              #
+            ENDARRAY
+          StringSize          #60
+        ENDPROPERTIES
+        
+      FIELD #DBName
+        Id 50005
+        STRING
+        PROPERTIES
+          Name                #DBName
+          Label               #Datase Name
+          Table               #FIN_GroupDataSource
+          ExtendedDataType    
+            ARRAY 
+              #Name
+              #
+            ENDARRAY
+          StringSize          #60
+        ENDPROPERTIES
+        
+      FIELD #DBServer
+        Id 50006
+        STRING
+        PROPERTIES
+          Name                #DBServer
+          Label               #Server
+          Table               #FIN_GroupDataSource
+          ExtendedDataType    
+            ARRAY 
+              #Name
+              #
+            ENDARRAY
+          StringSize          #60
+        ENDPROPERTIES
+        
+      FIELD #DBUserId
+        Id 50007
+        STRING
+        PROPERTIES
+          Name                #DBUserId
+          Label               #User Id
+          Table               #FIN_GroupDataSource
+          ExtendedDataType    
+            ARRAY 
+              #Name
+              #
+            ENDARRAY
+          StringSize          #60
+        ENDPROPERTIES
+        
+      FIELD #DBPassword
+        Id 50008
+        STRING
+        PROPERTIES
+          Name                #DBPassword
+          Label               #Password
+          Table               #FIN_GroupDataSource
+          ExtendedDataType    
+            ARRAY 
+              #Name
+              #
+            ENDARRAY
+          StringSize          #60
+        ENDPROPERTIES
+        
+      FIELD #DataSourceType
+        Id 50009
+        ENUM
+        PROPERTIES
+          Name                #DataSourceType
+          Label               #Type
+          Table               #FIN_GroupDataSource
+          EnumType            #FIN_DataSourceType
+        ENDPROPERTIES
+        
+      FIELD #Encrypt
+        Id 50010
+        ENUM
+        PROPERTIES
+          Name                #Encrypt
+          Table               #FIN_GroupDataSource
+          EnumType            #NoYes
+        ENDPROPERTIES
+        
+      FIELD #TrustServerCertificate
+        Id 50011
+        ENUM
+        PROPERTIES
+          Name                #TrustServerCertificate
+          Table               #FIN_GroupDataSource
+          EnumType            #NoYes
+        ENDPROPERTIES
+        
+    ENDFIELDS
+    GROUPS
+      GROUP #AutoLookup
+        PROPERTIES
+          Name                #AutoLookup
+        ENDPROPERTIES
+        
+        GROUPFIELDS
+          #EntityCode
+          #DataSource
+        ENDGROUPFIELDS
+      ENDGROUP
+    ENDGROUPS
+    
+    INDICES
+      #DataSourceIdx
+      Id 50001
+      PROPERTIES
+        Name                #DataSourceIdx
+        AllowDuplicates     #No
+      ENDPROPERTIES
+      
+      INDEXFIELDS
+        #DataSource
+        #EntityCode
+      ENDINDEXFIELDS
+      
+    ENDINDICES
+    REFERENCES
+      REFERENCE #Entities
+        PROPERTIES
+          Name                #Entities
+          Table               #FIN_GroupEntities
+        ENDPROPERTIES
+        
+        FIELDREFERENCES
+          REFERENCETYPE NORMAL
+          PROPERTIES
+            Field               #EntityCode
+            RelatedField        #EntityCode
+          ENDPROPERTIES
+          
+        ENDFIELDREFERENCES
+      ENDREFERENCE
+    ENDREFERENCES
+    
+    DELETEACTIONS
+      #FIN_GroupEntityDataSet
+      PROPERTIES
+        Table               #FIN_GroupEntityDataSet
+        DeleteAction        #Restricted
+      ENDPROPERTIES
+      
+    ENDDELETEACTIONS
+    
+    METHODS
+      Version: 3
+      SOURCE #copyDataSource
+        #public static void copyDataSource(FIN_EntityCode _entityCode)
+        #
+        #{
+        #    dialogField             dialogFromDataSource;
+        #    dialogField             dialogFromEntity;
+        #    dialogField             dialogToDataSource;
+        #    dialogField             dialogDestSource;
+        #    dialogField             dialogDestEntityCode;
+        #    dialogField             dialogCopyDataSets;
+        #
+        #    Dialog                  dialog;
+        #
+        #    FIN_EntityCode          fromEntity;
+        #    FIN_DataSource          fromDataSource, toDataSource;
+        #    NoYes                   copyDataSets;
+        #
+        #    FIN_GroupDataSource     tabDataSource;
+        #    FIN_GroupEntityDataSet  tabDataSet;
+        #    FIN_GroupEntityDataSetMap   tabMapping;
+        #
+        #    FIN_GroupDataSource     tabDestDataSource;
+        #    FIN_GroupEntityDataSet  tabDestDataSet;
+        #    FIN_GroupEntityDataSetMap   tabDestMapping;
+        #
+        #
+        #    ;
+        #
+        #
+        #
+        #
+        #    dialog = new Dialog("Copy DataSource");
+        #    dialog.addText("Destination Entity : " + _entityCode);
+        #    dialogFromEntity            =   dialog.addField(typeId(FIN_EntityCode),"From Entity");
+        #    dialogFromDataSource        =   dialog.addField(typeId(FIN_DataSource),"From DataSource");
+        #    dialogCopyDataSets          =   dialog.addField(typeId(NoYes),"Copy DataSets");
+        #    dialogToDataSource          =   dialog.addField(typeId(FIN_DataSource),"To DataSource");
+        #
+        #
+        #    if(!dialog.run())
+        #        return;
+        #
+        #    fromDataSource              =   dialogFromDataSource.value();
+        #    fromEntity                  =   dialogFromEntity.value();
+        #    toDataSource                =   dialogToDataSource.value();
+        #    copyDataSets                =   dialogcopyDataSets.value();
+        #
+        #    if (!toDataSource)
+        #        throw error('A valid To DataSource code required');
+        #
+        #
+        #    select RecId from tabDataSource where tabDataSource.EntityCode == _entityCode
+        #                                        && tabDataSource.DataSource == toDataSource;
+        #
+        #    if (tabDataSource.RecId)
+        #        throw error (strfmt('DataSource already exists for Entity %1',_entityCode));
+        #
+        #
+        #    select RecId from tabDataSet where tabDataSet.EntityCode == _entityCode
+        #                                        && tabDataSet.DataSource == toDataSource;
+        #
+        #    if (tabDataSet.RecId)
+        #        throw error (strfmt('DataSets already exists for Entity %1',_entityCode));
+        #
+        #
+        #
+        #    ttsbegin;
+        #    while select *
+        #        from tabDataSource
+        #        where   tabDataSource.DataSource == fromDataSource
+        #                && tabDataSource.EntityCode == fromEntity
+        #    {
+        #
+        #        tabDestDataSource.data(tabDataSource.data());
+        #        tabDestDataSource.EntityCode = _entityCode;
+        #        tabDestDataSource.DataSource = toDataSource;
+        #        tabDestDataSource.insert();
+        #
+        #    }
+        #
+        #    if (copyDataSets)
+        #    {
+        #        while select *
+        #            from tabDataSet
+        #            where   tabDataSet.DataSource == fromDataSource
+        #                    && tabDataSet.EntityCode == fromEntity
+        #        {
+        #
+        #            tabDestDataSet.data(tabDataSet.data());
+        #            tabDestDataSet.EntityCode = _entityCode;
+        #            tabDestDataSet.DataSource = toDataSource;
+        #            tabDestDataSet.insert();
+        #
+        #        }
+        #
+        #        while select *
+        #            from tabMapping
+        #            exists join tabDataSet
+        #            where   tabDataSet.DataSource == tabMapping.DataSource
+        #                    && tabDataSet.EntityCode == fromEntity
+        #                    &&tabMapping.DataSource == fromDataSource
+        #                    && tabMapping.EntityCode == fromEntity
+        #        {
+        #
+        #            tabDestMapping.data(tabMapping.data());
+        #            tabDestMapping.EntityCode = _entityCode;
+        #            tabDestMapping.DataSource = toDataSource;
+        #            tabDestMapping.insert();
+        #
+        #        }
+        #
+        #
+        #    }
+        #
+        #    ttscommit;
+        #
+        #}
+      ENDSOURCE
+      SOURCE #ExecuteQueryADO
+        #static CCADORecordSet ExecuteQueryADO(FIN_GroupEntityDataSet _dataSet
+        #                                ,NoYes _testOnly = NoYes::No)
+        #{
+        #    CCADOConnection         connection;
+        #    CCADOCommand            command;
+        #    CCADORecordSet          recordSet;
+        #    Str                     ConnectionString;
+        #
+        #    FIN_GroupDataSource     tabDataSource;
+        #
+        #    ;
+        #
+        #
+        #    if (!_dataSet || !_dataSet.SQLQuery)
+        #        throw error ('Entity DataSet required to execute query.');
+        #
+        #    //Do some checking in the query to not allow deletes drops etc.
+        #    if (strscan(_dataSet.SQLQuery,'drop',0,0))
+        #        throw error ('DROP not allowed in query!');
+        #
+        #    if (strscan(_dataSet.SQLQuery,'delete',0,0))
+        #        throw error ('DROP not allowed in query!');
+        #
+        #
+        #
+        #    tabDataSource    = FIN_GroupDataSource::find(_dataSet.DataSource,_dataSet.EntityCode);
+        #
+        #    if (!tabDataSource)
+        #        throw error (strfmt('Unable to find DataSource %1 for Entity %2', _dataSet.DataSource,_dataSet.EntityCode));
+        #
+        #
+        #    ConnectionString =  strfmt("Provider=SqlOledb;server=%1; trusted_Connection=false; Initial catalog=%2;user id=%3;password='%4';"
+        #                                ,tabDataSource.DBServer,tabDataSource.DBName,tabDataSource.DBUserId,tabDataSource.DBPassword);
+        #
+        #    try
+        #    {
+        #        connection = new CCADOConnection();
+        #        connection.open(connectionString);
+        #
+        #
+        #        command = new CCADOCommand();
+        #        command.activeConnection(connection);
+        #
+        #        command.commandText(_dataSet.SQLQuery);
+        #
+        #        recordSet = new CCADORecordSet();
+        #        recordSet = command.execute();
+        #
+        #        return recordSet;
+        #
+        #    }
+        #    catch
+        #    {
+        #        throw error('Unable to execute query!');
+        #    }
+        #
+        #    return null;
+        #}
+      ENDSOURCE
+      SOURCE #find
+        #static FIN_GroupDataSource find(FIN_DataSource   _dataSource , FIN_EntityCode _entityCode,
+        #                             boolean         _forUpdate = false)
+        #{
+        #    FIN_GroupDataSource  fin_GroupDataSouce;
+        #
+        #    if (_dataSource && _entityCode)
+        #    {
+        #        fin_GroupDataSouce.selectForUpdate(_forUpdate);
+        #
+        #        select firstonly *
+        #            from fin_GroupDataSouce
+        #                where fin_GroupDataSouce.DataSource == _dataSource
+        #                    && fin_GroupDataSouce.EntityCode == _entityCode;
+        #    }
+        #
+        #    return fin_GroupDataSouce;
+        #}
+      ENDSOURCE
+      SOURCE #lookupDataSource
+        #public static void lookupDataSource(FormControl _callingControl,FIN_EntityCode _entityCode)
+        #{
+        #  Query                   query = new Query();
+        #  QueryBuildDataSource    dsGroupDataSource;
+        #  QueryBuildRange         qbr_EntityCode;
+        #
+        #
+        #  // Instantiate sysTableLookup object using table which will provide the visible fields
+        #  SysTableLookup  sysTableLookup = sysTableLookup::newParameters(tableNum(FIN_GroupDataSource), _callingControl);
+        #  ;
+        #
+        #  // Create the query.
+        #  dsGroupDataSource = query.addDataSource(tableNum(FIN_GroupDataSource));
+        #
+        #  qbr_EntityCode = dsGroupDataSource.addRange(fieldNum(FIN_GroupDataSource ,EntityCode));
+        #  qbr_EntityCode.value(_entityCode);
+        #
+        #
+        #  // Set the query to be used by the lookup form
+        #  sysTableLookup.parmQuery(query);
+        #
+        #  // Specify the fields to show in the form.  In this case we have chosen
+        #
+        #  sysTableLookup.addLookupfield(fieldNum(FIN_GroupDataSource, DataSource));
+        #  sysTableLookup.addLookupfield(fieldNum(FIN_GroupDataSource, EntityCode));
+        #  sysTableLookup.addLookupfield(fieldNum(FIN_GroupDataSource, DataSourceType));
+        #
+        #
+        #  // Perform the lookup
+        #  sysTableLookup.performFormLookup();
+        #}
+      ENDSOURCE
+      SOURCE #password
+        #static str 30 password(FIN_EntityCode  _entityCode,
+        #                        FIN_DataSource  _dataSource)
+        #{
+        #    CryptoBlob cryptoBlob = connull();
+        #    FIN_GroupDataSourcePassword dataSourcePassword;
+        #
+        #    AOSId AOSId;
+        #    AOSInstanceId AOSInstanceId;
+        #
+        #    ;
+        #    [AOSId,AOSInstanceId] = FIN_GroupDataSourcePassword::currentAOSInstance();
+        #
+        #    dataSourcePassword = FIN_GroupDataSourcePassword::find(AOSId,AOSInstanceId,_dataSource,_entityCode);
+        #
+        #    if (dataSourcePassword.RecId != 0)
+        #        cryptoBlob = dataSourcePassword.Password;
+        #
+        #    if (cryptoBlob != connull())
+        #        return cryptoblob2str(WinapiServer::cryptUnProtectData(cryptoBlob));
+        #    else
+        #        return '';
+        #}
+      ENDSOURCE
+    ENDMETHODS
+  ENDTABLE

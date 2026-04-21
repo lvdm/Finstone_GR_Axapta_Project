@@ -1,0 +1,21 @@
+﻿  USERTYPE #FIN_RowLineNo
+  Id 50018
+  INT
+    PROPERTIES
+      Name                #FIN_RowLineNo
+      Label               #Row LineNo
+    ENDPROPERTIES
+    
+    TYPEELEMENTS
+    ENDTYPEELEMENTS
+    
+    TYPEREFERENCES
+      TYPEREFERENCETYPE DATASET
+      PROPERTIES
+        Table               #FIN_GroupRowLine
+        RelatedField        #RowLineNo
+      ENDPROPERTIES
+      
+    ENDTYPEREFERENCES
+    
+  ENDUSERTYPE

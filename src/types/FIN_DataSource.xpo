@@ -1,0 +1,23 @@
+﻿  USERTYPE #FIN_DataSource
+  Id 50015
+  STRING
+    PROPERTIES
+      Name                #FIN_DataSource
+      Label               #DataSource
+      Extends             #Name
+      StringSize          #60
+    ENDPROPERTIES
+    
+    TYPEELEMENTS
+    ENDTYPEELEMENTS
+    
+    TYPEREFERENCES
+      TYPEREFERENCETYPE DATASET
+      PROPERTIES
+        Table               #FIN_GroupDataSource
+        RelatedField        #DataSource
+      ENDPROPERTIES
+      
+    ENDTYPEREFERENCES
+    
+  ENDUSERTYPE

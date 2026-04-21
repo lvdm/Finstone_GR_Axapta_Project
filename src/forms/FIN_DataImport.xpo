@@ -1,0 +1,595 @@
+﻿FORM #FIN_DataImport
+  PROPERTIES
+    Name                #FIN_DataImport
+  ENDPROPERTIES
+  
+  METHODS
+    Version: 3
+    SOURCE #classDeclaration
+      #public class FormRun extends ObjectRun
+      #{
+      #    FIN_FormTreeDatasource  treeDatasource;
+      #    ImageListAppl_checkbox  imageList;
+      #    //map                     checkedMap;
+      #    #resAppl
+      #}
+    ENDSOURCE
+    SOURCE #importData
+      #void importData()
+      #{
+      #    MapEnumerator me;
+      #    FIN_DataSet             dataSet;
+      #    Date                    startDate, endDate;
+      #    ;
+      #
+      #
+      #    dataSet            =   ComboBoxDataSet.selection();
+      #
+      #    if(dataSet == FIN_DataSet::LedgerAdjustments || dataSet == FIN_DataSet::LedgerData || dataSet == FIN_DataSet::InventoryData)
+      #    {
+      #        startDate           =   DateEditStartDate.dateValue();
+      #        endDate             =   DateEditEndDate.dateValue();
+      #    }
+      #
+      #
+      #    me = treeDatasource.getSelectedMap().getEnumerator();
+      #
+      #    print "Number of elements : " + int2str(treeDatasource.getSelectedMap().elements());
+      #
+      #    while (me.moveNext())
+      #    {
+      #        print any2str(me.currentKey());
+      #
+      #        try
+      #        {
+      #            if (me.currentKey() != "")
+      #                FIN_GroupEntityDataSet::loadData_bulk(me.currentKey(),dataSet,startDate,endDate);
+      #        }
+      #        catch (Exception::Error)
+      #        {
+      #
+      #        }
+      #    }
+      #
+      #
+      #}
+    ENDSOURCE
+    SOURCE #importData_dialog
+      #void importData_dialog()
+      #{
+      #    MapEnumerator me;
+      #
+      #    Date                    startDate, endDate;
+      #    FIN_DataSet             dataSet;
+      #    dialogField             dialogStartDate;
+      #    dialogField             dialogEndDate;
+      #    dialogField             dialogDataSet;
+      #    Dialog                  dialog;
+      #
+      #    ;
+      #
+      #    dialog = new Dialog("Load data from DataSource");
+      #    dialog.caption("Load Data");
+      #
+      #    dialogDataSet       =   dialog.addField(typeId(FIN_DataSet));
+      #
+      #    dialogStartDate     =   dialog.addField(typeId(TransDate),"Start Date");
+      #    dialogEndDate       =   dialog.addField(typeId(TransDate),"End Date");
+      #
+      #
+      #    if(!dialog.run())
+      #        return;
+      #
+      #    dataSet            =   dialogDataSet.value();
+      #
+      #    if(dataSet == FIN_DataSet::LedgerAdjustments || dataSet == FIN_DataSet::LedgerData || dataSet == FIN_DataSet::InventoryData)
+      #    {
+      #        startDate           =   dialogStartDate.value();
+      #        endDate             =   dialogEndDate.value();
+      #    }
+      #
+      #
+      #    me = treeDatasource.getSelectedMap().getEnumerator();
+      #
+      #    print "Number of elements : " + int2str(treeDatasource.getSelectedMap().elements());
+      #
+      #    while (me.moveNext())
+      #    {
+      #        print any2str(me.currentKey());
+      #
+      #        try
+      #        {
+      #            if (me.currentKey() != "")
+      #                FIN_GroupEntityDataSet::loadData_bulk(me.currentKey(),dataSet,startDate,endDate);
+      #        }
+      #        catch (Exception::Error)
+      #        {
+      #
+      #        }
+      #    }
+      #
+      #
+      #}
+    ENDSOURCE
+    SOURCE #task
+      #// catch "return" to initiate exit
+      #int task(int p1)
+      #{
+      #   int                 ret;
+      #   ;
+      #   ret = super(p1);
+      #   if (p1 == 288)  // Enter
+      #       element.exit();
+      #   Return ret;
+      #}
+    ENDSOURCE
+    SOURCE #run
+      #public void run()
+      #{
+      #   FormControl hostControl;
+      #   ;
+      #   super();
+      #
+      #   // initialize tree
+      #   this.InitTree();
+      #
+      #   SysFormTreeControl::expandTree(tree, tree.getRoot());
+      #
+      #
+      #}
+    ENDSOURCE
+    SOURCE #exit
+      #void exit()
+      #{
+      #;
+      #   // on exit, return data of currently selected node
+      #   element.closeSelect(treedatasource.selectedData());
+      #}
+    ENDSOURCE
+    SOURCE #ExpandAndSelectRec
+      #// simple recursive ExpandAndSelect function
+      #// ok, not so simple, but simpler then the one from Axapta, which was using a stack here
+      #int ExpandAndSelectRec(FIN_EntityCode ChildId)
+      #{
+      #   int node;
+      #   FIN_GroupEntities     table;
+      #   str IdTree;
+      #   ;
+      #   // recursively search for parent Ids to be expanded first
+      #   select firstonly table where table.EntityCode == ChildId;
+      #   if (table) {
+      #       node = this.ExpandAndSelectRec(table.ParentEntityCode);
+      #
+      #       // expand found node
+      #       tree.expand(node, FormTreeExpand::EXPAND);
+      #
+      #       // search for my node starting from parent
+      #       IdTree   = tree.getItem(node).data();
+      #       while (ChildId != IdTree)
+      #       {
+      #        node = tree.getNextVisible(node);
+      #        IdTree   = tree.getItem(node).data();
+      #       }
+      #   } else {
+      #       // if no parent was found, then we reached the root node
+      #       node = tree.getRoot();
+      #   }
+      #
+      #   // select  and return found node
+      #   tree.select(node);
+      #   return node;
+      #}
+    ENDSOURCE
+    SOURCE #ExpandAndSelect
+      #// wrapper for ExpandAndSelectRec
+      #// speeds up build of tree, by disabling tree updates
+      #void ExpandAndSelect(str ChildId)
+      #{
+      #    tree.lockWindowUpdate(true);
+      #    this.ExpandAndSelectRec(ChildId);
+      #    tree.lockWindowUpdate(false);
+      #}
+    ENDSOURCE
+    SOURCE #InitTree
+      #void InitTree()
+      #{
+      #
+      #    ;
+      #    //checkedMap = new Map(Types::String,Types::String);
+      #
+      #    // create datasource for tree
+      #    treeDatasource = new FIN_FormTreeDatasource(FIN_GroupEntities_DS, tree,
+      #                                           fieldnum(FIN_GroupEntities,EntityCode),
+      #                                           fieldnum(FIN_GroupEntities,ParentEntityCode),
+      #                                           fieldnum(FIN_GroupEntities,EntityName),
+      #                                           false,false
+      #                                          );
+      #
+      #    //imageList = new ImageListAppl_checkbox();
+      #
+      #    // initialize root node
+      #    treeDatasource.initRoot("Finstone Group",'',7);
+      #
+      #    //tree.setImagelist(imageList.imageList());
+      #
+      #
+      #    //imagelist = new Imagelist(Imagelist::smallIconWidth(), Imagelist::smallIconHeight());
+      #    //imagelist.add(new Image(#RES_NODE_COMPANY));
+      #    //imagelist.add(new Image(#RES_COMPANY));
+      #
+      #    //tree.setImagelist(imagelist);
+      #
+      #
+      #}
+    ENDSOURCE
+  ENDMETHODS
+  OBJECTBANK
+    PROPERTIES
+    ENDPROPERTIES
+    
+    DATASOURCE
+      OBJECTPOOL
+        PROPERTIES
+          Name                #FIN_GroupEntities
+          Table               #FIN_GroupEntities
+        ENDPROPERTIES
+        
+        FIELDLIST
+        ENDFIELDLIST
+      ENDOBJECTPOOL
+      METHODS
+        Version: 3
+        SOURCE #init
+          #public void init()
+          #{
+          #    super();
+          #    this.query().dataSourceNo(1).clearDynalinks();
+          #}
+        ENDSOURCE
+      ENDMETHODS
+    ENDDATASOURCE
+  ENDOBJECTBANK
+  
+  JOINS
+  ENDJOINS
+  
+  DESIGN
+    PROPERTIES
+      Caption             #Data Import
+      Columns             #2
+      ArrangeGuide        
+        ARRAY INDEX Columns 
+          #0
+          #0
+        ENDARRAY
+    ENDPROPERTIES
+    
+    CONTAINER
+      CONTROL GROUP
+        PROPERTIES
+          Name                #Group
+          Width               #500
+          Height              #Column height
+        ENDPROPERTIES
+        
+          CONTAINER
+            CONTROL TREE
+              PROPERTIES
+                Name                #tree
+                Width               #Column width
+                Height              #Column height
+              ENDPROPERTIES
+              
+              METHODS
+                Version: 3
+                SOURCE #keyDown
+                  #boolean keyDown(int vKey, boolean ctrl, boolean shift)
+                  #{
+                  #    return treeDatasource.keyDown(vKey,ctrl,shift);
+                  #
+                  #    //return super(vKey, ctrl, shift);
+                  #}
+                ENDSOURCE
+                SOURCE #mouseDown
+                  #int mouseDown(int x, int y, int button, boolean ctrl, boolean shift)
+                  #{
+                  #    ;
+                  #    return treeDatasource.mouseDown(x,y,button,ctrl,shift);
+                  #
+                  #    //return super(x, y, button, ctrl, shift);
+                  #}
+                  #
+                  #
+                  #
+                  #
+                ENDSOURCE
+                SOURCE #selectionChanged
+                  #void selectionChanged(FormTreeItem oldItem, FormTreeItem newItem, FormTreeSelect how)
+                  #{
+                  #    ;
+                  #    super(oldItem, newItem, how);
+                  #
+                  #    // on select of node in tree, update datasource to fetch new record
+                  #    treeDatasource.selectionChanged(oldItem,newItem);
+                  #
+                  #}
+                ENDSOURCE
+                SOURCE #expanding
+                  #boolean expanding(int idx, FormTreeExpand action, anytype data)
+                  #{
+                  #   boolean ret;
+                  #   ;
+                  #   ret = super(idx, action, data);
+                  #
+                  #   treeDatasource.expanding(idx, action, data); // expand node
+                  #
+                  #   Return ret;
+                  #}
+                ENDSOURCE
+                SOURCE #mouseDblClick
+                  #// catch double click to initiate exit
+                  #public int mouseDblClick(int _x, int _y, int _button, boolean _Ctrl, boolean _Shift)
+                  #{
+                  #   int ret;
+                  #   ;
+                  #   ret = super(_x, _y, _button, _Ctrl, _Shift);
+                  #
+                  #  // element.exit(); // exit and return selected node value
+                  #
+                  #   return ret;
+                  #}
+                ENDSOURCE
+              ENDMETHODS
+            ENDCONTROL 
+            
+          ENDCONTAINER
+          
+      ENDCONTROL 
+      
+      CONTROL GROUP
+        PROPERTIES
+          Name                #Group1
+          Width               #Column width
+          Height              #Column height
+        ENDPROPERTIES
+        
+          CONTAINER
+            CONTROL GROUP
+              PROPERTIES
+                Name                #Group2
+                Width               #Column width
+                Height              #Column height
+              ENDPROPERTIES
+              
+                CONTAINER
+                  CONTROL COMBOBOX
+                    PROPERTIES
+                      Name                #ComboBoxDataSet
+                      AutoDeclaration     #Yes
+                      EnumType            #FIN_DataSet
+                    ENDPROPERTIES
+                    
+                    METHODS
+                      Version: 3
+                      SOURCE #selectionChange
+                        #public int selectionChange()
+                        #{
+                        #    int ret;
+                        #
+                        #    ret = super();
+                        #
+                        #    if (ComboBoxDataSet.selection() == FIN_DataSet::LedgerData
+                        #        || ComboBoxDataSet.selection() == FIN_DataSet::LedgerAdjustments
+                        #        || ComboBoxDataSet.selection() == FIN_DataSet::InventoryData )
+                        #    {
+                        #        DateEditStartDate.enabled(true);
+                        #        DateEditEndDate.enabled(true);
+                        #    }
+                        #    else
+                        #    {
+                        #        DateEditStartDate.enabled(false);
+                        #        DateEditEndDate.enabled(false);
+                        #    }
+                        #
+                        #    return ret;
+                        #}
+                      ENDSOURCE
+                    ENDMETHODS
+                  ENDCONTROL 
+                  
+                  CONTROL DATEEDIT
+                    PROPERTIES
+                      Name                #DateEditStartDate
+                      AutoDeclaration     #Yes
+                      Enabled             #No
+                      ExtendedDataType    
+                        ARRAY 
+                          #StartDate
+                          #
+                        ENDARRAY
+                    ENDPROPERTIES
+                    
+                  ENDCONTROL 
+                  
+                  CONTROL DATEEDIT
+                    PROPERTIES
+                      Name                #DateEditEndDate
+                      AutoDeclaration     #Yes
+                      Enabled             #No
+                      ExtendedDataType    
+                        ARRAY 
+                          #EndDate
+                          #
+                        ENDARRAY
+                    ENDPROPERTIES
+                    
+                  ENDCONTROL 
+                  
+                  CONTROL BUTTON
+                    PROPERTIES
+                      Name                #ButtonImport
+                      Text                #Import Data
+                    ENDPROPERTIES
+                    
+                    METHODS
+                      Version: 3
+                      SOURCE #clicked
+                        #void clicked()
+                        #{
+                        #    super();
+                        #    element.importData();
+                        #}
+                      ENDSOURCE
+                    ENDMETHODS
+                  ENDCONTROL 
+                  
+                  CONTROL BUTTON
+                    PROPERTIES
+                      Name                #CopyOfButtonImport
+                      Text                #Import Data Batch
+                    ENDPROPERTIES
+                    
+                    METHODS
+                      Version: 3
+                      SOURCE #clicked
+                        #void clicked()
+                        #{
+                        #    super();
+                        #    FIN_RunBatch_DataImport::main(null);
+                        #
+                        #}
+                      ENDSOURCE
+                    ENDMETHODS
+                  ENDCONTROL 
+                  
+                  CONTROL BUTTON
+                    PROPERTIES
+                      Name                #ButtonCurTranslation
+                      Text                #Currency Translation
+                    ENDPROPERTIES
+                    
+                    METHODS
+                      Version: 3
+                      SOURCE #clicked
+                        #void clicked()
+                        #{
+                        #    FIN_PeriodStart periodstart;
+                        #    FIN_PeriodStart periodEnd;
+                        #    FIN_Category    category;
+                        #    FIN_EntityCode  entityCode;
+                        #    CurrencyCode    currencyCode;
+                        #
+                        #    FIN_GroupPeriod tabPeriod;
+                        #    int i;
+                        #
+                        #    dialogField                     dialogStartPeriod;
+                        #    dialogField                     dialogEndPeriod;
+                        #    dialogField                     dialogCurrency;
+                        #    dialogField                     dialogCategory;
+                        #    Dialog                          dialog;
+                        #
+                        #    MapEnumerator me;
+                        #
+                        #    ;
+                        #
+                        #    super();
+                        #
+                        #    dialog = new Dialog("Process currency exchange translations");
+                        #
+                        #    dialogCurrency      =   dialog.addField(typeId(CurrencyCode),"To  Currency");
+                        #    dialogStartPeriod   =   dialog.addField(typeId(FIN_PeriodStart),"Start Period");
+                        #    dialogEndPeriod     =   dialog.addField(typeId(FIN_PeriodStart),"End Period");
+                        #    dialogCategory      =   dialog.addField(typeId(FIN_Category),"Source Category");
+                        #
+                        #    dialogCategory.value("MAIN");
+                        #    dialogStartPeriod.value(str2date('1 jan 2022',123));
+                        #    dialogEndPeriod.value(str2date('31 dec 2022',123));
+                        #
+                        #    if(!dialog.run())
+                        #        return;
+                        #
+                        #    periodStart         =   dialogStartPeriod.value();
+                        #    periodEnd           =   endmth(dialogEndPeriod.value());
+                        #
+                        #    category            =   dialogCategory.value();
+                        #    currencyCode        =   dialogCurrency.value();
+                        #
+                        #
+                        #    if (!periodStart || !periodEnd)
+                        #        throw error('Valid start and end periods are required!');
+                        #
+                        #    if (!category)
+                        #        throw error('A valid category is required!');
+                        #
+                        #    if (!currencyCode)
+                        #        throw error('A valid currency is required!');
+                        #
+                        #
+                        #    me = treeDatasource.getSelectedMap().getEnumerator();
+                        #
+                        #    print "Number of elements : " + int2str(treeDatasource.getSelectedMap().elements());
+                        #
+                        #    while (me.moveNext())
+                        #    {
+                        #        print any2str(me.currentKey());
+                        #
+                        #        try
+                        #        {
+                        #            if (me.currentKey() != "")
+                        #            {
+                        #               entityCode = me.currentKey();
+                        #
+                        #               while select * from tabPeriod
+                        #                 where tabPeriod.PeriodStart >= periodStart && tabPeriod.PeriodEnd <= periodEnd
+                        #                 {
+                        #                    FIN_GroupEntities::doTranslationAdj(entityCode,currencyCode,tabPeriod.PeriodStart,Category,NoYes::Yes);
+                        #                 }
+                        #
+                        #            }
+                        #
+                        #        }
+                        #        catch (Exception::Error)
+                        #        {
+                        #
+                        #        }
+                        #    }
+                        #
+                        #
+                        #
+                        #
+                        #}
+                      ENDSOURCE
+                    ENDMETHODS
+                  ENDCONTROL 
+                  
+                ENDCONTAINER
+                
+            ENDCONTROL 
+            
+            CONTROL BUTTON
+              PROPERTIES
+                Name                #ButtonImportData
+                Text                #Import Data
+              ENDPROPERTIES
+              
+              METHODS
+                Version: 3
+                SOURCE #clicked
+                  #void clicked()
+                  #{
+                  #    super();
+                  #    element.importData_dialog();
+                  #}
+                ENDSOURCE
+              ENDMETHODS
+            ENDCONTROL 
+            
+          ENDCONTAINER
+          
+      ENDCONTROL 
+      
+    ENDCONTAINER
+    
+  ENDDESIGN
+  
+ENDFORM

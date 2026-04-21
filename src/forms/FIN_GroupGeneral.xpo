@@ -1,0 +1,413 @@
+﻿FORM #FIN_GroupGeneral
+  PROPERTIES
+    Name                #FIN_GroupGeneral
+  ENDPROPERTIES
+  
+  METHODS
+    Version: 3
+    SOURCE #classDeclaration
+      #public class FormRun extends ObjectRun
+      #{
+      #    QueryBuildRange      qbr_ExchRate_CurrencyCode;
+      #}
+    ENDSOURCE
+  ENDMETHODS
+  OBJECTBANK
+    PROPERTIES
+    ENDPROPERTIES
+    
+    DATASOURCE
+      OBJECTPOOL
+        PROPERTIES
+          Name                #FIN_GroupScenario
+          Table               #FIN_GroupScenario
+        ENDPROPERTIES
+        
+        FIELDLIST
+        ENDFIELDLIST
+      ENDOBJECTPOOL
+    ENDDATASOURCE
+    DATASOURCE
+      OBJECTPOOL
+        PROPERTIES
+          Name                #FIN_GroupCategory
+          Table               #FIN_GroupCategory
+        ENDPROPERTIES
+        
+        FIELDLIST
+        ENDFIELDLIST
+      ENDOBJECTPOOL
+    ENDDATASOURCE
+    DATASOURCE
+      OBJECTPOOL
+        PROPERTIES
+          Name                #FIN_GroupPeriod
+          Table               #FIN_GroupPeriod
+          StartPosition       #Last
+        ENDPROPERTIES
+        
+        FIELDLIST
+        ENDFIELDLIST
+      ENDOBJECTPOOL
+    ENDDATASOURCE
+    DATASOURCE
+      OBJECTPOOL
+        PROPERTIES
+          Name                #FIN_GroupExchangeRates
+          Table               #FIN_GroupExchangeRates
+        ENDPROPERTIES
+        
+        FIELDLIST
+        ENDFIELDLIST
+      ENDOBJECTPOOL
+      METHODS
+        Version: 3
+        SOURCE #init
+          #public void init()
+          #{
+          #    super();
+          #
+          #    qbr_ExchRate_CurrencyCode = this.query().dataSourceName('FIN_GroupExchangeRates').addRange(fieldNum(FIN_GroupExchangeRates,CurrencyCode));
+          #
+          #}
+        ENDSOURCE
+      ENDMETHODS
+    ENDDATASOURCE
+    DATASOURCE
+      OBJECTPOOL
+        PROPERTIES
+          Name                #FIN_GroupUserPositions
+          Table               #FIN_GroupUserPositions
+        ENDPROPERTIES
+        
+        FIELDLIST
+        ENDFIELDLIST
+      ENDOBJECTPOOL
+    ENDDATASOURCE
+  ENDOBJECTBANK
+  
+  JOINS
+  ENDJOINS
+  
+  DESIGN
+    PROPERTIES
+      Caption             #Finstone Group General Settings
+    ENDPROPERTIES
+    
+    CONTAINER
+      CONTROL TAB
+        PROPERTIES
+          Name                #Tab
+          Width               #Column width
+          Height              #Column height
+        ENDPROPERTIES
+        
+        CONTAINER
+          CONTROL TABPAGE
+            PROPERTIES
+              Name                #TabPagePeriods
+              Caption             #Periods
+            ENDPROPERTIES
+            
+            CONTAINER
+              CONTROL GRID
+                PROPERTIES
+                  Name                #Grid3
+                  Width               #Column width
+                  Height              #Column height
+                  DataSource          #FIN_GroupPeriod
+                ENDPROPERTIES
+                
+                  CONTAINER
+                    CONTROL DATEEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupPeriod_PeriodStart
+                        DataSource          #FIN_GroupPeriod
+                        DataField           #PeriodStart
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL DATEEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupPeriod_PeriodEnd
+                        DataSource          #FIN_GroupPeriod
+                        DataField           #PeriodEnd
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL COMBOBOX
+                      PROPERTIES
+                        Name                #FIN_GroupPeriod_PeriodStatus
+                        DataSource          #FIN_GroupPeriod
+                        DataField           #PeriodStatus
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL CHECKBOX
+                      PROPERTIES
+                        Name                #FIN_GroupPeriod_Active
+                        BackgroundColor     #Window background
+                        DataSource          #FIN_GroupPeriod
+                        DataField           #Active
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupPeriod_Commentaries
+                        DataSource          #FIN_GroupPeriod
+                        DataField           #Commentaries
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                  ENDCONTAINER
+                  
+              ENDCONTROL 
+              
+            ENDCONTAINER
+            
+          ENDCONTROL 
+          
+          CONTROL TABPAGE
+            PROPERTIES
+              Name                #TabPageScenarios
+              Caption             #Scenarios
+            ENDPROPERTIES
+            
+            CONTAINER
+              CONTROL GRID
+                PROPERTIES
+                  Name                #Grid1
+                  Width               #Column width
+                  Height              #Column height
+                  DataSource          #FIN_GroupScenario
+                ENDPROPERTIES
+                
+                  CONTAINER
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupScenario_ScenarioCode
+                        DataSource          #FIN_GroupScenario
+                        DataField           #ScenarioCode
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupScenario_Description
+                        DataSource          #FIN_GroupScenario
+                        DataField           #Description
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                  ENDCONTAINER
+                  
+              ENDCONTROL 
+              
+            ENDCONTAINER
+            
+          ENDCONTROL 
+          
+          CONTROL TABPAGE
+            PROPERTIES
+              Name                #TabPageCategory
+              Caption             #Categories
+            ENDPROPERTIES
+            
+            CONTAINER
+              CONTROL GRID
+                PROPERTIES
+                  Name                #Grid2
+                  Width               #Column width
+                  Height              #Column height
+                  DataSource          #FIN_GroupCategory
+                ENDPROPERTIES
+                
+                  CONTAINER
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupDataSet_DataSet
+                        DataSource          #FIN_GroupCategory
+                        DataField           #Category
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupDataSet_Descriptoin
+                        DataSource          #FIN_GroupCategory
+                        DataField           #Descriptoin
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                  ENDCONTAINER
+                  
+              ENDCONTROL 
+              
+            ENDCONTAINER
+            
+          ENDCONTROL 
+          
+          CONTROL TABPAGE
+            PROPERTIES
+              Name                #TabPageExchRates
+              Caption             #Exchange Rates
+            ENDPROPERTIES
+            
+            CONTAINER
+              CONTROL STRINGEDIT
+                PROPERTIES
+                  Name                #CurrencyCode
+                  AutoDeclaration     #Yes
+                  ExtendedDataType    
+                    ARRAY 
+                      #CurrencyCode
+                      #
+                    ENDARRAY
+                ENDPROPERTIES
+                
+                METHODS
+                  Version: 3
+                  SOURCE #modified
+                    #public boolean modified()
+                    #{
+                    #    boolean ret;
+                    #
+                    #    ret = super();
+                    #
+                    #    qbr_ExchRate_CurrencyCode.value(this.valueStr());
+                    #    FIN_GroupExchangeRates_ds.executeQuery();
+                    #
+                    #
+                    #    return ret;
+                    #}
+                  ENDSOURCE
+                ENDMETHODS
+              ENDCONTROL 
+              
+              CONTROL GRID
+                PROPERTIES
+                  Name                #Grid
+                  Width               #Column width
+                  Height              #Column height
+                  DataSource          #FIN_GroupExchangeRates
+                ENDPROPERTIES
+                
+                  CONTAINER
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupExchangeRates_CurrencyCode
+                        DataSource          #FIN_GroupExchangeRates
+                        DataField           #CurrencyCode
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL DATEEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupExchangeRates_PeriodStart
+                        Label               #Period
+                        DataSource          #FIN_GroupExchangeRates
+                        DataField           #PeriodStart
+                      ENDPROPERTIES
+                      
+                      METHODS
+                        Version: 3
+                        SOURCE #lookup
+                          #public void lookup()
+                          #{
+                          #    ;
+                          #    FIN_GroupPeriod::lookupPeriodStart(this);
+                          #}
+                        ENDSOURCE
+                      ENDMETHODS
+                    ENDCONTROL 
+                    
+                    CONTROL REALEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupExchangeRates_AvgExchRate
+                        DataSource          #FIN_GroupExchangeRates
+                        DataField           #AvgExchRate
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL REALEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupExchangeRates_ClosingExchRate
+                        DataSource          #FIN_GroupExchangeRates
+                        DataField           #ClosingExchRate
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                  ENDCONTAINER
+                  
+              ENDCONTROL 
+              
+            ENDCONTAINER
+            
+          ENDCONTROL 
+          
+          CONTROL TABPAGE
+            PROPERTIES
+              Name                #TabPageUserPositions
+              Width               #Column width
+              Height              #Column height
+              Caption             #User Positions
+            ENDPROPERTIES
+            
+            CONTAINER
+              CONTROL GRID
+                PROPERTIES
+                  Name                #GridUserPosition
+                  Width               #Column width
+                  Height              #Column height
+                  DataSource          #FIN_GroupUserPositions
+                ENDPROPERTIES
+                
+                  CONTAINER
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupUserPositions_Position
+                        DataSource          #FIN_GroupUserPositions
+                        DataField           #Position
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupUserPositions_Description
+                        DataSource          #FIN_GroupUserPositions
+                        DataField           #Description
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                  ENDCONTAINER
+                  
+              ENDCONTROL 
+              
+            ENDCONTAINER
+            
+          ENDCONTROL 
+          
+        ENDCONTAINER
+        
+      ENDCONTROL 
+      
+    ENDCONTAINER
+    
+  ENDDESIGN
+  
+ENDFORM

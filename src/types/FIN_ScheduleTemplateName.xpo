@@ -1,0 +1,16 @@
+﻿  USERTYPE #FIN_ScheduleTemplateName
+  Id 50022
+  STRING
+    PROPERTIES
+      Name                #FIN_ScheduleTemplateName
+      Label               #Schedule Template Name
+      StringSize          #20
+    ENDPROPERTIES
+    
+    TYPEELEMENTS
+    ENDTYPEELEMENTS
+    
+    TYPEREFERENCES
+    ENDTYPEREFERENCES
+    
+  ENDUSERTYPE

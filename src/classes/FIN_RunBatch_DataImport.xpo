@@ -1,0 +1,268 @@
+﻿  CLASS #FIN_RunBatch_DataImport
+    Id 50037
+    PROPERTIES
+      Name                #FIN_RunBatch_DataImport
+      Extends             #RunBaseBatch
+      RunOn               #Called from
+    ENDPROPERTIES
+    
+    METHODS
+      Version: 3
+      SOURCE #canGoBatchJournal
+        #public boolean canGoBatchJournal()
+        #{
+        #    return true;
+        #}
+      ENDSOURCE
+      SOURCE #classDeclaration
+        #class FIN_RunBatch_DataImport  extends RunBaseBatch
+        #{
+        #    // Packed variables
+        #    FIN_EntityCode  entityCode;
+        #    int             daysPrior;
+        #    FIN_DataSet     dataSet;
+        #    Date            startDate;
+        #    Date            endDate;
+        #
+        #
+        #    // Dialog fields
+        #    DialogField     dlgEntityCode;
+        #    DialogField     dlgDaysPrior;
+        #//    DialogField     dlgStartDate;
+        #//    DialogField     dlgEndDate;
+        #//    DialogField     dlgDataSet;
+        #
+        #    #define.CurrentVersion(1)
+        #    #define.Version1(1)
+        #    #localmacro.CurrentList
+        #        entityCode,
+        #        daysPrior
+        #//       dataSet,
+        #//       startDate,
+        #//        endDate
+        #    #endmacro
+        #
+        #}
+      ENDSOURCE
+      SOURCE #dialog
+        #public Object dialog()
+        #{
+        #    DialogRunbase       dialog = super();
+        #    #resAppl
+        #;
+        #    dialog.addInfoImage();
+        #
+        #    dlgEntityCode =dialog.addFieldValue(typeid(FIN_EntityCode),entityCode);
+        #    dlgDaysPrior  =dialog.addField(typeid(Num),'Start this amount of days PRIOR to Batch run date.',
+        #                        'The amount of days PRIOR to execution date which data will be deleted and re-imported again. ');
+        #
+        #    //dlgStartDate = dialog.addFieldValue(typeid(TransDate),startDate);
+        #
+        #    //dlgEndDate = dialog.addFieldValue(typeid(TransDate),endDate);
+        #    //dlgDataSet = dialog.addFieldValue(typeid(FIN_DataSet),dataSet);
+        #
+        #    //dialog.addTabPage("@SYS76580");
+        #    //dlgCustAccount = dialog.addFieldValue(typeid(CustAccount),custAccount);
+        #
+        #    return dialog;
+        #}
+      ENDSOURCE
+      SOURCE #dialogPostRun
+        #public void dialogPostRun(DialogRunbase dialog)
+        #{
+        #;
+        #    super(dialog);
+        #}
+      ENDSOURCE
+      SOURCE #getFromDialog
+        #public boolean getFromDialog()
+        #{
+        #;
+        #    entityCode  = dlgEntityCode.value();
+        #    daysPrior   = dlgDaysPrior.value();
+        #//    dataSet   = dlgDataSet.value();
+        #//    startDate = dlgStartDate.value();
+        #//    endDate   = dlgEndDate.value();
+        #
+        #
+        #    return super();
+        #}
+      ENDSOURCE
+      SOURCE #init
+        #public boolean init()
+        #{
+        #    ;
+        #
+        #    return true;
+        #}
+      ENDSOURCE
+      SOURCE #new
+        #protected void new()
+        #{
+        #    super();
+        #}
+      ENDSOURCE
+      SOURCE #pack
+        #public container pack()
+        #{
+        #    return [#CurrentVersion,#CurrentList];
+        #}
+      ENDSOURCE
+      SOURCE #run
+        #public void run()
+        #{
+        #    #OCCRetryCount
+        #    TransDate   latestLockedDate;
+        #    TransDate   suggestedStartDate;
+        #    ;
+        #
+        #    info(strFmt("Start Batch DataImport.run at %1"
+        #                ,DateTimeUtil ::toStr(
+        #                    DateTimeUtil ::utcNow())
+        #                ));
+        #
+        #    if (! this.validate())
+        #        throw error("Validation error importing transactions.");
+        #
+        #    try
+        #    {
+        #
+        #         endDate = today();
+        #
+        #         latestLockedDate = FIN_GroupEntityDataSet::latest_LockedDate(entityCode);
+        #
+        #         suggestedStartDate = (FIN_GroupPeriod::periodStart(endDate - daysPrior));
+        #
+        #         startDate = suggestedStartDate > latestLockedDate + 1 ? suggestedStartDate : latestLockedDate + 1;
+        #
+        #         info(strFmt("Before calling LoadData_Bulk Batch DataImport.run  EntityCode : %1  StartDate : %2 EndDate : %3"
+        #                ,entityCode
+        #                ,date2str(startDate,123, 2, -1, 2, -1, 2)
+        #                ,date2str(endDate,123, 2, -1, 2, -1, 2)
+        #
+        #                ));
+        #
+        #         FIN_GroupEntityDataSet::loadData_bulk(entityCode,FIN_DataSet::LedgerData,startDate,endDate,NoYes::Yes);
+        #
+        #         info(strFmt("After calling LoadData_Bulk Batch DataImport.run at %1"
+        #                ,DateTimeUtil ::toStr(
+        #                    DateTimeUtil ::utcNow())
+        #                ));
+        #
+        #
+        #    }
+        #    catch (Exception::Deadlock)
+        #    {
+        #        info(strFmt("Catch Retry Batch DataImport.run at %1"
+        #                ,DateTimeUtil ::toStr(
+        #                    DateTimeUtil ::utcNow())
+        #                ));
+        #
+        #        retry;
+        #    }
+        #    catch (Exception::UpdateConflict)
+        #    {
+        #
+        #        info(strFmt("Catch UpdateConflict Batch DataImport.run at %1"
+        #                ,DateTimeUtil ::toStr(
+        #                    DateTimeUtil ::utcNow())
+        #                ));
+        #
+        #        if (appl.ttsLevel() == 0)
+        #        {
+        #            if (xSession::currentRetryCount() >= #RetryNum)
+        #            {
+        #                throw Exception::UpdateConflictNotRecovered;
+        #            }
+        #            else
+        #            {
+        #                retry;
+        #            }
+        #        }
+        #        else
+        #        {
+        #            throw Exception::UpdateConflict;
+        #        }
+        #    }
+        #    catch {
+        #        info(strFmt("Catch Exception Batch DataImport.run at %1"
+        #                ,DateTimeUtil ::toStr(
+        #                    DateTimeUtil ::utcNow())
+        #                ));
+        #
+        #    }
+        #
+        #    info(strFmt("End Batch DataImport.run at %1"
+        #                ,DateTimeUtil ::toStr(
+        #                    DateTimeUtil ::utcNow())
+        #                ));
+        #
+        #
+        #
+        #}
+      ENDSOURCE
+      SOURCE #runsImpersonated
+        #public boolean runsImpersonated()
+        #{
+        #    return true;
+        #}
+      ENDSOURCE
+      SOURCE #unpack
+        #public boolean unpack(container packedClass)
+        #{
+        #    Version version = RunBase::getVersion(packedClass);
+        #;
+        #    switch (version)
+        #    {
+        #        case #CurrentVersion:
+        #            [version,#CurrentList] = packedClass;
+        #            break;
+        #        default:
+        #            return false;
+        #    }
+        #
+        #    return true;
+        #}
+      ENDSOURCE
+      SOURCE #validate
+        #public boolean validate()
+        #{
+        #    if (entityCode == "")
+        #        return checkFailed("Entity Code required!");
+        #
+        #//    if (!dataSet)
+        #//        return checkFailed("Data Set required!");
+        #
+        #
+        #
+        #    return true;
+        #}
+      ENDSOURCE
+      SOURCE #construct
+        #server static FIN_RunBatch_DataImport construct()
+        #{
+        #    return new FIN_RunBatch_DataImport();
+        #}
+      ENDSOURCE
+      SOURCE #description
+        #// Here goes a description of the class
+        #static ClassDescription description()
+        #{
+        #    return "Group Reporting - Data Import";
+        #}
+      ENDSOURCE
+      SOURCE #main
+        #static void main(Args args)
+        #{
+        #    FIN_RunBatch_DataImport    dataImport_RunBase;
+        #;
+        #    dataImport_RunBase = FIN_RunBatch_DataImport::construct();
+        #
+        #    if (dataImport_RunBase.prompt())
+        #        dataImport_RunBase.run();
+        #
+        #
+        #}
+      ENDSOURCE
+    ENDMETHODS
+  ENDCLASS

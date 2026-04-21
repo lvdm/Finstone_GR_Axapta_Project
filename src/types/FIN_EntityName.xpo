@@ -1,0 +1,16 @@
+﻿  USERTYPE #FIN_EntityName
+  Id 50009
+  STRING
+    PROPERTIES
+      Name                #FIN_EntityName
+      Label               #Entity Name
+      StringSize          #100
+    ENDPROPERTIES
+    
+    TYPEELEMENTS
+    ENDTYPEELEMENTS
+    
+    TYPEREFERENCES
+    ENDTYPEREFERENCES
+    
+  ENDUSERTYPE

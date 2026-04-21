@@ -1,0 +1,110 @@
+﻿  TABLE #FIN_GroupExcelReportMapping
+    Id 50040
+    PROPERTIES
+      Name                #FIN_GroupExcelReportMapping
+      Label               #Group Excel Report Mappings
+    ENDPROPERTIES
+    
+    FIELDS
+      FIELD #ReportName
+        Id 50001
+        STRING
+        PROPERTIES
+          Name                #ReportName
+          Label               #Name
+          Table               #FIN_GroupExcelReportMapping
+          ExtendedDataType    
+            ARRAY 
+              #Name
+              #
+            ENDARRAY
+          StringSize          #60
+        ENDPROPERTIES
+        
+      FIELD #EntityCode
+        Id 50003
+        STRING
+        PROPERTIES
+          Name                #EntityCode
+          Mandatory           #Yes
+          AllowEdit           #No
+          Table               #FIN_GroupExcelReportMapping
+          ExtendedDataType    
+            ARRAY 
+              #FIN_EntityCode
+              #
+            ENDARRAY
+        ENDPROPERTIES
+        
+      FIELD #AccountNum
+        Id 50004
+        STRING
+        PROPERTIES
+          Name                #AccountNum
+          Mandatory           #Yes
+          Table               #FIN_GroupExcelReportMapping
+          ExtendedDataType    
+            ARRAY 
+              #FIN_AccountNum
+              #
+            ENDARRAY
+          StringSize          #30
+        ENDPROPERTIES
+        
+      FIELD #WorkSheet
+        Id 50005
+        STRING
+        PROPERTIES
+          Name                #WorkSheet
+          Label               #WorkSheet Name
+          Table               #FIN_GroupExcelReportMapping
+          ExtendedDataType    
+            ARRAY 
+              #ExcelSpreadsheetName
+              #
+            ENDARRAY
+          StringSize          #31
+        ENDPROPERTIES
+        
+      FIELD #RowNum
+        Id 50006
+        INT
+        PROPERTIES
+          Name                #RowNum
+          Label               #Row Number
+          Table               #FIN_GroupExcelReportMapping
+        ENDPROPERTIES
+        
+      FIELD #ColumnNum
+        Id 50007
+        INT
+        PROPERTIES
+          Name                #ColumnNum
+          Label               #Column Number
+          Table               #FIN_GroupExcelReportMapping
+        ENDPROPERTIES
+        
+      FIELD #OverwriteValue
+        Id 50009
+        ENUM
+        PROPERTIES
+          Name                #OverwriteValue
+          Label               #Overwrite value
+          HelpText            #Overwrite or Add to existing value in field
+          Table               #FIN_GroupExcelReportMapping
+          EnumType            #NoYes
+        ENDPROPERTIES
+        
+    ENDFIELDS
+    GROUPS
+    ENDGROUPS
+    
+    INDICES
+    ENDINDICES
+    REFERENCES
+    ENDREFERENCES
+    
+    DELETEACTIONS
+    ENDDELETEACTIONS
+    
+  ENDTABLE

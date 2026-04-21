@@ -1,0 +1,16 @@
+﻿  USERTYPE #FIN_RowSetName
+  Id 50016
+  STRING
+    PROPERTIES
+      Name                #FIN_RowSetName
+      Label               #RowSet Name
+      StringSize          #100
+    ENDPROPERTIES
+    
+    TYPEELEMENTS
+    ENDTYPEELEMENTS
+    
+    TYPEREFERENCES
+    ENDTYPEREFERENCES
+    
+  ENDUSERTYPE

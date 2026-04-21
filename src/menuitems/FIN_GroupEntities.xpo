@@ -1,0 +1,9 @@
+﻿  MENUITEM #FIN_GroupEntities
+    Type: 1
+    PROPERTIES
+      Name                #FIN_GroupEntities
+      Label               #Entities
+      Object              #FIN_GroupEntities
+    ENDPROPERTIES
+    
+  ENDMENUITEM

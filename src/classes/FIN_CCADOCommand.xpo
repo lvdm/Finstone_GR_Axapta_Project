@@ -1,0 +1,120 @@
+﻿  CLASS #FIN_CCADOCommand
+    Id 50039
+    PROPERTIES
+      Name                #FIN_CCADOCommand
+      Extends             #
+      RunOn               #Called from
+    ENDPROPERTIES
+    
+    METHODS
+      Version: 3
+      SOURCE #activeConnection
+        #void activeConnection(FIN_CCADOConnection CCADOConnection)
+        #{
+        #    InteropPermission _perm;
+        #;
+        #    _perm = new InteropPermission(InteropKind::ComInterop);
+        #    _perm.assert();
+        #
+        #    command.activeConnection(CCADOConnection.connection());
+        #}
+      ENDSOURCE
+      SOURCE #addParameter
+        #void addParameter(CCADOParameter CCADOParameter)
+        #{
+        #    COM parameters = command.parameters();
+        #    parameters.append(CCADOParameter.parameter());
+        #}
+      ENDSOURCE
+      SOURCE #addRanges
+        #void addRanges(CCDataLinkLine CCDataLinkLine)
+        #{
+        #    CCDataLinkTmpFilter tmpFilter;
+        #    Counter             counter;
+        #    ;
+        #
+        #    for (counter = 1; counter <= conlen(CCDataLinkLine.PackedRanges); counter++)
+        #    {
+        #        tmpFilter = conpeek(CCDataLinkLine.PackedRanges, counter);
+        #
+        #        if (tmpFilter.RangeType == CCDataLinkRangeType::Value)
+        #            this.createParameter(tmpFilter, counter);
+        #    }
+        #}
+      ENDSOURCE
+      SOURCE #classDeclaration
+        #class FIN_CCADOCommand
+        #{
+        #    COM command;
+        #}
+      ENDSOURCE
+      SOURCE #command
+        #COM command()
+        #{
+        #    return command;
+        #}
+      ENDSOURCE
+      SOURCE #commandText
+        #str commandText(str commandText = '')
+        #{
+        #    InteropPermission _perm;
+        #;
+        #    _perm = new InteropPermission(InteropKind::ComInterop);
+        #    _perm.assert();
+        #
+        #    if (!prmisdefault(commandText))
+        #        command.commandText(commandText);
+        #
+        #    return command.commandText();
+        #}
+      ENDSOURCE
+      SOURCE #commandType
+        #int commandType(int commandType = 0)
+        #{
+        #    if (!prmisdefault(commandType))
+        #        command.commandType(commandType);
+        #
+        #    return command.commandType();
+        #}
+      ENDSOURCE
+      SOURCE #createParameter
+        #void createParameter(CCDataLinkTmpFilter CCDataLinkTmpFilter, Counter counter)
+        #{
+        #    CCADOParameter  CCADOParameter;
+        #    ;
+        #    CCADOParameter = new CCADOParameter();
+        #    CCADOParameter.name('p'+int2str(counter));
+        #    CCADOParameter.size(CCDataLinkTmpFilter.Size);
+        #    CCADOParameter.type(CCDataLinkTmpFilter.Type);
+        #
+        #    if (CCDataLinkTmpFilter.UseStringValue)
+        #        CCADOParameter.parameter().value(CCDataLinkTmpFilter.Field2);
+        #    else
+        #        CCADOParameter.parameter().value(CCADOParameter.getVariant(CCDataLinkTmpFilter.Field2));
+        #
+        #    this.addParameter(CCADOParameter);
+        #}
+      ENDSOURCE
+      SOURCE #execute
+        #FIN_CCADORecordSet execute()
+        #{
+        #    InteropPermission _perm;
+        #;
+        #    _perm = new InteropPermission(InteropKind::ComInterop);
+        #    _perm.assert();
+        #
+        #    return new FIN_CCADORecordSet(command.execute());
+        #}
+      ENDSOURCE
+      SOURCE #new
+        #void new()
+        #{
+        #    InteropPermission _perm;
+        #;
+        #    _perm = new InteropPermission(InteropKind::ComInterop);
+        #    _perm.assert();
+        #    command = new COM('ADODB.Command');
+        #}
+      ENDSOURCE
+    ENDMETHODS
+  ENDCLASS

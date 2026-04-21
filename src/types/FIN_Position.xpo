@@ -1,0 +1,23 @@
+﻿  USERTYPE #FIN_Position
+  Id 50021
+  STRING
+    PROPERTIES
+      Name                #FIN_Position
+      Label               #Position
+      Extends             #Position
+      StringSize          #30
+    ENDPROPERTIES
+    
+    TYPEELEMENTS
+    ENDTYPEELEMENTS
+    
+    TYPEREFERENCES
+      TYPEREFERENCETYPE DATASET
+      PROPERTIES
+        Table               #FIN_GroupUserPositions
+        RelatedField        #Position
+      ENDPROPERTIES
+      
+    ENDTYPEREFERENCES
+    
+  ENDUSERTYPE

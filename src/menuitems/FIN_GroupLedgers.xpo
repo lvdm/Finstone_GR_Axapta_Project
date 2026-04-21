@@ -1,0 +1,9 @@
+﻿  MENUITEM #FIN_GroupLedgers
+    Type: 1
+    PROPERTIES
+      Name                #FIN_GroupLedgers
+      Label               #Ledgers
+      Object              #FIN_GroupLedgers
+    ENDPROPERTIES
+    
+  ENDMENUITEM

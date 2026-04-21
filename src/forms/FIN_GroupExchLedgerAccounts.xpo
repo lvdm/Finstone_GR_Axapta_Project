@@ -1,0 +1,199 @@
+﻿FORM #FIN_GroupExchLedgerAccounts
+  PROPERTIES
+    Name                #FIN_GroupExchLedgerAccounts
+  ENDPROPERTIES
+  
+  METHODS
+    Version: 3
+    SOURCE #classDeclaration
+      #public class FormRun extends ObjectRun
+      #{
+      #   QueryBuildRange      qbr_EntityCode;
+      #
+      #}
+    ENDSOURCE
+    SOURCE #init
+      #public void init()
+      #{
+      #    ;
+      #    super();
+      #
+      #    if( element.args() )
+      #    {
+      #        // get string parameter
+      #        qbr_EntityCode.value(element.args().parm());
+      #    }
+      #}
+    ENDSOURCE
+  ENDMETHODS
+  OBJECTBANK
+    PROPERTIES
+    ENDPROPERTIES
+    
+    DATASOURCE
+      OBJECTPOOL
+        PROPERTIES
+          Name                #FIN_GroupExchLedgerAccRates
+          Table               #FIN_GroupExchLedgerAccRates
+        ENDPROPERTIES
+        
+        FIELDLIST
+        ENDFIELDLIST
+      ENDOBJECTPOOL
+      METHODS
+        Version: 3
+        SOURCE #init
+          #public void init()
+          #{
+          #    super();
+          #
+          #   FIN_GroupExchLedgerAccRates_ds.cacheAddMethod(tablemethodstr(FIN_GroupExchLedgerAccRates, AccountName));
+          #
+          #   qbr_EntityCode = this.query().dataSourceName('FIN_GroupExchLedgerAccRates').addRange(fieldNum(FIN_GroupExchLedgerAccRates ,EntityCode));
+          #
+          #
+          #}
+        ENDSOURCE
+      ENDMETHODS
+    ENDDATASOURCE
+  ENDOBJECTBANK
+  
+  JOINS
+  ENDJOINS
+  
+  DESIGN
+    PROPERTIES
+    ENDPROPERTIES
+    
+    CONTAINER
+      CONTROL TAB
+        PROPERTIES
+          Name                #Tab
+          Width               #Column width
+          Height              #Column height
+        ENDPROPERTIES
+        
+        CONTAINER
+          CONTROL TABPAGE
+            PROPERTIES
+              Name                #TabPage
+              Width               #Column width
+              Height              #Column height
+              Caption             #Fixed Rates
+            ENDPROPERTIES
+            
+            CONTAINER
+              CONTROL GRID
+                PROPERTIES
+                  Name                #Grid
+                  DataSource          #FIN_GroupExchLedgerAccRates
+                ENDPROPERTIES
+                
+                  CONTAINER
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupExchLedgerAccRates_EntityCode
+                        AllowEdit           #No
+                        ColorScheme         #RGB
+                        BackgroundColor     #230 230 230
+                        DataSource          #FIN_GroupExchLedgerAccRates
+                        DataField           #EntityCode
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupExchLedgerAccRates_AccountNum
+                        DataSource          #FIN_GroupExchLedgerAccRates
+                        DataField           #AccountNum
+                      ENDPROPERTIES
+                      
+                      METHODS
+                        Version: 3
+                        SOURCE #lookup
+                          #public void lookup()
+                          #{
+                          #    ;
+                          #    FIN_GroupLedgerTable::lookupAccountNum(this,fIN_GroupExchLedgerAccRates.EntityCode);
+                          #}
+                        ENDSOURCE
+                      ENDMETHODS
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #AccountName
+                        AllowEdit           #No
+                        ColorScheme         #RGB
+                        BackgroundColor     #230 230 230
+                        DataSource          #FIN_GroupExchLedgerAccRates
+                        DataMethod          #AccountName
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupExchLedgerAccRates_CurrencyCode
+                        DataSource          #FIN_GroupExchLedgerAccRates
+                        DataField           #CurrencyCode
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL DATEEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupExchLedgerAccRates_PeriodStart
+                        Label               #Period
+                        DataSource          #FIN_GroupExchLedgerAccRates
+                        DataField           #PeriodStart
+                      ENDPROPERTIES
+                      
+                      METHODS
+                        Version: 3
+                        SOURCE #lookup
+                          #public void lookup()
+                          #{
+                          #    ;
+                          #    FIN_GroupPeriod::lookupPeriodStart(this);
+                          #}
+                        ENDSOURCE
+                      ENDMETHODS
+                    ENDCONTROL 
+                    
+                    CONTROL REALEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupExchLedgerAccRates_AvgExchRate
+                        DataSource          #FIN_GroupExchLedgerAccRates
+                        DataField           #AvgExchRate
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL REALEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupExchLedgerAccRates_ClosingExchRate
+                        DataSource          #FIN_GroupExchLedgerAccRates
+                        DataField           #ClosingExchRate
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                  ENDCONTAINER
+                  
+              ENDCONTROL 
+              
+            ENDCONTAINER
+            
+          ENDCONTROL 
+          
+        ENDCONTAINER
+        
+      ENDCONTROL 
+      
+    ENDCONTAINER
+    
+  ENDDESIGN
+  
+ENDFORM

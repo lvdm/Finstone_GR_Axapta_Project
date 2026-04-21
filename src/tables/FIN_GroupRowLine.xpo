@@ -1,0 +1,266 @@
+﻿  TABLE #FIN_GroupRowLine
+    Id 50042
+    PROPERTIES
+      Name                #FIN_GroupRowLine
+      Label               #RowSets Lines
+      CreateRecIdIndex    #Yes
+      ModifiedDateTime    #Yes
+      ModifiedBy          #Yes
+      CreatedDateTime     #Yes
+      CreatedBy           #Yes
+    ENDPROPERTIES
+    
+    FIELDS
+      FIELD #RowSetCode
+        Id 50002
+        STRING
+        PROPERTIES
+          Name                #RowSetCode
+          Table               #FIN_GroupRowLine
+          ExtendedDataType    
+            ARRAY 
+              #FIN_RowSetCode
+              #
+            ENDARRAY
+        ENDPROPERTIES
+        
+      FIELD #RowLineNo
+        Id 50003
+        INT
+        PROPERTIES
+          Name                #RowLineNo
+          Table               #FIN_GroupRowLine
+          ExtendedDataType    
+            ARRAY 
+              #FIN_RowLineNo
+              #
+            ENDARRAY
+        ENDPROPERTIES
+        
+      FIELD #RowLineName
+        Id 50004
+        STRING
+        PROPERTIES
+          Name                #RowLineName
+          Label               #RowLine Name
+          Table               #FIN_GroupRowLine
+          ExtendedDataType    
+            ARRAY 
+              #FIN_RowLineName
+              #
+            ENDARRAY
+          StringSize          #100
+        ENDPROPERTIES
+        
+      FIELD #Level0
+        Id 50005
+        STRING
+        PROPERTIES
+          Name                #Level0
+          Label               #Level 0
+          Table               #FIN_GroupRowLine
+          ExtendedDataType    
+            ARRAY 
+              #Description
+              #
+            ENDARRAY
+          StringSize          #60
+        ENDPROPERTIES
+        
+      FIELD #Level0_Sort
+        Id 50006
+        INT
+        PROPERTIES
+          Name                #Level0_Sort
+          Label               #Level 0 Sort
+          Table               #FIN_GroupRowLine
+        ENDPROPERTIES
+        
+      FIELD #Level1
+        Id 50007
+        STRING
+        PROPERTIES
+          Name                #Level1
+          Label               #Level 1
+          Table               #FIN_GroupRowLine
+          ExtendedDataType    
+            ARRAY 
+              #Description
+              #
+            ENDARRAY
+          StringSize          #60
+        ENDPROPERTIES
+        
+      FIELD #Level4_Sort
+        Id 50008
+        INT
+        PROPERTIES
+          Name                #Level4_Sort
+          Label               #Level 4 Sort
+          Table               #FIN_GroupRowLine
+        ENDPROPERTIES
+        
+      FIELD #Level4
+        Id 50009
+        STRING
+        PROPERTIES
+          Name                #Level4
+          Label               #Level 4
+          Table               #FIN_GroupRowLine
+          ExtendedDataType    
+            ARRAY 
+              #Description
+              #
+            ENDARRAY
+          StringSize          #60
+        ENDPROPERTIES
+        
+      FIELD #Level3_Sort
+        Id 50010
+        INT
+        PROPERTIES
+          Name                #Level3_Sort
+          Label               #Level 3 Sort
+          Table               #FIN_GroupRowLine
+        ENDPROPERTIES
+        
+      FIELD #Level3
+        Id 50011
+        STRING
+        PROPERTIES
+          Name                #Level3
+          Label               #Level 3
+          Table               #FIN_GroupRowLine
+          ExtendedDataType    
+            ARRAY 
+              #Description
+              #
+            ENDARRAY
+          StringSize          #60
+        ENDPROPERTIES
+        
+      FIELD #Level2_Sort
+        Id 50012
+        INT
+        PROPERTIES
+          Name                #Level2_Sort
+          Label               #Level 2 Sort
+          Table               #FIN_GroupRowLine
+        ENDPROPERTIES
+        
+      FIELD #Level2
+        Id 50013
+        STRING
+        PROPERTIES
+          Name                #Level2
+          Label               #Level 2
+          Table               #FIN_GroupRowLine
+          ExtendedDataType    
+            ARRAY 
+              #Description
+              #
+            ENDARRAY
+          StringSize          #60
+        ENDPROPERTIES
+        
+      FIELD #Level1_Sort
+        Id 50014
+        INT
+        PROPERTIES
+          Name                #Level1_Sort
+          Label               #Level 1 Sort
+          Table               #FIN_GroupRowLine
+        ENDPROPERTIES
+        
+    ENDFIELDS
+    GROUPS
+    ENDGROUPS
+    
+    INDICES
+      #RowLineNoIdx
+      Id 50001
+      PROPERTIES
+        Name                #RowLineNoIdx
+        AllowDuplicates     #No
+      ENDPROPERTIES
+      
+      INDEXFIELDS
+        #RowLineNo
+        #RowSetCode
+      ENDINDEXFIELDS
+      
+    ENDINDICES
+    REFERENCES
+      REFERENCE #Parent
+        PROPERTIES
+          Name                #Parent
+          Table               #FIN_GroupRowSet
+        ENDPROPERTIES
+        
+        FIELDREFERENCES
+          REFERENCETYPE NORMAL
+          PROPERTIES
+            Field               #RowSetCode
+            RelatedField        #RowSetCode
+          ENDPROPERTIES
+          
+        ENDFIELDREFERENCES
+      ENDREFERENCE
+    ENDREFERENCES
+    
+    DELETEACTIONS
+    ENDDELETEACTIONS
+    
+    METHODS
+      Version: 3
+      SOURCE #find
+        #static FIN_GroupRowLine find(FIN_RowSetCode rowSetCode ,FIN_RowLineNo rowLineNo,
+        #                             boolean         _forUpdate = false)
+        #{
+        #    FIN_GroupRowLine  fIN_GroupRowLine;
+        #
+        #    if (rowSetCode)
+        #    {
+        #        fIN_GroupRowLine.selectForUpdate(_forUpdate);
+        #
+        #        select firstonly *
+        #            from fIN_GroupRowLine
+        #                where fIN_GroupRowLine.RowSetCode == rowSetCode && fIN_GroupRowLine.RowLineNo == rowLineNo;
+        #    }
+        #
+        #    return fIN_GroupRowLine;
+        #}
+      ENDSOURCE
+      SOURCE #lookupRowLineNo
+        #public static void lookupRowLineNo(FormControl _callingControl,FIN_RowSetCode _rowSetCode)
+        #{
+        #  Query                   query = new Query();
+        #  QueryBuildDataSource    dsGroupRowLine;
+        #  QueryBuildRange         qbr_RowSetCode;
+        #
+        #  // Instantiate sysTableLookup object using table which will provide the visible fields
+        #  SysTableLookup  sysTableLookup = sysTableLookup::newParameters(tableNum(FIN_GroupRowLine), _callingControl);
+        #  ;
+        #
+        #
+        #  dsGroupRowLine = query.addDataSource(tableNum(FIN_GroupRowLine));
+        #
+        #
+        #  qbr_RowSetCode = dsGroupRowLine.addRange(fieldNum(FIN_GroupRowLine ,RowSetCode));
+        #  qbr_RowSetCode.value(queryvalue(_rowSetCode));
+        #
+        #  // Set the query to be used by the lookup form
+        #  sysTableLookup.parmQuery(query);
+        #
+        #  // Specify the fields to show in the form.  In this case we have chosen
+        #
+        #  sysTableLookup.addLookupfield(fieldNum(FIN_GroupRowLine, RowLineNo));
+        #  sysTableLookup.addLookupfield(fieldNum(FIN_GroupRowLine, RowLineName));
+        #  sysTableLookup.addLookupfield(fieldNum(FIN_GroupRowLine, RowSetCode));
+        #
+        #  // Perform the lookup
+        #  sysTableLookup.performFormLookup();
+        #}
+      ENDSOURCE
+    ENDMETHODS
+  ENDTABLE

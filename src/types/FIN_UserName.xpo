@@ -1,0 +1,23 @@
+﻿  USERTYPE #FIN_UserName
+  Id 50020
+  STRING
+    PROPERTIES
+      Name                #FIN_UserName
+      Label               #User Name
+      Extends             #UserName
+      StringSize          #60
+    ENDPROPERTIES
+    
+    TYPEELEMENTS
+    ENDTYPEELEMENTS
+    
+    TYPEREFERENCES
+      TYPEREFERENCETYPE DATASET
+      PROPERTIES
+        Table               #FIN_GroupUsers
+        RelatedField        #UserName
+      ENDPROPERTIES
+      
+    ENDTYPEREFERENCES
+    
+  ENDUSERTYPE

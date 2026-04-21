@@ -1,0 +1,26 @@
+﻿  ENUMTYPE #FIN_RowMapping
+    Id 50011
+    PROPERTIES
+      Name                #FIN_RowMapping
+      Label               #Row Mapping
+      Help                #Row mapping indicator
+      UseEnumValue        #Yes
+    ENDPROPERTIES
+    
+    TYPEELEMENTS
+      #Specific
+      PROPERTIES
+        Name                #Specific
+        Label               #Specific
+        EnumValue           #0
+      ENDPROPERTIES
+      
+      #Any
+      PROPERTIES
+        Name                #Any
+        Label               #Any
+        EnumValue           #1
+      ENDPROPERTIES
+      
+    ENDTYPEELEMENTS
+  ENDENUMTYPE

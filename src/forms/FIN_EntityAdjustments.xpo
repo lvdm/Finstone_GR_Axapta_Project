@@ -1,0 +1,483 @@
+﻿FORM #FIN_EntityAdjustments
+  PROPERTIES
+    Name                #FIN_EntityAdjustments
+  ENDPROPERTIES
+  
+  METHODS
+    Version: 3
+    SOURCE #classDeclaration
+      #public class FormRun extends ObjectRun
+      #{
+      #
+      #    QueryBuildRange qbr_PeriodEnd_LedgerData;
+      #    QueryBuildRange qbr_ScenarioADJ_LedgerData;
+      #    QueryBuildRange qbr_EntityCode_LedgerData;
+      #    QueryBuildRange qbr_Category_LedgerData;
+      #
+      #    FIN_EntityCode  selectedEntityCode;
+      #    FIN_PeriodEnd   selectedDate;
+      #
+      #}
+    ENDSOURCE
+    SOURCE #canClose
+      #public boolean canClose()
+      #{
+      #    boolean ret;
+      #
+      #    ret = super();
+      #
+      #     this.checkIfBalance();
+      #
+      #    return ret;
+      #}
+    ENDSOURCE
+    SOURCE #checkIfBalance
+      #boolean checkIfBalance()
+      #{
+      #    FIN_GroupLedgerData tabData;
+      #    boolean   ret = false;
+      #    ;
+      #
+      #
+      #    Select sum(AmountMST), sum(Amount)
+      #        from tabData
+      #        where tabData.EntityCode == selectedEntityCode
+      #            && tabData.PeriodStart == selectedDate
+      #            && tabData.ScenarioCode == 'ADJ'
+      #            && tabData.Category == 'MAIN';
+      #
+      #    if (tabData.Amount != 0 || tabData.AmountMST != 0)
+      #    {
+      #        error (strfmt('Adjustment entries for period does not balance! Amount: %1 AmountMST: %2 Entity: %3  Period %4',num2str(tabData.Amount,1,4,1,1), num2str(tabData.AmountMST,1,4,1,1),selectedEntityCode,date2str(selectedDate,123,1,1,3,1,4)));
+      #
+      #    }
+      #    else
+      #    {
+      #        ret = true;
+      #    }
+      #
+      #    return ret;
+      #
+      #}
+    ENDSOURCE
+    SOURCE #filterGrid
+      #boolean filterGrid()
+      #{
+      #    FIN_PeriodEnd newDate;
+      #    FIN_GroupEntities   tabEntities;
+      #
+      #    ;
+      #    if (selectedEntityCode && selectedDate)
+      #        this.checkIfBalance();
+      #
+      #    newDate = str2date(PeriodComboBox.valueStr(),123);
+      #    newDate = FIN_GroupPeriod::periodStart(newDate);
+      #
+      #    qbr_PeriodEnd_LedgerData.value(queryValue(newDate));
+      #
+      #    Select EntityCode from tabEntities where tabEntities.EntityName == EntityComboBox.valueStr();
+      #    if (tabEntities.EntityCode)
+      #    {
+      #        qbr_EntityCode_LedgerData.value(queryValue(tabEntities.EntityCode));
+      #
+      #        selectedEntityCode = tabEntities.EntityCode;
+      #        selectedDate       = newDate;
+      #
+      #        FIN_GroupLedgerData_ds.executeQuery();
+      #    }
+      #
+      #    return true;
+      #
+      #}
+    ENDSOURCE
+    SOURCE #fillEntityCombox
+      #void fillEntityCombox()
+      #{
+      #    FIN_GroupEntities tabEntities;
+      #
+      #    ;
+      #
+      #
+      #    While select * from tabEntities order by tabEntities.EntityName
+      #    {
+      #
+      #        EntityComboBox.add(tabEntities.EntityName);
+      #
+      #
+      #
+      #    }
+      #
+      #
+      #
+      #}
+    ENDSOURCE
+    SOURCE #fillPeriodCombox
+      #void fillPeriodCombox()
+      #{
+      #    FIN_GroupPeriod tabPeriod;
+      #    FIN_PeriodEnd   minPeriodEnd;
+      #    int             selectPosition;
+      #
+      #    ;
+      #
+      #    minPeriodEnd = str2date('31 Dec 2015',123);
+      #
+      #    While select * from tabPeriod order by tabPeriod.PeriodEnd desc where tabPeriod.PeriodEnd > minPeriodEnd
+      #    {
+      #
+      #        PeriodComboBox.add(date2str(tabPeriod.PeriodEnd,123,2,1,3,1,4));
+      #
+      #        if (tabPeriod.PeriodEnd > endMth(today()))
+      #        {
+      #            selectPosition ++;
+      #        }
+      #
+      #
+      #    }
+      #
+      #    PeriodComboBox.selection( selectPosition);
+      #
+      #}
+    ENDSOURCE
+    SOURCE #init
+      #public void init()
+      #{
+      #    super();
+      #
+      #    qbr_PeriodEnd_LedgerData.value(queryValue(endMth(today())));
+      #
+      #    qbr_ScenarioADJ_LedgerData.value(queryValue("ADJ"));
+      #    qbr_Category_LedgerData.value(queryvalue("MAIN"));
+      #
+      #    this.fillPeriodCombox();
+      #    this.fillEntityCombox();
+      #
+      #
+      #}
+    ENDSOURCE
+  ENDMETHODS
+  OBJECTBANK
+    PROPERTIES
+    ENDPROPERTIES
+    
+    DATASOURCE
+      OBJECTPOOL
+        PROPERTIES
+          Name                #FIN_GroupEntities
+          Table               #FIN_GroupEntities
+          AllowEdit           #No
+          AllowCreate         #No
+          AllowDelete         #No
+          InsertAtEnd         #No
+          InsertIfEmpty       #No
+        ENDPROPERTIES
+        
+        FIELDLIST
+        ENDFIELDLIST
+      ENDOBJECTPOOL
+    ENDDATASOURCE
+    DATASOURCE
+      OBJECTPOOL
+        PROPERTIES
+          Name                #FIN_GroupLedgerData
+          Table               #FIN_GroupLedgerData
+        ENDPROPERTIES
+        
+        FIELDLIST
+          DATAFIELD ScenarioCode
+            PROPERTIES
+              Mandatory           #Yes
+            ENDPROPERTIES
+            
+          ENDDATAFIELD
+          
+          DATAFIELD TransDate
+            PROPERTIES
+              Mandatory           #Yes
+            ENDPROPERTIES
+            
+          ENDDATAFIELD
+          
+          DATAFIELD Amount
+            PROPERTIES
+              Mandatory           #Yes
+            ENDPROPERTIES
+            
+          ENDDATAFIELD
+          
+          DATAFIELD AccountNum
+            PROPERTIES
+              Mandatory           #Yes
+            ENDPROPERTIES
+            
+          ENDDATAFIELD
+          
+          DATAFIELD AmountMST
+            PROPERTIES
+              Mandatory           #Yes
+            ENDPROPERTIES
+            
+          ENDDATAFIELD
+          
+          DATAFIELD CurrencyCode
+            PROPERTIES
+              Mandatory           #Yes
+            ENDPROPERTIES
+            
+          ENDDATAFIELD
+          
+        ENDFIELDLIST
+      ENDOBJECTPOOL
+      METHODS
+        Version: 3
+        SOURCE #initValue
+          #public void initValue()
+          #{
+          #    TransDate transDate;
+          #    ;
+          #
+          #    super();
+          #
+          #    transDate = str2date(PeriodComboBox.valueStr(),123);
+          #    FIN_GroupLedgerData.TransDate = transDate;
+          #}
+        ENDSOURCE
+        SOURCE #validateWrite
+          #public boolean validateWrite()
+          #{
+          #    boolean ret;
+          #
+          #    ret = super();
+          #
+          #    if (FIN_GroupLedgerData.ScenarioCode != 'ADJ')
+          #         ret = false;
+          #
+          #    return ret;
+          #}
+        ENDSOURCE
+        SOURCE #init
+          #public void init()
+          #{
+          #    super();
+          #
+          #    qbr_PeriodEnd_LedgerData = this.query().dataSourceName('FIN_GroupLedgerData').addRange(fieldNum(FIN_GroupLedgerData ,PeriodStart));
+          #    qbr_ScenarioADJ_LedgerData = this.query().dataSourceName('FIN_GroupLedgerData').addRange(fieldNum(FIN_GroupLedgerData ,ScenarioCode));
+          #    qbr_EntityCode_LedgerData = this.query().dataSourceName('FIN_GroupLedgerData').addRange(fieldNum(FIN_GroupLedgerData ,EntityCode));
+          #    qbr_Category_LedgerData = this.query().dataSourceName('FIN_GroupLedgerData').addRange(fieldNum(FIN_GroupLedgerData ,Category));
+          #
+          #}
+        ENDSOURCE
+      ENDMETHODS
+    ENDDATASOURCE
+  ENDOBJECTBANK
+  
+  JOINS
+  ENDJOINS
+  
+  DESIGN
+    PROPERTIES
+      Caption             #Enitity Adjustments
+    ENDPROPERTIES
+    
+    CONTAINER
+      CONTROL COMBOBOX
+        PROPERTIES
+          Name                #PeriodComboBox
+          AutoDeclaration     #Yes
+          Selection           #5
+          Label               #Period
+          LabelFontSize       #10
+          LabelBold           #Bold
+        ENDPROPERTIES
+        
+        METHODS
+          Version: 3
+          SOURCE #selectionChange
+            #public int selectionChange()
+            #{
+            #    int ret;
+            #    ;
+            #
+            #    ret = super();
+            #
+            #    ret = element.filterGrid();
+            #
+            #    return ret;
+            #}
+          ENDSOURCE
+        ENDMETHODS
+      ENDCONTROL 
+      
+      CONTROL COMBOBOX
+        PROPERTIES
+          Name                #EntityComboBox
+          AutoDeclaration     #Yes
+          Selection           #5
+          Label               #Entity
+          LabelFontSize       #10
+          LabelBold           #Bold
+        ENDPROPERTIES
+        
+        METHODS
+          Version: 3
+          SOURCE #selectionChange
+            #public int selectionChange()
+            #{
+            #    int ret;
+            #    ;
+            #
+            #    ret = super();
+            #
+            #    ret = element.filterGrid();
+            #
+            #    return ret;
+            #}
+          ENDSOURCE
+        ENDMETHODS
+      ENDCONTROL 
+      
+      CONTROL TAB
+        PROPERTIES
+          Name                #Tab
+          Width               #Column width
+          Height              #Column height
+        ENDPROPERTIES
+        
+        CONTAINER
+          CONTROL TABPAGE
+            PROPERTIES
+              Name                #TabAdjustments
+              AutoDeclaration     #Yes
+              Caption             #Adjustments
+            ENDPROPERTIES
+            
+            CONTAINER
+              CONTROL GRID
+                PROPERTIES
+                  Name                #Grid1
+                  Width               #Column width
+                  Height              #Column height
+                  DataSource          #FIN_GroupLedgerData
+                ENDPROPERTIES
+                
+                  CONTAINER
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupLedgerData_EntityCode
+                        AllowEdit           #No
+                        DataSource          #FIN_GroupLedgerData
+                        DataField           #EntityCode
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL DATEEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupLedgerData_TransDate
+                        AllowEdit           #No
+                        DataSource          #FIN_GroupLedgerData
+                        DataField           #TransDate
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupLedgerData_AccountNum
+                        DataSource          #FIN_GroupLedgerData
+                        DataField           #AccountNum
+                      ENDPROPERTIES
+                      
+                      METHODS
+                        Version: 3
+                        SOURCE #lookup
+                          #public void lookup()
+                          #{
+                          #    ;
+                          #     FIN_GroupLedgerTable::lookupAccountNum(this,selectedEntityCode);
+                          #}
+                        ENDSOURCE
+                      ENDMETHODS
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupLedgerData_ScenarioCode
+                        AllowEdit           #No
+                        DataSource          #FIN_GroupLedgerData
+                        DataField           #ScenarioCode
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupLedgerData_CostCenter
+                        DataSource          #FIN_GroupLedgerData
+                        DataField           #CostCenter
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupLedgerData_Department
+                        DataSource          #FIN_GroupLedgerData
+                        DataField           #Department
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupLedgerData_Purpose
+                        DataSource          #FIN_GroupLedgerData
+                        DataField           #Purpose
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupLedgerData_CurrencyCode
+                        DataSource          #FIN_GroupLedgerData
+                        DataField           #CurrencyCode
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL REALEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupLedgerData_Amount
+                        DataSource          #FIN_GroupLedgerData
+                        DataField           #Amount
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL REALEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupLedgerData_AmountMST
+                        DataSource          #FIN_GroupLedgerData
+                        DataField           #AmountMST
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                  ENDCONTAINER
+                  
+              ENDCONTROL 
+              
+            ENDCONTAINER
+            
+          ENDCONTROL 
+          
+        ENDCONTAINER
+        
+      ENDCONTROL 
+      
+    ENDCONTAINER
+    
+  ENDDESIGN
+  
+ENDFORM

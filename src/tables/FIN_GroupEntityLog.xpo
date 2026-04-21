@@ -1,0 +1,174 @@
+﻿  TABLE #FIN_GroupEntityLog
+    Id 50051
+    PROPERTIES
+      Name                #FIN_GroupEntityLog
+      Label               #Group Entity Log Table
+      ModifiedDateTime    #Yes
+      ModifiedBy          #Yes
+      CreatedDateTime     #Yes
+      CreatedBy           #Yes
+    ENDPROPERTIES
+    
+    FIELDS
+      FIELD #EntityCode
+        Id 50001
+        STRING
+        PROPERTIES
+          Name                #EntityCode
+          Table               #FIN_GroupEntityLog
+          ExtendedDataType    
+            ARRAY 
+              #FIN_EntityCode
+              #
+            ENDARRAY
+        ENDPROPERTIES
+        
+      FIELD #PeriodStart
+        Id 50002
+        DATE
+        PROPERTIES
+          Name                #PeriodStart
+          Table               #FIN_GroupEntityLog
+          ExtendedDataType    
+            ARRAY 
+              #FIN_PeriodStart
+              #
+            ENDARRAY
+        ENDPROPERTIES
+        
+      FIELD #LogEntryType
+        Id 50003
+        ENUM
+        PROPERTIES
+          Name                #LogEntryType
+          Table               #FIN_GroupEntityLog
+          EnumType            #FIN_LogEntryType
+        ENDPROPERTIES
+        
+      FIELD #UserName
+        Id 50004
+        STRING
+        PROPERTIES
+          Name                #UserName
+          Table               #FIN_GroupEntityLog
+          ExtendedDataType    
+            ARRAY 
+              #FIN_UserName
+              #
+            ENDARRAY
+          StringSize          #60
+        ENDPROPERTIES
+        
+      FIELD #PeriodEnd
+        Id 50005
+        DATE
+        PROPERTIES
+          Name                #PeriodEnd
+          Table               #FIN_GroupEntityLog
+          ExtendedDataType    
+            ARRAY 
+              #FIN_PeriodEnd
+              #
+            ENDARRAY
+        ENDPROPERTIES
+        
+    ENDFIELDS
+    GROUPS
+    ENDGROUPS
+    
+    INDICES
+    ENDINDICES
+    REFERENCES
+      REFERENCE #Entities
+        PROPERTIES
+          Name                #Entities
+          Table               #FIN_GroupEntities
+        ENDPROPERTIES
+        
+        FIELDREFERENCES
+          REFERENCETYPE NORMAL
+          PROPERTIES
+            Field               #EntityCode
+            RelatedField        #EntityCode
+          ENDPROPERTIES
+          
+        ENDFIELDREFERENCES
+      ENDREFERENCE
+    ENDREFERENCES
+    
+    DELETEACTIONS
+    ENDDELETEACTIONS
+    
+    METHODS
+      Version: 3
+      SOURCE #addEntityLog_Import_DataSet
+        #public static void addEntityLog_Import_DataSet(FIN_EntityCode _entityCode, FIN_DataSet _dataSet
+        #                             ,FIN_UserName _userName = curUserId()
+        #                             ,FIN_PeriodStart _periodStart = today(),FIN_PeriodEnd _periodEnd = today())
+        #{
+        #
+        #    ;
+        #
+        #    if (!_entityCode)
+        #        throw error('No entity code supplied log entry cannot be created.');
+        #
+        #
+        #    switch (_dataSet)
+        #    {
+        #
+        #        case FIN_DataSet::LedgerAccounts :
+        #
+        #             FIN_GroupEntityLog::addEntry(_entityCode,FIN_LogEntryType::Accounts_Imported);
+        #
+        #            break;
+        #
+        #        case FIN_DataSet::LedgerAdjustments :
+        #
+        #             FIN_GroupEntityLog::addEntry(_entityCode,FIN_LogEntryType::AdjData_Import,curUserId(),_periodStart,_periodEnd);
+        #             break;
+        #
+        #        case FIN_DataSet::LedgerData :
+        #
+        #             FIN_GroupEntityLog::addEntry(_entityCode,FIN_LogEntryType::LedgerData_Imported,curUserId(),_periodStart,_periodEnd);
+        #             break;
+        #
+        #
+        #        case FIN_DataSet::LedgerMappings :
+        #
+        #             FIN_GroupEntityLog::addEntry(_entityCode,FIN_LogEntryType::Mapping_Imported,curUserId(),_periodStart,_periodEnd);
+        #             break;
+        #
+        #       case FIN_DataSet::InventoryData :
+        #
+        #             FIN_GroupEntityLog::addEntry(_entityCode,FIN_LogEntryType::InventData_Imported,curUserId(),_periodStart,_periodEnd);
+        #             break;
+        #
+        #    }
+        #
+        #}
+      ENDSOURCE
+      SOURCE #addEntry
+        #public static void addEntry(FIN_EntityCode _entityCode, FIN_LogEntryType _entryType
+        #                            ,FIN_UserName _userName = curUserId()
+        #                            ,FIN_PeriodStart _periodStart = today(),FIN_PeriodEnd _periodEnd = today())
+        #{
+        #    FIN_GroupEntityLog  tabEntityLog;
+        #
+        #    ;
+        #    ttsbegin;
+        #
+        #    tabEntityLog.clear();
+        #    tabEntityLog.EntityCode     = _entityCode;
+        #    tabEntityLog.LogEntryType   = _entryType;
+        #    tabEntityLog.UserName       = _userName;
+        #    tabEntityLog.PeriodStart    = _periodStart;
+        #    tabEntityLog.PeriodEnd      = _periodEnd;
+        #    tabEntityLog.insert();
+        #
+        #    ttscommit;
+        #
+        #
+        #}
+      ENDSOURCE
+    ENDMETHODS
+  ENDTABLE

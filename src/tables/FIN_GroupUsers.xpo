@@ -1,0 +1,144 @@
+﻿  TABLE #FIN_GroupUsers
+    Id 50045
+    PROPERTIES
+      Name                #FIN_GroupUsers
+      ModifiedDateTime    #Yes
+      ModifiedBy          #Yes
+      CreatedDateTime     #Yes
+      CreatedBy           #Yes
+    ENDPROPERTIES
+    
+    FIELDS
+      FIELD #FirstName
+        Id 50001
+        STRING
+        PROPERTIES
+          Name                #FirstName
+          Label               #First Name
+          Mandatory           #Yes
+          Table               #FIN_GroupUsers
+          ExtendedDataType    
+            ARRAY 
+              #Name
+              #
+            ENDARRAY
+          StringSize          #60
+        ENDPROPERTIES
+        
+      FIELD #LastName
+        Id 50002
+        STRING
+        PROPERTIES
+          Name                #LastName
+          Label               #Last Name
+          Mandatory           #Yes
+          Table               #FIN_GroupUsers
+          ExtendedDataType    
+            ARRAY 
+              #LastName
+              #
+            ENDARRAY
+          StringSize          #25
+        ENDPROPERTIES
+        
+      FIELD #OfficePhone
+        Id 50003
+        STRING
+        PROPERTIES
+          Name                #OfficePhone
+          Label               #Office Phone
+          Table               #FIN_GroupUsers
+          ExtendedDataType    
+            ARRAY 
+              #Phone
+              #
+            ENDARRAY
+          StringSize          #20
+        ENDPROPERTIES
+        
+      FIELD #MobilePhone
+        Id 50004
+        STRING
+        PROPERTIES
+          Name                #MobilePhone
+          Label               #Mobile Phone
+          Table               #FIN_GroupUsers
+          ExtendedDataType    
+            ARRAY 
+              #PhoneMobile
+              #
+            ENDARRAY
+          StringSize          #20
+        ENDPROPERTIES
+        
+      FIELD #UserName
+        Id 50005
+        STRING
+        PROPERTIES
+          Name                #UserName
+          Mandatory           #Yes
+          Table               #FIN_GroupUsers
+          ExtendedDataType    
+            ARRAY 
+              #FIN_UserName
+              #
+            ENDARRAY
+          StringSize          #60
+        ENDPROPERTIES
+        
+      FIELD #Email
+        Id 50006
+        STRING
+        PROPERTIES
+          Name                #Email
+          Mandatory           #Yes
+          Table               #FIN_GroupUsers
+          ExtendedDataType    
+            ARRAY 
+              #Email
+              #
+            ENDARRAY
+          StringSize          #80
+        ENDPROPERTIES
+        
+      FIELD #DomainUser
+        Id 50007
+        STRING
+        PROPERTIES
+          Name                #DomainUser
+          Label               #Domain Account
+          HelpText            #Used for DIRECT SQL Access Validation
+          Table               #FIN_GroupUsers
+          StringSize          #30
+        ENDPROPERTIES
+        
+    ENDFIELDS
+    GROUPS
+    ENDGROUPS
+    
+    INDICES
+      #UserNameIdx
+      Id 50001
+      PROPERTIES
+        Name                #UserNameIdx
+        AllowDuplicates     #No
+      ENDPROPERTIES
+      
+      INDEXFIELDS
+        #UserName
+      ENDINDEXFIELDS
+      
+    ENDINDICES
+    REFERENCES
+    ENDREFERENCES
+    
+    DELETEACTIONS
+      #FIN_GroupUserEntity
+      PROPERTIES
+        Table               #FIN_GroupUserEntity
+        DeleteAction        #Restricted
+      ENDPROPERTIES
+      
+    ENDDELETEACTIONS
+    
+  ENDTABLE

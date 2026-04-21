@@ -1,0 +1,93 @@
+﻿  CLASS #FIN_CCADORecordSet
+    Id 50040
+    PROPERTIES
+      Name                #FIN_CCADORecordSet
+      Extends             #
+      RunOn               #Called from
+    ENDPROPERTIES
+    
+    METHODS
+      Version: 3
+      SOURCE #BOF
+        #boolean BOF()
+        #{
+        #    InteropPermission _perm;
+        #;
+        #    _perm = new InteropPermission(InteropKind::ComInterop);
+        #    _perm.assert();
+        #
+        #    return recordSet.BOF();
+        #}
+        #
+      ENDSOURCE
+      SOURCE #classDeclaration
+        #class FIN_CCADORecordSet
+        #{
+        #    COM recordSet;
+        #    #CCADo
+        #}
+      ENDSOURCE
+      SOURCE #close
+        #void close()
+        #{
+        #    InteropPermission _perm;
+        #;
+        #    _perm = new InteropPermission(InteropKind::ComInterop);
+        #    _perm.assert();
+        #
+        #    recordSet.close();
+        #    recordSet = null;
+        #}
+      ENDSOURCE
+      SOURCE #cursorLocation
+        #void cursorLocation(int cursorLocation = #adUseClient)
+        #{
+        #    recordSet.cursorLocation(cursorLocation);
+        #}
+      ENDSOURCE
+      SOURCE #EOF
+        #boolean EOF()
+        #{
+        #    InteropPermission _perm;
+        #;
+        #    _perm = new InteropPermission(InteropKind::ComInterop);
+        #    _perm.assert();
+        #
+        #    return recordSet.EOF();
+        #}
+      ENDSOURCE
+      SOURCE #fields
+        #FIN_CCADOFields fields()
+        #{
+        #    FIN_CCADOFields CCADOFields;
+        #    InteropPermission _perm;
+        #;
+        #    _perm = new InteropPermission(InteropKind::ComInterop);
+        #    _perm.assert();
+        #
+        #    CCADOFields = new FIN_CCADOFields(recordSet.fields());
+        #    return CCADOFields;
+        #}
+      ENDSOURCE
+      SOURCE #new
+        #void new(COM _recordSet = null)
+        #{
+        #    InteropPermission _perm;
+        #;
+        #    _perm = new InteropPermission(InteropKind::ComInterop);
+        #    _perm.assert();
+        #
+        #    if (!_recordSet)
+        #        recordSet = new COM('ADODB.RecordSet');
+        #    else
+        #        recordSet = _recordSet;
+        #}
+      ENDSOURCE
+      SOURCE #recordSet
+        #COM recordSet()
+        #{
+        #    return recordSet;
+        #}
+      ENDSOURCE
+    ENDMETHODS
+  ENDCLASS

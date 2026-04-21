@@ -1,0 +1,222 @@
+﻿FORM #FIN_EntityTreeLookup
+  PROPERTIES
+    Name                #FIN_EntityTreeLookup
+  ENDPROPERTIES
+  
+  METHODS
+    Version: 3
+    SOURCE #classDeclaration
+      #public class FormRun extends ObjectRun
+      #{
+      #    CCFormTreeDatasource treeDatasource;
+      #}
+    ENDSOURCE
+    SOURCE #task
+      #// catch "return" to initiate exit
+      #int task(int p1)
+      #{
+      #   int                 ret;
+      #   ;
+      #   ret = super(p1);
+      #   if (p1 == 288)  // Enter
+      #       element.exit();
+      #   Return ret;
+      #}
+    ENDSOURCE
+    SOURCE #run
+      #public void run()
+      #{
+      #   FormControl hostControl;
+      #   ;
+      #   super();
+      #
+      #   // initialize tree
+      #   this.InitTree();
+      #
+      #   // if this form was called as lookup, then expand tree at value of calling host control
+      #   hostControl =  element.selectTarget();
+      #   if (hostControl)
+      #       this.ExpandAndSelect( hostControl.valueStr() );
+      #}
+    ENDSOURCE
+    SOURCE #exit
+      #void exit()
+      #{
+      #;
+      #   // on exit, return data of currently selected node
+      #   element.closeSelect(treedatasource.selectedData());
+      #}
+    ENDSOURCE
+    SOURCE #ExpandAndSelectRec
+      #// simple recursive ExpandAndSelect function
+      #// ok, not so simple, but simpler then the one from Axapta, which was using a stack here
+      #int ExpandAndSelectRec(FIN_EntityCode ChildId)
+      #{
+      #   int node;
+      #   FIN_GroupEntities     table;
+      #   str IdTree;
+      #   ;
+      #   // recursively search for parent Ids to be expanded first
+      #   select firstonly table where table.EntityCode == ChildId;
+      #   if (table) {
+      #       node = this.ExpandAndSelectRec(table.ParentEntityCode);
+      #
+      #       // expand found node
+      #       tree.expand(node, FormTreeExpand::EXPAND);
+      #
+      #       // search for my node starting from parent
+      #       IdTree   = tree.getItem(node).data();
+      #       while (ChildId != IdTree)
+      #       {
+      #        node = tree.getNextVisible(node);
+      #        IdTree   = tree.getItem(node).data();
+      #       }
+      #   } else {
+      #       // if no parent was found, then we reached the root node
+      #       node = tree.getRoot();
+      #   }
+      #
+      #   // select  and return found node
+      #   tree.select(node);
+      #   return node;
+      #}
+    ENDSOURCE
+    SOURCE #ExpandAndSelect
+      #// wrapper for ExpandAndSelectRec
+      #// speeds up build of tree, by disabling tree updates
+      #void ExpandAndSelect(str ChildId)
+      #{
+      #    tree.lockWindowUpdate(true);
+      #    this.ExpandAndSelectRec(ChildId);
+      #    tree.lockWindowUpdate(false);
+      #}
+    ENDSOURCE
+    SOURCE #InitTree
+      #void InitTree()
+      #{
+      #
+      #    #Resource
+      #
+      #    Imagelist   imagelist;
+      #    ;
+      #
+      #    // create datasource for tree
+      #    treeDatasource = new CCFormTreeDatasource(FIN_GroupEntities_DS,tree,
+      #                                           fieldnum(FIN_GroupEntities,EntityCode),
+      #                                           fieldnum(FIN_GroupEntities,ParentEntityCode),
+      #                                           fieldnum(FIN_GroupEntities,EntityName),
+      #                                           false, false
+      #                                          );
+      #    // initialize root node
+      #    treeDatasource.initRoot("Finstone Group",'',1);
+      #
+      #    imagelist = new Imagelist(Imagelist::smallIconWidth(), Imagelist::smallIconHeight());
+      #    imagelist.add(new Image(#RES_NODE_COMPANY));
+      #    imagelist.add(new Image(#RES_COMPANY));
+      #
+      #    tree.setImagelist(imagelist);
+      #
+      #    treeDatasource.imageList().clear();
+      #}
+    ENDSOURCE
+  ENDMETHODS
+  OBJECTBANK
+    PROPERTIES
+    ENDPROPERTIES
+    
+    DATASOURCE
+      OBJECTPOOL
+        PROPERTIES
+          Name                #FIN_GroupEntities
+          Table               #FIN_GroupEntities
+        ENDPROPERTIES
+        
+        FIELDLIST
+        ENDFIELDLIST
+      ENDOBJECTPOOL
+      METHODS
+        Version: 3
+        SOURCE #init
+          #public void init()
+          #{
+          #    super();
+          #    this.query().dataSourceNo(1).clearDynalinks();
+          #}
+        ENDSOURCE
+      ENDMETHODS
+    ENDDATASOURCE
+  ENDOBJECTBANK
+  
+  JOINS
+  ENDJOINS
+  
+  DESIGN
+    PROPERTIES
+      Width               #400
+      Frame               #Border
+      WindowType          #Popup
+      HideToolbar         #Yes
+    ENDPROPERTIES
+    
+    CONTAINER
+      CONTROL TREE
+        PROPERTIES
+          Name                #tree
+          Width               #Column width
+          Height              #Column height
+        ENDPROPERTIES
+        
+        METHODS
+          Version: 3
+          SOURCE #selectionChanged
+            #void selectionChanged(FormTreeItem oldItem, FormTreeItem newItem, FormTreeSelect how)
+            #   {
+            #       ;
+            #       super(oldItem, newItem, how);
+            #
+            #       // on select of node in tree, update datasource to fetch new record
+            #       treeDatasource.selectionChanged(oldItem,newItem);
+            #   }
+          ENDSOURCE
+          SOURCE #expanding
+            #boolean expanding(int idx, FormTreeExpand action, anytype data)
+            #   {
+            #       boolean ret;
+            #       ;
+            #       ret = super(idx, action, data);
+            #
+            #       treeDatasource.expanding(idx, action, data); // expand node
+            #
+            #       Return ret;
+            #   }
+          ENDSOURCE
+          SOURCE #mouseDblClick
+            #// catch double click to initiate exit
+            #public int mouseDblClick(int _x, int _y, int _button, boolean _Ctrl, boolean _Shift)
+            #{
+            #   int ret;
+            #   ;
+            #   ret = super(_x, _y, _button, _Ctrl, _Shift);
+            #
+            #   element.exit(); // exit and return selected node value
+            #
+            #   return ret;
+            #}
+          ENDSOURCE
+          SOURCE #mouseUp
+            #int mouseUp(int x, int y, int button, boolean ctrl, boolean shift)
+            #{
+            #   super(x, y, button, ctrl, shift);
+            #
+            #   // must return 1 here, otherwise lookup will close each time on expanding :-;
+            #   return 1;
+            #}
+          ENDSOURCE
+        ENDMETHODS
+      ENDCONTROL 
+      
+    ENDCONTAINER
+    
+  ENDDESIGN
+  
+ENDFORM

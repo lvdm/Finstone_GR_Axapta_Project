@@ -1,0 +1,9 @@
+﻿  MENUITEM #FIN_GroupUsers
+    Type: 1
+    PROPERTIES
+      Name                #FIN_GroupUsers
+      Label               #Users
+      Object              #FIN_GroupUsers
+    ENDPROPERTIES
+    
+  ENDMENUITEM

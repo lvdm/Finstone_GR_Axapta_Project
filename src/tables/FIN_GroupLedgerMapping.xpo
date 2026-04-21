@@ -1,0 +1,300 @@
+﻿  TABLE #FIN_GroupLedgerMapping
+    Id 50023
+    PROPERTIES
+      Name                #FIN_GroupLedgerMapping
+      Label               #Finstone Ledger Mappings
+      ModifiedDateTime    #Yes
+      ModifiedBy          #Yes
+      CreatedDateTime     #Yes
+      CreatedBy           #Yes
+    ENDPROPERTIES
+    
+    FIELDS
+      FIELD #ToEntityCode
+        Id 50005
+        STRING
+        PROPERTIES
+          Name                #ToEntityCode
+          Label               #To Entity
+          Table               #FIN_GroupLedgerMapping
+          ExtendedDataType    
+            ARRAY 
+              #FIN_EntityCode
+              #
+            ENDARRAY
+        ENDPROPERTIES
+        
+      FIELD #FromEntityCode
+        Id 50007
+        STRING
+        PROPERTIES
+          Name                #FromEntityCode
+          Label               #From Entity
+          Table               #FIN_GroupLedgerMapping
+          ExtendedDataType    
+            ARRAY 
+              #FIN_EntityCode
+              #
+            ENDARRAY
+        ENDPROPERTIES
+        
+      FIELD #FromAcountNum
+        Id 50008
+        STRING
+        PROPERTIES
+          Name                #FromAcountNum
+          Label               #From Account
+          Table               #FIN_GroupLedgerMapping
+          ExtendedDataType    
+            ARRAY 
+              #FIN_AccountNum
+              #
+            ENDARRAY
+          StringSize          #30
+        ENDPROPERTIES
+        
+      FIELD #ToAcountNum
+        Id 50009
+        STRING
+        PROPERTIES
+          Name                #ToAcountNum
+          Label               #To Account
+          Table               #FIN_GroupLedgerMapping
+          ExtendedDataType    
+            ARRAY 
+              #FIN_AccountNum
+              #
+            ENDARRAY
+          StringSize          #30
+        ENDPROPERTIES
+        
+    ENDFIELDS
+    GROUPS
+    ENDGROUPS
+    
+    INDICES
+      #FromEntity
+      Id 50001
+      PROPERTIES
+        Name                #FromEntity
+        AllowDuplicates     #No
+      ENDPROPERTIES
+      
+      INDEXFIELDS
+        #ToEntityCode
+        #FromAcountNum
+        #FromEntityCode
+      ENDINDEXFIELDS
+      
+    ENDINDICES
+    REFERENCES
+    ENDREFERENCES
+    
+    DELETEACTIONS
+    ENDDELETEACTIONS
+    
+    METHODS
+      Version: 3
+      SOURCE #FromAccountName
+        #display AccountName FromAccountName()
+        #{
+        #       FIN_GroupLedgerTable tabLedger;
+        #       ;
+        #
+        #       if (this.FromAcountNum && this.FromEntityCode)
+        #       {
+        #            Select AccountName from tabLedger where tabLedger.AccountNum == this.FromAcountNum && tabLedger.EntityCode == this.FromEntityCode;
+        #            return tabLedger.AccountName;
+        #       }
+        #       else
+        #            return "";
+        #
+        # }
+      ENDSOURCE
+      SOURCE #insert
+        #public void insert()
+        #{
+        #
+        #    super();
+        #}
+      ENDSOURCE
+      SOURCE #ToAccountName
+        #display AccountName ToAccountName()
+        #{
+        #       FIN_GroupLedgerTable tabLedger;
+        #       ;
+        #
+        #       if (this.ToAcountNum && this.ToEntityCode)
+        #       {
+        #            Select AccountName from tabLedger where tabLedger.AccountNum == this.ToAcountNum && tabLedger.EntityCode == this.ToEntityCode;
+        #            return tabLedger.AccountName;
+        #       }
+        #       else
+        #            return "";
+        #
+        # }
+      ENDSOURCE
+      SOURCE #update
+        #public void update()
+        #{
+        #
+        #    super();
+        #}
+      ENDSOURCE
+      SOURCE #validateWrite
+        #public boolean validateWrite()
+        #{
+        #    FIN_GroupLedgerTable _ledgerTable;
+        #    boolean ret;
+        #    str 10  toType;
+        #
+        #    ;
+        #
+        #    ret = super();
+        #
+        #    if (!this.ToEntityCode)
+        #        throw error('A to entity code has to be supplied.');
+        #
+        #    if (!this.ToAcountNum)
+        #        throw error('A to account number has to be supplied.');
+        #
+        #    if (!this.FromAcountNum)
+        #        throw error('A from account number has to be supplied.');
+        #
+        #    if (!this.FromEntityCode)
+        #        throw error('A from entity code has to be supplied.');
+        #
+        #    select IsHeading,IsTotal,Type from _ledgerTable where _ledgerTable.AccountNum == this.ToAcountNum && _ledgerTable.EntityCode == this.ToEntityCode;
+        #
+        #    if (_ledgerTable.IsHeading || _ledgerTable.IsTotal)
+        #    {
+        #        ret = false;
+        #        info('An account cannot be mapped to a HEADING or TOTAL account.');
+        #    }
+        #
+        #    //Check that Source Type and Destination Type is the same
+        #    toType = _ledgerTable.Type;
+        #
+        #    select Type from _ledgerTable where _ledgerTable.AccountNum == this.FromAcountNum && _ledgerTable.EntityCode == this.FromEntityCode;
+        #
+        #    if (toType != _ledgerTable.Type)
+        #    {
+        #        ret = false;
+        #        info(strfmt('An account cannot be mapped because account Types need to be the same. From Type: %1  To Type: %2',_ledgerTable.Type,toType));
+        #    }
+        #
+        #
+        #    return ret;
+        #}
+      ENDSOURCE
+      SOURCE #copyMapping
+        #public static void copyMapping(FIN_EntityCode _destEntity)
+        #{
+        #    dialogField             dialogFromEntity;
+        #    dialogField             dialogToEntity;
+        #    dialogField             dialogDestEntity;
+        #    dialogField             dialogMerge;
+        #
+        #    Dialog                  dialog;
+        #
+        #    FIN_EntityCode          fromEntity, toEntity;
+        #    FIN_GroupLedgerTable    tabLedgerTable;
+        #    FIN_GroupLedgerMapping  tabMapping;
+        #    FIN_GroupLedgerMapping  tabExistMapping;
+        #    FIN_GroupLedgerMapping  tabDestMapping;
+        #    NoYes                   noYesMerge = NoYes::No;
+        #    ;
+        #
+        #    if (!_destEntity)
+        #        throw error('Destination Entity is required!');
+        #
+        #
+        #    dialog = new Dialog("Copy Ledger Mappings for " + _destEntity);
+        #    dialog.addText("Destination Entity : " + _destEntity);
+        #    dialogFromEntity    =   dialog.addField(typeId(FIN_EntityCode),"From Entity");
+        #    dialogToEntity      =   dialog.addField(typeId(FIN_EntityCode),"To Entity");
+        #    dialogMerge         =   dialog.addField(typeId(NoYes),"Merge with existing mappings");
+        #    dialog.addText(" ");
+        #    dialog.addText("Only mapping lines are copied where the Account number exists in the Destination company''s Ledger Accounts table.");
+        #    dialog.addText("From Entity : Is the entity's mappings that will be used as the source for the new mappings being created.");
+        #    dialog.addText("To Entity : Is destination entity to which the new mappings will point for enity " + _destEntity + ". Normally the master account list (_002)");
+        #
+        #
+        #    if(!dialog.run())
+        #        return;
+        #
+        #    fromEntity           =   dialogFromEntity.value();
+        #    toEntity             =   dialogToEntity.value();
+        #    noYesMerge           =   dialogMerge.value();
+        #
+        #
+        #    if (noYesMerge == NoYes::No)
+        #    {
+        #        select RecId from tabMapping where tabMapping.FromEntityCode == _destEntity
+        #                                            && tabMapping.ToEntityCode == toEntity;
+        #
+        #
+        #        if (tabMapping.RecId)
+        #            throw error (strfmt('Mappings already exists for FromEntity %1  ToEntity %2',_destEntity,toEntity));
+        #
+        #
+        #        ttsbegin;
+        #        while select *
+        #            from tabMapping
+        #            exists join AccountNum from tabLedgerTable
+        #            where   tabMapping.FromAcountNum == tabLedgerTable.AccountNum
+        #                    && tabLedgerTable.EntityCode == _destEntity
+        #                    && tabMapping.FromEntityCode == fromEntity
+        #                    && tabMapping.ToEntityCode == toEntity
+        #        {
+        #
+        #            tabDestMapping.data(tabMapping.data());
+        #            tabDestMapping.FromEntityCode = _destEntity;
+        #            tabDestMapping.insert();
+        #
+        #        }
+        #        ttscommit;
+        #
+        #    }
+        #    else
+        #    {
+        #
+        #        ttsbegin;
+        #        while select *
+        #            from tabMapping
+        #            exists join AccountNum from tabLedgerTable
+        #            where   tabMapping.FromAcountNum == tabLedgerTable.AccountNum
+        #                    && tabLedgerTable.EntityCode == _destEntity
+        #                    && tabMapping.FromEntityCode == fromEntity
+        #                    && tabMapping.ToEntityCode == toEntity
+        #        {
+        #
+        #            select RecId from tabExistMapping where tabExistMapping.FromEntityCode == _destEntity
+        #                                                && tabExistMapping.ToEntityCode == toEntity
+        #                                                && tabExistMapping.FromAcountNum == tabMapping.FromAcountNum
+        #                                                && tabExistMapping.ToAcountNum == tabMapping.ToAcountNum;
+        #
+        #
+        #            if (tabExistMapping.RecId)
+        #            {
+        #                continue;
+        #            }
+        #            else
+        #            {
+        #                tabDestMapping.data(tabMapping.data());
+        #                tabDestMapping.FromEntityCode = _destEntity;
+        #                tabDestMapping.insert();
+        #            }
+        #        }
+        #        ttscommit;
+        #
+        #    }
+        #
+        #
+        #
+        #
+        #
+        #}
+      ENDSOURCE
+    ENDMETHODS
+  ENDTABLE

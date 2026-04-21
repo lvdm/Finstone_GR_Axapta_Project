@@ -1,0 +1,9 @@
+﻿  MENUITEM #FIN_EntityAdjustments
+    Type: 1
+    PROPERTIES
+      Name                #FIN_EntityAdjustments
+      Label               #Ledger Adjustments
+      Object              #FIN_EntityAdjustments
+    ENDPROPERTIES
+    
+  ENDMENUITEM

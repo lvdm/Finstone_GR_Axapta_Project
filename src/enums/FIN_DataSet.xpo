@@ -1,0 +1,46 @@
+﻿  ENUMTYPE #FIN_DataSet
+    Id 50007
+    PROPERTIES
+      Name                #FIN_DataSet
+      Label               #Group DataSet
+      UseEnumValue        #Yes
+    ENDPROPERTIES
+    
+    TYPEELEMENTS
+      #LedgerAccounts
+      PROPERTIES
+        Name                #LedgerAccounts
+        Label               #Ledger Accounts
+        EnumValue           #4
+      ENDPROPERTIES
+      
+      #LedgerMappings
+      PROPERTIES
+        Name                #LedgerMappings
+        Label               #Ledger Mappings
+        EnumValue           #1
+      ENDPROPERTIES
+      
+      #LedgerData
+      PROPERTIES
+        Name                #LedgerData
+        Label               #Ledger Data
+        EnumValue           #2
+      ENDPROPERTIES
+      
+      #LedgerAdjustments
+      PROPERTIES
+        Name                #LedgerAdjustments
+        Label               #Ledger Adjustments
+        EnumValue           #3
+      ENDPROPERTIES
+      
+      #InventoryData
+      PROPERTIES
+        Name                #InventoryData
+        Label               #Inventory Data
+        EnumValue           #5
+      ENDPROPERTIES
+      
+    ENDTYPEELEMENTS
+  ENDENUMTYPE

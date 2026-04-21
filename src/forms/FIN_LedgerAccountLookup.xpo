@@ -1,0 +1,156 @@
+﻿FORM #FIN_LedgerAccountLookup
+  PROPERTIES
+    Name                #FIN_LedgerAccountLookup
+  ENDPROPERTIES
+  
+  METHODS
+    Version: 3
+    SOURCE #classDeclaration
+      #public class FormRun extends ObjectRun
+      #{
+      #
+      #    FormStringControl callingControl;
+      #
+      #}
+    ENDSOURCE
+    SOURCE #init
+      #public void init()
+      #{
+      #    super();
+      #}
+    ENDSOURCE
+    SOURCE #run
+      #public void run()
+      #{
+      #    boolean filterLookup;
+      #
+      #    ;
+      #
+      #   // Returns selected value from form control
+      #    element.selectMode(FIN_GroupLedgerTable_AccountNum);
+      #
+      #
+      #
+      #    callingControl = SysTableLookup::getCallerStringControl(element.args());
+      #
+      #    filterLookup = SysTableLookup::FilterLookupPreRun(callingControl, FIN_GroupLedgerTable_AccountNum, FIN_GroupLedgerTable_ds);
+      #
+      #
+      #    super();
+      #
+      #    SysTableLookup::FilterLookupPostRun(filterLookup, callingControl.text(), FIN_GroupLedgerTable_AccountNum, FIN_GroupLedgerTable_ds);
+      #
+      #
+      #
+      #}
+      #
+    ENDSOURCE
+  ENDMETHODS
+  OBJECTBANK
+    PROPERTIES
+    ENDPROPERTIES
+    
+    DATASOURCE
+      OBJECTPOOL
+        PROPERTIES
+          Name                #FIN_GroupLedgerTable
+          Table               #FIN_GroupLedgerTable
+          AllowEdit           #No
+          AllowCreate         #No
+          AllowDelete         #No
+          AutoNotify          #No
+          InsertAtEnd         #No
+          InsertIfEmpty       #No
+        ENDPROPERTIES
+        
+        FIELDLIST
+        ENDFIELDLIST
+      ENDOBJECTPOOL
+      METHODS
+        Version: 3
+        SOURCE #init
+          #public void init()
+          #{
+          #    QueryBuildDataSource qbds;
+          #    QueryBuildRange      qbr;
+          #    str filterEntity
+          #    ;
+          #
+          #    super();
+          #
+          #    // Check to see if there was a EntityCode send to filter on.
+          #    filterEntity = element.args().parm();
+          #    if (filterEntity)
+          #    {
+          #        qbds = this.query().dataSourceNo(1);
+          #        qbr = qbds.addRange(fieldNum(FIN_GroupLedgerTable,EntityCode));
+          #        qbds.clearDynalinks();
+          #
+          #        qbr.value(queryvalue(filterEntity));
+          #
+          #    }
+          #
+          #}
+        ENDSOURCE
+      ENDMETHODS
+    ENDDATASOURCE
+  ENDOBJECTBANK
+  
+  JOINS
+  ENDJOINS
+  
+  DESIGN
+    PROPERTIES
+      Frame               #Border
+      WindowType          #Popup
+      DataSource          #
+    ENDPROPERTIES
+    
+    CONTAINER
+      CONTROL GRID
+        PROPERTIES
+          Name                #Grid
+          Width               #Column width
+          Height              #Column height
+          ShowRowLabels       #No
+          DataSource          #FIN_GroupLedgerTable
+        ENDPROPERTIES
+        
+          CONTAINER
+            CONTROL STRINGEDIT
+              PROPERTIES
+                Name                #FIN_GroupLedgerTable_EntityCode
+                DataSource          #FIN_GroupLedgerTable
+                DataField           #EntityCode
+              ENDPROPERTIES
+              
+            ENDCONTROL 
+            
+            CONTROL STRINGEDIT
+              PROPERTIES
+                Name                #FIN_GroupLedgerTable_AccountNum
+                AutoDeclaration     #Yes
+                DataSource          #FIN_GroupLedgerTable
+                DataField           #AccountNum
+              ENDPROPERTIES
+              
+            ENDCONTROL 
+            
+            CONTROL STRINGEDIT
+              PROPERTIES
+                Name                #FIN_GroupLedgerTable_AccountName
+                DataSource          #FIN_GroupLedgerTable
+                DataField           #AccountName
+              ENDPROPERTIES
+              
+            ENDCONTROL 
+            
+          ENDCONTAINER
+          
+      ENDCONTROL 
+      
+    ENDCONTAINER
+    
+  ENDDESIGN
+  
+ENDFORM

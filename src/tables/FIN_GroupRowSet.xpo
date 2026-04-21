@@ -1,0 +1,159 @@
+﻿  TABLE #FIN_GroupRowSet
+    Id 50041
+    PROPERTIES
+      Name                #FIN_GroupRowSet
+      Label               #RowSets
+      ModifiedDateTime    #Yes
+      ModifiedBy          #Yes
+      CreatedDateTime     #Yes
+      CreatedBy           #Yes
+    ENDPROPERTIES
+    
+    FIELDS
+      FIELD #RowSetName
+        Id 50001
+        STRING
+        PROPERTIES
+          Name                #RowSetName
+          Table               #FIN_GroupRowSet
+          ExtendedDataType    
+            ARRAY 
+              #FIN_RowSetName
+              #
+            ENDARRAY
+          StringSize          #100
+        ENDPROPERTIES
+        
+      FIELD #RowSetCode
+        Id 50002
+        STRING
+        PROPERTIES
+          Name                #RowSetCode
+          Table               #FIN_GroupRowSet
+          ExtendedDataType    
+            ARRAY 
+              #FIN_RowSetCode
+              #
+            ENDARRAY
+        ENDPROPERTIES
+        
+    ENDFIELDS
+    GROUPS
+      GROUP #General
+        PROPERTIES
+          Name                #General
+          Label               #General
+        ENDPROPERTIES
+        
+        GROUPFIELDS
+          #RowSetCode
+          #RowSetName
+        ENDGROUPFIELDS
+      ENDGROUP
+    ENDGROUPS
+    
+    INDICES
+      #RowSetCodeIdx
+      Id 50001
+      PROPERTIES
+        Name                #RowSetCodeIdx
+        AllowDuplicates     #No
+      ENDPROPERTIES
+      
+      INDEXFIELDS
+        #RowSetCode
+      ENDINDEXFIELDS
+      
+    ENDINDICES
+    REFERENCES
+    ENDREFERENCES
+    
+    DELETEACTIONS
+    ENDDELETEACTIONS
+    
+    METHODS
+      Version: 3
+      SOURCE #createRowLinks
+        #//This method created the RowLink recordIds used to link the RowLine with the Ledger Data Transaction.
+        #//This method should be called each time a change is made to the Row mappings OR when new transaction data is loaded,
+        #//to ensure all the lines are mapped.
+        #public static void createRowLinks()
+        #{
+        #    FIN_GroupRowLine    tabRowLine;
+        #    FIN_GroupRowMapping tabRowMapping;
+        #    FIN_GroupLedgerData tabLedgerData;
+        #    FIN_GroupRowLink    tabRowLink;
+        #
+        #    ;
+        #
+        #    try
+        #
+        #    {
+        #        startlengthyoperation();
+        #
+        #        ttsbegin;
+        #
+        #        delete_from tabRowLink;
+        #
+        #
+        #
+        #        while select *
+        #            from tabRowLine
+        #
+        #                join tabRowMapping
+        #                join tabLedgerData
+        #                group by tabRowLine.RecId, tabLedgerData.AccDimKey,tabLedgerData.EntityCode
+        #            where tabRowLine.RowSetCode == tabRowMapping.ToRowSetCode && tabRowLine.RowLineNo == tabRowMapping.ToRowLineNo
+        #               && tabLedgerData.EntityCode == tabRowMapping.FromEntityCode && tabLedgerData.AccountNum == tabRowMapping.FromAcountNum
+        #               && (
+        #                   ((tabRowMapping.CostCenter_Map_Type == FIN_RowMapping::Specific && tabRowMapping.CostCenter_Map_Value == tabLedgerData.CostCenter) || tabRowMapping.CostCenter_Map_Type == FIN_RowMapping::Any)
+        #                   &&
+        #                   ((tabRowMapping.Department_Map_Type == FIN_RowMapping::Specific && tabRowMapping.Department_Map_Value == tabLedgerData.Department) || tabRowMapping.Department_Map_Type == FIN_RowMapping::Any)
+        #                   &&
+        #                   ((tabRowMapping.Purpose_Map_Type == FIN_RowMapping::Specific && tabRowMapping.Purpose_Map_Value == tabLedgerData.Purpose) || tabRowMapping.Purpose_Map_Type == FIN_RowMapping::Any)
+        #                  )
+        #
+        #        {
+        #             //print tabLedgerData.EntityCode + ' - ' + tabLedgerData.AccountNum + ' D: ' + tabLedgerData.Department + ' C: ' + tabLedgerData.CostCenter + ' P: ' + tabLedgerData.Purpose;
+        #
+        #             //print tabLedgerData.AccDimKey;
+        #             tabRowLink.clear();
+        #             tabRowLink.RowLinkId   = tabRowLine.RecId;
+        #             tabRowLink.DataLinkKey = tabLedgerData.AccDimKey;
+        #             tabRowLink.FromEntityCode = tabLedgerData.EntityCode;
+        #             tabRowLink.insert();
+        #
+        #
+        #        }
+        #
+        #        ttscommit;
+        #        endlengthyoperation();
+        #
+        #    }
+        #    catch
+        #    {
+        #        error('Error occured building Row link data!');
+        #    }
+        #
+        #}
+      ENDSOURCE
+      SOURCE #find
+        #static FIN_GroupRowSet find(FIN_RowSetCode rowSetCode ,
+        #                             boolean         _forUpdate = false)
+        #{
+        #    FIN_GroupRowSet  fIN_GroupRowSet;
+        #
+        #    if (rowSetCode)
+        #    {
+        #        fIN_GroupRowSet.selectForUpdate(_forUpdate);
+        #
+        #        select firstonly *
+        #            from fIN_GroupRowSet
+        #                where fIN_GroupRowSet.RowSetCode == rowSetCode;
+        #    }
+        #
+        #    return fIN_GroupRowSet;
+        #}
+      ENDSOURCE
+    ENDMETHODS
+  ENDTABLE

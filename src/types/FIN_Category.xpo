@@ -1,0 +1,21 @@
+﻿  USERTYPE #FIN_Category
+  Id 50014
+  STRING
+    PROPERTIES
+      Name                #FIN_Category
+      Label               #Category
+    ENDPROPERTIES
+    
+    TYPEELEMENTS
+    ENDTYPEELEMENTS
+    
+    TYPEREFERENCES
+      TYPEREFERENCETYPE DATASET
+      PROPERTIES
+        Table               #FIN_GroupCategory
+        RelatedField        #Category
+      ENDPROPERTIES
+      
+    ENDTYPEREFERENCES
+    
+  ENDUSERTYPE

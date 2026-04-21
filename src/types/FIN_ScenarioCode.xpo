@@ -1,0 +1,21 @@
+﻿  USERTYPE #FIN_ScenarioCode
+  Id 50011
+  STRING
+    PROPERTIES
+      Name                #FIN_ScenarioCode
+      Label               #Scenario
+    ENDPROPERTIES
+    
+    TYPEELEMENTS
+    ENDTYPEELEMENTS
+    
+    TYPEREFERENCES
+      TYPEREFERENCETYPE DATASET
+      PROPERTIES
+        Table               #FIN_GroupScenario
+        RelatedField        #ScenarioCode
+      ENDPROPERTIES
+      
+    ENDTYPEREFERENCES
+    
+  ENDUSERTYPE

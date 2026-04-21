@@ -1,0 +1,338 @@
+﻿  TABLE #FIN_GroupPeriod
+    Id 50028
+    PROPERTIES
+      Name                #FIN_GroupPeriod
+      Label               #Group Periods
+      PrimaryIndex        #PeriodStartEndIdx
+      ModifiedDateTime    #Yes
+      ModifiedBy          #Yes
+      CreatedDateTime     #Yes
+      CreatedBy           #Yes
+    ENDPROPERTIES
+    
+    FIELDS
+      FIELD #PeriodStart
+        Id 50001
+        DATE
+        PROPERTIES
+          Name                #PeriodStart
+          Label               #@SYS3008
+          HelpText            #@SYS428
+          Mandatory           #Yes
+          AllowEdit           #No
+          Table               #FIN_GroupPeriod
+          ExtendedDataType    
+            ARRAY 
+              #FIN_PeriodStart
+              #
+            ENDARRAY
+        ENDPROPERTIES
+        
+      FIELD #PeriodStatus
+        Id 50002
+        ENUM
+        PROPERTIES
+          Name                #PeriodStatus
+          Label               #@SYS25587
+          HelpText            #@SYS16820
+          Table               #FIN_GroupPeriod
+          EnumType            #LedgerPeriodStatus
+        ENDPROPERTIES
+        
+      FIELD #Commentaries
+        Id 50003
+        STRING
+        PROPERTIES
+          Name                #Commentaries
+          Label               #@SYS5343
+          HelpText            #@SYS12473
+          Table               #FIN_GroupPeriod
+          ExtendedDataType    
+            ARRAY 
+              #TransTxt
+              #
+            ENDARRAY
+          StringSize          #60
+        ENDPROPERTIES
+        
+      FIELD #PeriodEnd
+        Id 50004
+        DATE
+        PROPERTIES
+          Name                #PeriodEnd
+          Label               #@SYS14401
+          AllowEdit           #No
+          Table               #FIN_GroupPeriod
+          ExtendedDataType    
+            ARRAY 
+              #FIN_PeriodEnd
+              #
+            ENDARRAY
+        ENDPROPERTIES
+        
+      FIELD #Active
+        Id 50005
+        ENUM
+        PROPERTIES
+          Name                #Active
+          Label               #Currently Active
+          HelpText            #Indicates the period being currently active
+          Table               #FIN_GroupPeriod
+          EnumType            #NoYes
+        ENDPROPERTIES
+        
+    ENDFIELDS
+    GROUPS
+      GROUP #AutoLookup
+        PROPERTIES
+          Name                #AutoLookup
+        ENDPROPERTIES
+        
+        GROUPFIELDS
+          #PeriodStart
+          #PeriodEnd
+          #PeriodStatus
+        ENDGROUPFIELDS
+      ENDGROUP
+    ENDGROUPS
+    
+    INDICES
+      #PeriodStartEndIdx
+      Id 50001
+      PROPERTIES
+        Name                #PeriodStartEndIdx
+        AllowDuplicates     #No
+      ENDPROPERTIES
+      
+      INDEXFIELDS
+        #PeriodStart
+        #PeriodEnd
+      ENDINDEXFIELDS
+      
+    ENDINDICES
+    REFERENCES
+    ENDREFERENCES
+    
+    DELETEACTIONS
+    ENDDELETEACTIONS
+    
+    METHODS
+      Version: 3
+      SOURCE #insert
+        #public void insert()
+        #{
+        #    super();
+        #
+        #    //Add the entity periods
+        #    FIN_GroupEntityPeriod::createEntityPeriodsByPeriod(this);
+        #
+        #}
+      ENDSOURCE
+      SOURCE #update
+        #public void update()
+        #{
+        #    super();
+        #
+        #    //Create the entity periods incase a new entity was added
+        #    FIN_GroupEntityPeriod::createEntityPeriodsByPeriod(this);
+        #
+        #    //Update the entity periods
+        #    FIN_GroupEntityPeriod::updateEntityPeriodsByPeriod(this);
+        #}
+      ENDSOURCE
+      SOURCE #validateUpdate
+        #server boolean validateUpdate()
+        #{
+        #    LedgerPeriod prevPer;
+        #    LedgerPeriod nxtPer;
+        #
+        #    if (this.PeriodStart  != this.orig().PeriodStart)
+        #    {
+        #        select prevPer
+        #            order PeriodStart  desc
+        #            where prevPer.PeriodStart < this.orig().PeriodStart;
+        #
+        #        select nxtPer
+        #            order PeriodStart
+        #            where prevPer.PeriodStart > this.orig().PeriodStart;
+        #
+        #        if (this.PeriodStart  <= prevPer.PeriodStart ||
+        #            this.PeriodStart  >= nxtPer.PeriodEnd   )
+        #        {
+        #            return checkFailed(strfmt("@SYS21587",date2StrUsr(prevPer.PeriodStart+1, DateFlags::FormatAll),
+        #                                      date2StrUsr(nxtPer.PeriodEnd-1, DateFlags::FormatAll)));
+        #        }
+        #
+        #    }
+        #
+        #    return true;
+        #
+        #}
+      ENDSOURCE
+      SOURCE #validateWrite
+        #public boolean validateWrite()
+        #{
+        #    boolean ret;
+        #
+        #    ret = super();
+        #
+        #    if (this && ! ret)
+        #        this.validateUpdate();
+        #
+        #    return ret;
+        #
+        #}
+      ENDSOURCE
+      SOURCE #exist
+        #static boolean exist( PeriodStart   _periodStart  )
+        #{
+        #    return _periodStart && (select firstonly RecId from FIN_GroupPeriod
+        #                where  FIN_GroupPeriod.PeriodStart == _periodStart
+        #           ).RecId != 0;
+        #}
+      ENDSOURCE
+      SOURCE #existDate
+        #static boolean existDate(PeriodStart   periodStart)
+        #{
+        #
+        #    return (select FIN_GroupPeriod
+        #                where FIN_GroupPeriod.PeriodStart== periodStart).RecId != 0;
+        #
+        #}
+      ENDSOURCE
+      SOURCE #find
+        #//
+        #// Returns the ledger period corresponding to the specified arguments or an
+        #// empty ledger period.
+        #//
+        #// _periodStart: The date whose ledger period is to be returned.
+        #//
+        #// _periodCode: The period code to match.
+        #//
+        #// _checkResultForErrors: A boolean indicating whether the ledger period
+        #// returned is expected to contain the _periodStart value.
+        #//
+        #// Return: The ledger period corresponding to the specified arguments or an
+        #// empty ledger period.
+        #//
+        #public static FIN_GroupPeriod find(
+        #    PeriodStart _periodStart,
+        #    boolean _checkResultForErrors = false)
+        #{
+        #    FIN_GroupPeriod ledgerPeriod;
+        #
+        #    if (_periodStart != dateNull())
+        #    {
+        #        select reverse ledgerPeriod
+        #            order by PeriodStart
+        #                  where ledgerPeriod.PeriodStart  <= _periodStart;
+        #
+        #        if (_checkResultForErrors)
+        #        {
+        #            if ((ledgerPeriod.RecId == 0) ||
+        #                (ledgerPeriod.PeriodStart > _periodStart) ||
+        #                (ledgerPeriod.PeriodEnd < _periodStart))
+        #            {
+        #                // the record doesn't exist or it doesn't contain the specified date
+        #                ledgerPeriod.clear();
+        #            }
+        #        }
+        #    }
+        #
+        #    return ledgerPeriod;
+        #}
+      ENDSOURCE
+      SOURCE #findEndDate
+        #static TransDate findEndDate(PeriodEnd  _date)
+        #{
+        #    FIN_GroupPeriod ledgerPeriod;
+        #    ;
+        #
+        #    select firstOnly ledgerPeriod
+        #        order by ledgerPeriod.PeriodEnd asc
+        #        where ledgerPeriod.PeriodEnd  >= _date;
+        #
+        #
+        #    return ledgerPeriod.PeriodEnd;
+        #}
+      ENDSOURCE
+      SOURCE #lookupPeriodStart
+        #public static void lookupPeriodStart(FormControl _callingControl)
+        #{
+        #  Query                   query = new Query();
+        #  QueryBuildDataSource    dsGroupPeriodTable;
+        #
+        #
+        #  // Instantiate sysTableLookup object using table which will provide the visible fields
+        #  SysTableLookup  sysTableLookup = sysTableLookup::newParameters(tableNum(FIN_GroupPeriod), _callingControl);
+        #  ;
+        #
+        #
+        #  dsGroupPeriodTable = query.addDataSource(tableNum(FIN_GroupPeriod));
+        #  dsGroupPeriodTable.addSortField(fieldNum(FIN_GroupPeriod, PeriodStart),SortOrder::Descending);
+        #
+        #
+        #  // Set the query to be used by the lookup form
+        #  sysTableLookup.parmQuery(query);
+        #
+        #  // Specify the fields to show in the form.  In this case we have chosen
+        #
+        #  sysTableLookup.addLookupfield(fieldNum(FIN_GroupPeriod, PeriodStart));
+        #  sysTableLookup.addLookupfield(fieldNum(FIN_GroupPeriod, PeriodEnd));
+        #  sysTableLookup.addLookupfield(fieldNum(FIN_GroupPeriod, PeriodStatus));
+        #
+        #  // Perform the lookup
+        #  sysTableLookup.performFormLookup();
+        #}
+      ENDSOURCE
+      SOURCE #periodEnd
+        #static TransDate periodEnd(TransDate _transDate,Integer relativeIndex = 0)
+        #{
+        #    FIN_GroupPeriod    ledgerPeriod;
+        #    if (!relativeIndex)
+        #    {
+        #        return (select ledgerPeriod
+        #            order   PeriodStart desc
+        #            where   ledgerPeriod.PeriodStart <= _transDate).PeriodEnd;
+        #    }
+        #    else
+        #    {
+        #        if (relativeIndex > 0)
+        #        {
+        #            return FIN_GroupPeriod::periodEnd(FIN_GroupPeriod::periodEnd(_transDate)+1 ,  relativeIndex-1);
+        #        }
+        #        else
+        #        {
+        #            return FIN_GroupPeriod::periodEnd(FIN_GroupPeriod::periodStart(_transDate)-1,
+        #                                                    relativeIndex+1);
+        #        }
+        #    }
+        #
+        #}
+      ENDSOURCE
+      SOURCE #periodStart
+        #static TransDate periodStart(TransDate _transDate,Integer relativeIndex = 0)
+        #{
+        #    if (!relativeIndex)
+        #    {
+        #        return (select FIN_GroupPeriod
+        #                order PeriodStart desc
+        #                where FIN_GroupPeriod.PeriodStart <= _transDate).PeriodStart;
+        #    }
+        #    else
+        #    {
+        #        if (relativeIndex > 0)
+        #        {
+        #            return FIN_GroupPeriod::periodStart(   FIN_GroupPeriod::periodEnd(_transDate)+1,
+        #                                                relativeIndex-1);
+        #        }
+        #        else
+        #        {
+        #            return FIN_GroupPeriod::periodStart(   FIN_GroupPeriod::periodStart(_transDate)-1,
+        #                                                relativeIndex+1);
+        #        }
+        #    }
+        #}
+      ENDSOURCE
+    ENDMETHODS
+  ENDTABLE

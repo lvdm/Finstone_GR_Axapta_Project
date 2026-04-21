@@ -1,0 +1,64 @@
+﻿  TABLE #FIN_GroupUserPositions
+    Id 50047
+    PROPERTIES
+      Name                #FIN_GroupUserPositions
+      Label               #User Job Positions
+      ModifiedDateTime    #Yes
+      ModifiedBy          #Yes
+      CreatedDateTime     #Yes
+      CreatedBy           #Yes
+    ENDPROPERTIES
+    
+    FIELDS
+      FIELD #Position
+        Id 50001
+        STRING
+        PROPERTIES
+          Name                #Position
+          Table               #FIN_GroupUserPositions
+          ExtendedDataType    
+            ARRAY 
+              #FIN_Position
+              #
+            ENDARRAY
+          StringSize          #30
+        ENDPROPERTIES
+        
+      FIELD #Description
+        Id 50002
+        STRING
+        PROPERTIES
+          Name                #Description
+          Table               #FIN_GroupUserPositions
+          ExtendedDataType    
+            ARRAY 
+              #Description
+              #
+            ENDARRAY
+          StringSize          #60
+        ENDPROPERTIES
+        
+    ENDFIELDS
+    GROUPS
+    ENDGROUPS
+    
+    INDICES
+      #PositionIdx
+      Id 50001
+      PROPERTIES
+        Name                #PositionIdx
+        AllowDuplicates     #No
+      ENDPROPERTIES
+      
+      INDEXFIELDS
+        #Position
+      ENDINDEXFIELDS
+      
+    ENDINDICES
+    REFERENCES
+    ENDREFERENCES
+    
+    DELETEACTIONS
+    ENDDELETEACTIONS
+    
+  ENDTABLE

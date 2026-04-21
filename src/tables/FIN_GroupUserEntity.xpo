@@ -1,0 +1,119 @@
+﻿  TABLE #FIN_GroupUserEntity
+    Id 50046
+    PROPERTIES
+      Name                #FIN_GroupUserEntity
+      Label               #Users and Entities
+      ModifiedDateTime    #Yes
+      ModifiedBy          #Yes
+      CreatedDateTime     #Yes
+      CreatedBy           #Yes
+    ENDPROPERTIES
+    
+    FIELDS
+      FIELD #UserName
+        Id 50001
+        STRING
+        PROPERTIES
+          Name                #UserName
+          Mandatory           #Yes
+          Table               #FIN_GroupUserEntity
+          ExtendedDataType    
+            ARRAY 
+              #FIN_UserName
+              #
+            ENDARRAY
+          StringSize          #60
+        ENDPROPERTIES
+        
+      FIELD #EntityCode
+        Id 50002
+        STRING
+        PROPERTIES
+          Name                #EntityCode
+          Mandatory           #Yes
+          AllowEdit           #No
+          Table               #FIN_GroupUserEntity
+          ExtendedDataType    
+            ARRAY 
+              #FIN_EntityCode
+              #
+            ENDARRAY
+        ENDPROPERTIES
+        
+      FIELD #Position
+        Id 50003
+        STRING
+        PROPERTIES
+          Name                #Position
+          Mandatory           #Yes
+          Table               #FIN_GroupUserEntity
+          ExtendedDataType    
+            ARRAY 
+              #FIN_Position
+              #
+            ENDARRAY
+          StringSize          #30
+        ENDPROPERTIES
+        
+    ENDFIELDS
+    GROUPS
+    ENDGROUPS
+    
+    INDICES
+      #UserEntity
+      Id 50001
+      PROPERTIES
+        Name                #UserEntity
+        AllowDuplicates     #No
+      ENDPROPERTIES
+      
+      INDEXFIELDS
+        #EntityCode
+        #Position
+        #UserName
+      ENDINDEXFIELDS
+      
+    ENDINDICES
+    REFERENCES
+      REFERENCE #FIN_GroupEntities
+        PROPERTIES
+          Name                #FIN_GroupEntities
+          Table               #FIN_GroupEntities
+        ENDPROPERTIES
+        
+        FIELDREFERENCES
+          REFERENCETYPE NORMAL
+          PROPERTIES
+            Field               #EntityCode
+            RelatedField        #EntityCode
+          ENDPROPERTIES
+          
+        ENDFIELDREFERENCES
+      ENDREFERENCE
+    ENDREFERENCES
+    
+    DELETEACTIONS
+    ENDDELETEACTIONS
+    
+    METHODS
+      Version: 3
+      SOURCE #find
+        #static FIN_GroupUserEntity find(FIN_EntityCode entityCode ,FIN_UserName userName,
+        #                             boolean         _forUpdate = false)
+        #{
+        #    FIN_GroupUserEntity  fin_GroupUserEntity;
+        #
+        #    if (entityCode && userName)
+        #    {
+        #        fin_GroupUserEntity.selectForUpdate(_forUpdate);
+        #
+        #        select firstonly *
+        #            from fin_GroupUserEntity
+        #                where fin_GroupUserEntity.entityCode == entityCode && fin_GroupUserEntity.UserName == userName;
+        #    }
+        #
+        #    return fin_GroupUserEntity;
+        #}
+      ENDSOURCE
+    ENDMETHODS
+  ENDTABLE

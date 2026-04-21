@@ -1,0 +1,25 @@
+﻿  ENUMTYPE #FIN_DataSourceType
+    Id 50009
+    PROPERTIES
+      Name                #FIN_DataSourceType
+      Label               #DataSource Type
+      UseEnumValue        #Yes
+    ENDPROPERTIES
+    
+    TYPEELEMENTS
+      #SQL
+      PROPERTIES
+        Name                #SQL
+        Label               #SQL
+        EnumValue           #0
+      ENDPROPERTIES
+      
+      #Excel
+      PROPERTIES
+        Name                #Excel
+        Label               #Excel
+        EnumValue           #1
+      ENDPROPERTIES
+      
+    ENDTYPEELEMENTS
+  ENDENUMTYPE

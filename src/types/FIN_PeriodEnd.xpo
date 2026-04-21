@@ -1,0 +1,23 @@
+﻿  USERTYPE #FIN_PeriodEnd
+  Id 50013
+  DATE
+    PROPERTIES
+      Name                #FIN_PeriodEnd
+      Label               #Period End
+      Extends             #TransDate
+      DateYear            #Four digits
+    ENDPROPERTIES
+    
+    TYPEELEMENTS
+    ENDTYPEELEMENTS
+    
+    TYPEREFERENCES
+      TYPEREFERENCETYPE DATASET
+      PROPERTIES
+        Table               #FIN_GroupPeriod
+        RelatedField        #PeriodEnd
+      ENDPROPERTIES
+      
+    ENDTYPEREFERENCES
+    
+  ENDUSERTYPE

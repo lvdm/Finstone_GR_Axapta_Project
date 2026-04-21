@@ -1,0 +1,343 @@
+﻿FORM #FIN_GroupUsers
+  PROPERTIES
+    Name                #FIN_GroupUsers
+  ENDPROPERTIES
+  
+  METHODS
+    Version: 3
+    SOURCE #classDeclaration
+      #public class FormRun extends ObjectRun
+      #{
+      #}
+    ENDSOURCE
+  ENDMETHODS
+  OBJECTBANK
+    PROPERTIES
+    ENDPROPERTIES
+    
+    DATASOURCE
+      OBJECTPOOL
+        PROPERTIES
+          Name                #FIN_GroupUsers
+          Table               #FIN_GroupUsers
+        ENDPROPERTIES
+        
+        FIELDLIST
+        ENDFIELDLIST
+      ENDOBJECTPOOL
+    ENDDATASOURCE
+    DATASOURCE
+      OBJECTPOOL
+        PROPERTIES
+          Name                #FIN_GroupUserEntity
+          Table               #FIN_GroupUserEntity
+          JoinSource          #FIN_GroupUsers
+        ENDPROPERTIES
+        
+        FIELDLIST
+        ENDFIELDLIST
+      ENDOBJECTPOOL
+    ENDDATASOURCE
+    DATASOURCE
+      OBJECTPOOL
+        PROPERTIES
+          Name                #FIN_GroupUserLog
+          Table               #FIN_GroupUserLog
+          AllowEdit           #No
+          AllowCreate         #No
+          AllowDelete         #No
+          StartPosition       #Last
+          JoinSource          #FIN_GroupUsers
+          InsertIfEmpty       #No
+        ENDPROPERTIES
+        
+        FIELDLIST
+        ENDFIELDLIST
+      ENDOBJECTPOOL
+    ENDDATASOURCE
+  ENDOBJECTBANK
+  
+  JOINS
+    FIN_GroupUserEntity FIN_GroupUsers
+    FIN_GroupUserLog FIN_GroupUsers
+  ENDJOINS
+  
+  DESIGN
+    PROPERTIES
+      Caption             #User Setups
+    ENDPROPERTIES
+    
+    CONTAINER
+      CONTROL TAB
+        PROPERTIES
+          Name                #Tab
+          Width               #Column width
+          Height              #Column height
+        ENDPROPERTIES
+        
+        CONTAINER
+          CONTROL TABPAGE
+            PROPERTIES
+              Name                #TabPage
+              Width               #Column width
+              Height              #Column height
+              Caption             #Users
+            ENDPROPERTIES
+            
+            CONTAINER
+              CONTROL GROUP
+                PROPERTIES
+                  Name                #Group
+                  Width               #Column width
+                  Height              #Column height
+                  Columns             #2
+                  ArrangeGuide        
+                    ARRAY INDEX Columns 
+                      #0
+                      #0
+                    ENDARRAY
+                ENDPROPERTIES
+                
+                  CONTAINER
+                    CONTROL GRID
+                      PROPERTIES
+                        Name                #GridUsers
+                        Width               #Column width
+                        Height              #Column height
+                        DataSource          #FIN_GroupUsers
+                      ENDPROPERTIES
+                      
+                        CONTAINER
+                          CONTROL STRINGEDIT
+                            PROPERTIES
+                              Name                #FIN_GroupUsers_FirstName
+                              Width               #80
+                              DataSource          #FIN_GroupUsers
+                              DataField           #FirstName
+                            ENDPROPERTIES
+                            
+                          ENDCONTROL 
+                          
+                          CONTROL STRINGEDIT
+                            PROPERTIES
+                              Name                #FIN_GroupUsers_LastName
+                              Width               #100
+                              DataSource          #FIN_GroupUsers
+                              DataField           #LastName
+                            ENDPROPERTIES
+                            
+                          ENDCONTROL 
+                          
+                          CONTROL STRINGEDIT
+                            PROPERTIES
+                              Name                #FIN_GroupUsers_OfficePhone
+                              Width               #80
+                              DataSource          #FIN_GroupUsers
+                              DataField           #OfficePhone
+                            ENDPROPERTIES
+                            
+                          ENDCONTROL 
+                          
+                          CONTROL STRINGEDIT
+                            PROPERTIES
+                              Name                #FIN_GroupUsers_MobilePhone
+                              Width               #80
+                              DataSource          #FIN_GroupUsers
+                              DataField           #MobilePhone
+                            ENDPROPERTIES
+                            
+                          ENDCONTROL 
+                          
+                          CONTROL STRINGEDIT
+                            PROPERTIES
+                              Name                #FIN_GroupUsers_UserName
+                              Width               #80
+                              DataSource          #FIN_GroupUsers
+                              DataField           #UserName
+                            ENDPROPERTIES
+                            
+                          ENDCONTROL 
+                          
+                          CONTROL STRINGEDIT
+                            PROPERTIES
+                              Name                #FIN_GroupUsers_Email
+                              Width               #150
+                              DataSource          #FIN_GroupUsers
+                              DataField           #Email
+                            ENDPROPERTIES
+                            
+                          ENDCONTROL 
+                          
+                          CONTROL STRINGEDIT
+                            PROPERTIES
+                              Name                #FIN_GroupUsers_DomainUser
+                              DataSource          #FIN_GroupUsers
+                              DataField           #DomainUser
+                            ENDPROPERTIES
+                            
+                          ENDCONTROL 
+                          
+                        ENDCONTAINER
+                        
+                    ENDCONTROL 
+                    
+                    CONTROL GRID
+                      PROPERTIES
+                        Name                #GridEntities
+                        Width               #Column width
+                        Height              #Column height
+                        DataSource          #FIN_GroupUserEntity
+                      ENDPROPERTIES
+                      
+                        CONTAINER
+                          CONTROL STRINGEDIT
+                            PROPERTIES
+                              Name                #FIN_GroupUserEntity_EntityCode
+                              DataSource          #FIN_GroupUserEntity
+                              DataField           #EntityCode
+                            ENDPROPERTIES
+                            
+                            METHODS
+                              Version: 3
+                              SOURCE #lookup
+                                #public void lookup()
+                                #{
+                                #    Args args = new Args();
+                                #    FormRun itemLookUp;
+                                #    ;
+                                #    args.caller(this);
+                                #    args.name(formstr(FIN_EntityLookup));
+                                #    args.parm("");
+                                #    itemLookUp = new FormRun(args);
+                                #    itemLookUp.init();
+                                #    this.performFormLookup(itemLookUp);
+                                #    //super();
+                                #}
+                              ENDSOURCE
+                            ENDMETHODS
+                          ENDCONTROL 
+                          
+                          CONTROL STRINGEDIT
+                            PROPERTIES
+                              Name                #FIN_GroupUserEntity_Position
+                              Width               #100
+                              DataSource          #FIN_GroupUserEntity
+                              DataField           #Position
+                            ENDPROPERTIES
+                            
+                          ENDCONTROL 
+                          
+                        ENDCONTAINER
+                        
+                    ENDCONTROL 
+                    
+                  ENDCONTAINER
+                  
+              ENDCONTROL 
+              
+              CONTROL STATICTEXT
+                PROPERTIES
+                  Name                #StaticText
+                  Text                #Username: Used for Excel Addon limiting access to assigned entities only.
+                ENDPROPERTIES
+                
+              ENDCONTROL 
+              
+              CONTROL STATICTEXT
+                PROPERTIES
+                  Name                #StaticText1
+                  Text                #Domain Account : Used for direct SQL Queries limiting access to assigned entities only
+                ENDPROPERTIES
+                
+              ENDCONTROL 
+              
+            ENDCONTAINER
+            
+          ENDCONTROL 
+          
+          CONTROL TABPAGE
+            PROPERTIES
+              Name                #TabPageLog
+              Width               #Column width
+              Height              #Column height
+              Caption             #User Log
+              Columns             #2
+              ArrangeGuide        
+                ARRAY INDEX Columns 
+                  #0
+                  #0
+                ENDARRAY
+            ENDPROPERTIES
+            
+            CONTAINER
+              CONTROL GRID
+                PROPERTIES
+                  Name                #Grid
+                  AllowEdit           #No
+                  Width               #Column width
+                  Height              #Column height
+                  DataSource          #FIN_GroupUserLog
+                ENDPROPERTIES
+                
+                  CONTAINER
+                    CONTROL UTCDATETIMEEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupUserLog_createdDateTime
+                        Width               #100
+                        DataSource          #FIN_GroupUserLog
+                        DataField           #createdDateTime
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupUserLog_EventType
+                        Width               #100
+                        DataSource          #FIN_GroupUserLog
+                        DataField           #EventType
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupUserLog_EventMessage
+                        Width               #350
+                        DataSource          #FIN_GroupUserLog
+                        DataField           #EventMessage
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                  ENDCONTAINER
+                  
+              ENDCONTROL 
+              
+              CONTROL STRINGEDIT
+                PROPERTIES
+                  Name                #FIN_GroupUserLog_EventData
+                  Left                #Auto (right)
+                  Width               #Column width
+                  Height              #Column height
+                  MultiLine           #Yes
+                  LabelPosition       #Above
+                  DataSource          #FIN_GroupUserLog
+                  DataField           #EventData
+                ENDPROPERTIES
+                
+              ENDCONTROL 
+              
+            ENDCONTAINER
+            
+          ENDCONTROL 
+          
+        ENDCONTAINER
+        
+      ENDCONTROL 
+      
+    ENDCONTAINER
+    
+  ENDDESIGN
+  
+ENDFORM

@@ -1,0 +1,75 @@
+﻿  TABLE #FIN_GroupScheduleTemplate
+    Id 50049
+    PROPERTIES
+      Name                #FIN_GroupScheduleTemplate
+      Label               #Schedule Template
+      ModifiedDateTime    #Yes
+      ModifiedBy          #Yes
+      CreatedDateTime     #Yes
+      CreatedBy           #Yes
+    ENDPROPERTIES
+    
+    FIELDS
+      FIELD #Name
+        Id 50001
+        STRING
+        PROPERTIES
+          Name                #Name
+          Table               #FIN_GroupScheduleTemplate
+          ExtendedDataType    
+            ARRAY 
+              #FIN_ScheduleTemplateName
+              #
+            ENDARRAY
+          StringSize          #20
+        ENDPROPERTIES
+        
+      FIELD #Description
+        Id 50002
+        STRING
+        PROPERTIES
+          Name                #Description
+          Table               #FIN_GroupScheduleTemplate
+          StringSize          #250
+        ENDPROPERTIES
+        
+      FIELD #Enabled
+        Id 50003
+        ENUM
+        PROPERTIES
+          Name                #Enabled
+          Table               #FIN_GroupScheduleTemplate
+          EnumType            #NoYes
+        ENDPROPERTIES
+        
+      FIELD #FirstReminderDaysBeforeDue
+        Id 50004
+        INT
+        PROPERTIES
+          Name                #FirstReminderDaysBeforeDue
+          Label               #First Reminder Before Due
+          Table               #FIN_GroupScheduleTemplate
+        ENDPROPERTIES
+        
+      FIELD #SecondReminderDaysBeforeDue
+        Id 50005
+        INT
+        PROPERTIES
+          Name                #SecondReminderDaysBeforeDue
+          Label               #Second Reminder Before Due
+          Table               #FIN_GroupScheduleTemplate
+        ENDPROPERTIES
+        
+    ENDFIELDS
+    GROUPS
+    ENDGROUPS
+    
+    INDICES
+    ENDINDICES
+    REFERENCES
+    ENDREFERENCES
+    
+    DELETEACTIONS
+    ENDDELETEACTIONS
+    
+  ENDTABLE

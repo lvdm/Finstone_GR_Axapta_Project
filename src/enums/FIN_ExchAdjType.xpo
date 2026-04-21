@@ -1,0 +1,25 @@
+﻿  ENUMTYPE #FIN_ExchAdjType
+    Id 50008
+    PROPERTIES
+      Name                #FIN_ExchAdjType
+      Label               #Exchange Adjustment Type
+      UseEnumValue        #Yes
+    ENDPROPERTIES
+    
+    TYPEELEMENTS
+      #RateTable
+      PROPERTIES
+        Name                #RateTable
+        Label               #Rate Table
+        EnumValue           #1
+      ENDPROPERTIES
+      
+      #Historic
+      PROPERTIES
+        Name                #Historic
+        Label               #Historic Rate
+        EnumValue           #2
+      ENDPROPERTIES
+      
+    ENDTYPEELEMENTS
+  ENDENUMTYPE

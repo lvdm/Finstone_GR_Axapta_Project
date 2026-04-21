@@ -1,0 +1,22 @@
+﻿  USERTYPE #FIN_EntityCode
+  Id 50008
+  STRING
+    PROPERTIES
+      Name                #FIN_EntityCode
+      Label               #Entity Code
+      FormHelp            #FIN_EntityTreeLookup
+    ENDPROPERTIES
+    
+    TYPEELEMENTS
+    ENDTYPEELEMENTS
+    
+    TYPEREFERENCES
+      TYPEREFERENCETYPE DATASET
+      PROPERTIES
+        Table               #FIN_GroupEntities
+        RelatedField        #EntityCode
+      ENDPROPERTIES
+      
+    ENDTYPEREFERENCES
+    
+  ENDUSERTYPE

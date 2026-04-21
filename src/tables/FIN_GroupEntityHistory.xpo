@@ -1,0 +1,274 @@
+﻿  TABLE #FIN_GroupEntityHistory
+    Id 50053
+    PROPERTIES
+      Name                #FIN_GroupEntityHistory
+      Label               #Group Entity History
+      TitleField1         #EntityCode
+      TitleField2         #
+      TableContents       #Default data
+      CacheLookup         #EntireTable
+      CreateRecIdIndex    #Yes
+      PrimaryIndex        #EntityCodeIdx
+      ClusterIndex        #EntityCodeIdx
+      ModifiedDateTime    #Yes
+      ModifiedBy          #Yes
+      CreatedDateTime     #Yes
+      CreatedBy           #Yes
+    ENDPROPERTIES
+    
+    FIELDS
+      FIELD #EntityCode
+        Id 50002
+        STRING
+        PROPERTIES
+          Name                #EntityCode
+          Mandatory           #Yes
+          AllowEdit           #No
+          Table               #FIN_GroupEntityHistory
+          ExtendedDataType    
+            ARRAY 
+              #FIN_EntityCode
+              #
+            ENDARRAY
+        ENDPROPERTIES
+        
+      FIELD #CurrencyCode
+        Id 50004
+        STRING
+        PROPERTIES
+          Name                #CurrencyCode
+          Table               #FIN_GroupEntityHistory
+          ExtendedDataType    
+            ARRAY 
+              #CurrencyCode
+              #
+            ENDARRAY
+          StringSize          #3
+        ENDPROPERTIES
+        
+      FIELD #ExchAdjAccountNum
+        Id 50006
+        STRING
+        PROPERTIES
+          Name                #ExchAdjAccountNum
+          Label               #Exchange Adjustment Account
+          Table               #FIN_GroupEntityHistory
+          ExtendedDataType    
+            ARRAY 
+              #FIN_AccountNum
+              #
+            ENDARRAY
+          StringSize          #30
+        ENDPROPERTIES
+        
+      FIELD #ParentEntityCode
+        Id 50008
+        STRING
+        PROPERTIES
+          Name                #ParentEntityCode
+          Label               #Parent
+          Table               #FIN_GroupEntityHistory
+          ExtendedDataType    
+            ARRAY 
+              #FIN_EntityCode
+              #
+            ENDARRAY
+        ENDPROPERTIES
+        
+      FIELD #PercOwned
+        Id 50009
+        REAL
+        PROPERTIES
+          Name                #PercOwned
+          Label               #Percentage Owned
+          Table               #FIN_GroupEntityHistory
+          ExtendedDataType    
+            ARRAY 
+              #Percent
+              #
+            ENDARRAY
+        ENDPROPERTIES
+        
+      FIELD #PeriodStart
+        Id 50010
+        DATE
+        PROPERTIES
+          Name                #PeriodStart
+          Label               #Period Start
+          HelpText            #@SYS428
+          Mandatory           #Yes
+          AllowEdit           #No
+          Table               #FIN_GroupEntityHistory
+          ExtendedDataType    
+            ARRAY 
+              #FIN_PeriodStart
+              #
+            ENDARRAY
+        ENDPROPERTIES
+        
+      FIELD #PeriodEnd
+        Id 50011
+        DATE
+        PROPERTIES
+          Name                #PeriodEnd
+          Table               #FIN_GroupEntityHistory
+          ExtendedDataType    
+            ARRAY 
+              #FIN_PeriodEnd
+              #
+            ENDARRAY
+        ENDPROPERTIES
+        
+      FIELD #NewEntityCode
+        Id 50012
+        STRING
+        PROPERTIES
+          Name                #NewEntityCode
+          Label               #New EntityCode
+          HelpText            #New Enitty code to use for this entity for the period
+          Table               #FIN_GroupEntityHistory
+        ENDPROPERTIES
+        
+      FIELD #EntityName
+        Id 50013
+        STRING
+        PROPERTIES
+          Name                #EntityName
+          Label               #Name of Entity for this historic period
+          Mandatory           #Yes
+          Table               #FIN_GroupEntityHistory
+          ExtendedDataType    
+            ARRAY 
+              #FIN_EntityName
+              #
+            ENDARRAY
+          StringSize          #100
+        ENDPROPERTIES
+        
+    ENDFIELDS
+    GROUPS
+      GROUP #AutoLookup
+        PROPERTIES
+          Name                #AutoLookup
+        ENDPROPERTIES
+        
+        GROUPFIELDS
+          #EntityCode
+        ENDGROUPFIELDS
+      ENDGROUP
+    ENDGROUPS
+    
+    INDICES
+      #EntityCodeIdx
+      Id 50001
+      PROPERTIES
+        Name                #EntityCodeIdx
+        AllowDuplicates     #No
+      ENDPROPERTIES
+      
+      INDEXFIELDS
+        #EntityCode
+      ENDINDEXFIELDS
+      
+    ENDINDICES
+    REFERENCES
+    ENDREFERENCES
+    
+    DELETEACTIONS
+      #FIN_GroupEntityPeriod
+      PROPERTIES
+        Table               #FIN_GroupEntityPeriod
+        DeleteAction        #Restricted
+      ENDPROPERTIES
+      
+      #FIN_GroupEntityDataSet
+      PROPERTIES
+        Table               #FIN_GroupEntityDataSet
+        DeleteAction        #Restricted
+      ENDPROPERTIES
+      
+      #FIN_GroupDataSource
+      PROPERTIES
+        Table               #FIN_GroupDataSource
+        DeleteAction        #Restricted
+      ENDPROPERTIES
+      
+      #FIN_GroupLedgerImportData
+      PROPERTIES
+        Table               #FIN_GroupLedgerImportData
+        DeleteAction        #Restricted
+      ENDPROPERTIES
+      
+      #FIN_GroupLedgerMapping
+      PROPERTIES
+        Table               #FIN_GroupLedgerMapping
+        DeleteAction        #Restricted
+      ENDPROPERTIES
+      
+      #FIN_GroupLedgerAdjustmentData
+      PROPERTIES
+        Table               #FIN_GroupLedgerAdjustmentData
+        DeleteAction        #Restricted
+      ENDPROPERTIES
+      
+      #FIN_GroupLedgerData
+      PROPERTIES
+        Table               #FIN_GroupLedgerData
+        DeleteAction        #Restricted
+      ENDPROPERTIES
+      
+      #FIN_GroupLedgerTable
+      PROPERTIES
+        Table               #FIN_GroupLedgerTable
+        DeleteAction        #Restricted
+      ENDPROPERTIES
+      
+    ENDDELETEACTIONS
+    
+    METHODS
+      Version: 3
+      SOURCE #delete
+        #public void delete()
+        #{
+        #    super();
+        #
+        #    //FIN_GroupEntityLog::addEntry(this.EntityCode,FIN_LogEntryType::Entity_Deleted);
+        #}
+      ENDSOURCE
+      SOURCE #insert
+        #public void insert()
+        #{
+        #    super();
+        #
+        #    //FIN_GroupEntityLog::addEntry(this.EntityCode,FIN_LogEntryType::Entity_Inserted);
+        #
+        #}
+      ENDSOURCE
+      SOURCE #update
+        #public void update()
+        #{
+        #    super();
+        #
+        #    //FIN_GroupEntityLog::addEntry(this.EntityCode,FIN_LogEntryType::Entity_Updated);
+        #}
+      ENDSOURCE
+      SOURCE #find
+        #static FIN_GroupEntityHistory find(FIN_EntityCode entityCode ,
+        #                             boolean         _forUpdate = false)
+        #{
+        #    FIN_GroupEntityHistory  fin_GroupEntityHistory;
+        #
+        #    if (entityCode)
+        #    {
+        #        fin_GroupEntityHistory.selectForUpdate(_forUpdate);
+        #
+        #        select firstonly *
+        #            from fin_GroupEntityHistory
+        #                where fin_GroupEntityHistory.entityCode == entityCode;
+        #    }
+        #
+        #    return fin_GroupEntityHistory;
+        #}
+      ENDSOURCE
+    ENDMETHODS
+  ENDTABLE

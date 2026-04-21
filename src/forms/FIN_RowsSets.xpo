@@ -1,0 +1,417 @@
+﻿FORM #FIN_RowsSets
+  PROPERTIES
+    Name                #FIN_RowsSets
+  ENDPROPERTIES
+  
+  METHODS
+    Version: 3
+    SOURCE #classDeclaration
+      #public class FormRun extends ObjectRun
+      #{
+      #}
+    ENDSOURCE
+  ENDMETHODS
+  OBJECTBANK
+    PROPERTIES
+    ENDPROPERTIES
+    
+    DATASOURCE
+      OBJECTPOOL
+        PROPERTIES
+          Name                #FIN_GroupRowSet
+          Table               #FIN_GroupRowSet
+        ENDPROPERTIES
+        
+        FIELDLIST
+        ENDFIELDLIST
+      ENDOBJECTPOOL
+    ENDDATASOURCE
+    DATASOURCE
+      OBJECTPOOL
+        PROPERTIES
+          Name                #FIN_GroupRowLines
+          Table               #FIN_GroupRowLine
+          JoinSource          #FIN_GroupRowSet
+        ENDPROPERTIES
+        
+        FIELDLIST
+        ENDFIELDLIST
+      ENDOBJECTPOOL
+    ENDDATASOURCE
+    DATASOURCE
+      OBJECTPOOL
+        PROPERTIES
+          Name                #FIN_GroupRowMapping
+          Table               #FIN_GroupRowMapping
+          JoinSource          #FIN_GroupRowLines
+          InsertIfEmpty       #No
+        ENDPROPERTIES
+        
+        FIELDLIST
+        ENDFIELDLIST
+      ENDOBJECTPOOL
+    ENDDATASOURCE
+    DATASOURCE
+      OBJECTPOOL
+        PROPERTIES
+          Name                #FIN_GroupRowLink
+          Table               #FIN_GroupRowLink
+          InsertIfEmpty       #No
+        ENDPROPERTIES
+        
+        FIELDLIST
+        ENDFIELDLIST
+      ENDOBJECTPOOL
+    ENDDATASOURCE
+  ENDOBJECTBANK
+  
+  JOINS
+    FIN_GroupRowLines FIN_GroupRowSet
+    FIN_GroupRowMapping FIN_GroupRowLines
+  ENDJOINS
+  
+  DESIGN
+    PROPERTIES
+      Caption             #Row Sets
+    ENDPROPERTIES
+    
+    CONTAINER
+      CONTROL TAB
+        PROPERTIES
+          Name                #Tab
+          Width               #Column width
+          Height              #Column height
+        ENDPROPERTIES
+        
+        CONTAINER
+          CONTROL TABPAGE
+            PROPERTIES
+              Name                #TabPage
+              Caption             #General
+              Columns             #3
+              ArrangeGuide        
+                ARRAY INDEX Columns 
+                  #0
+                  #0
+                  #0
+                ENDARRAY
+            ENDPROPERTIES
+            
+            CONTAINER
+              CONTROL GRID
+                PROPERTIES
+                  Name                #Grid_Set
+                  Height              #Column height
+                  DataSource          #FIN_GroupRowSet
+                  DataGroup           #General
+                ENDPROPERTIES
+                
+                  CONTAINER
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #Grid_RowSetCode
+                        DataSource          #FIN_GroupRowSet
+                        DataField           #RowSetCode
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #Grid_RowSetName
+                        DataSource          #FIN_GroupRowSet
+                        DataField           #RowSetName
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                  ENDCONTAINER
+                  
+              ENDCONTROL 
+              
+              CONTROL GRID
+                PROPERTIES
+                  Name                #Grid_Detail
+                  Width               #200
+                  Height              #Column height
+                  DataSource          #FIN_GroupRowLines
+                ENDPROPERTIES
+                
+                  CONTAINER
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupRowLines_RowSetCode
+                        AllowEdit           #No
+                        DataSource          #FIN_GroupRowLines
+                        DataField           #RowSetCode
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL INTEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupRowLines_RowLineNo
+                        DataSource          #FIN_GroupRowLines
+                        DataField           #RowLineNo
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupRowLines_RowLineName
+                        DataSource          #FIN_GroupRowLines
+                        DataField           #RowLineName
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL INTEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupRowLines_Level0_Sort
+                        DataSource          #FIN_GroupRowLines
+                        DataField           #Level0_Sort
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupRowLines_Level0
+                        DataSource          #FIN_GroupRowLines
+                        DataField           #Level0
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL INTEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupRowLines_Level1_Sort
+                        DataSource          #FIN_GroupRowLines
+                        DataField           #Level1_Sort
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupRowLines_Level1
+                        DataSource          #FIN_GroupRowLines
+                        DataField           #Level1
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL INTEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupRowLines_Level2_Sort
+                        DataSource          #FIN_GroupRowLines
+                        DataField           #Level2_Sort
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupRowLines_Level2
+                        DataSource          #FIN_GroupRowLines
+                        DataField           #Level2
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL INTEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupRowLines_Level3_Sort
+                        DataSource          #FIN_GroupRowLines
+                        DataField           #Level3_Sort
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupRowLines_Level3
+                        DataSource          #FIN_GroupRowLines
+                        DataField           #Level3
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL INTEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupRowLines_Level4_Sort
+                        DataSource          #FIN_GroupRowLines
+                        DataField           #Level4_Sort
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupRowLines_Level4
+                        DataSource          #FIN_GroupRowLines
+                        DataField           #Level4
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                  ENDCONTAINER
+                  
+              ENDCONTROL 
+              
+              CONTROL GRID
+                PROPERTIES
+                  Name                #Grid_Mapping
+                  Width               #Column width
+                  Height              #Column height
+                  DataSource          #FIN_GroupRowMapping
+                ENDPROPERTIES
+                
+                  CONTAINER
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupRowMapping_FromEntityCode
+                        AutoDeclaration     #Yes
+                        DataSource          #FIN_GroupRowMapping
+                        DataField           #FromEntityCode
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupRowMapping_FromAcountNum
+                        DataSource          #FIN_GroupRowMapping
+                        DataField           #FromAcountNum
+                      ENDPROPERTIES
+                      
+                      METHODS
+                        Version: 3
+                        SOURCE #lookup
+                          #public void lookup()
+                          #{
+                          #        ;
+                          #
+                          #     FIN_GroupLedgerTable::lookupAccountNum(this,FIN_GroupRowMapping_FromEntityCode.valueStr());
+                          #}
+                        ENDSOURCE
+                      ENDMETHODS
+                    ENDCONTROL 
+                    
+                    CONTROL GROUP
+                      PROPERTIES
+                        Name                #MappingDetail
+                        BackgroundColor     #Window background
+                        DataSource          #FIN_GroupRowMapping
+                        DataGroup           #MappingDetail
+                        AutoDataGroup       #Yes
+                      ENDPROPERTIES
+                      
+                        CONTAINER
+                        ENDCONTAINER
+                        
+                    ENDCONTROL 
+                    
+                    CONTROL GROUP
+                      PROPERTIES
+                        Name                #ToDetail
+                        BackgroundColor     #Window background
+                        DataSource          #FIN_GroupRowMapping
+                        DataGroup           #ToDetail
+                        AutoDataGroup       #Yes
+                      ENDPROPERTIES
+                      
+                        CONTAINER
+                        ENDCONTAINER
+                        
+                    ENDCONTROL 
+                    
+                  ENDCONTAINER
+                  
+              ENDCONTROL 
+              
+            ENDCONTAINER
+            
+          ENDCONTROL 
+          
+          CONTROL TABPAGE
+            PROPERTIES
+              Name                #TabPage1
+              Caption             #Row Links
+            ENDPROPERTIES
+            
+            CONTAINER
+              CONTROL GRID
+                PROPERTIES
+                  Name                #Grid
+                  DataSource          #FIN_GroupRowLink
+                ENDPROPERTIES
+                
+                  CONTAINER
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupRowLink_FromEntityCode
+                        DataSource          #FIN_GroupRowLink
+                        DataField           #FromEntityCode
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL INT64EDIT
+                      PROPERTIES
+                        Name                #FIN_GroupRowLink_RowLinkId
+                        DataSource          #FIN_GroupRowLink
+                        DataField           #RowLinkId
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupRowLink_DataLinkKey
+                        DataSource          #FIN_GroupRowLink
+                        DataField           #DataLinkKey
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                  ENDCONTAINER
+                  
+              ENDCONTROL 
+              
+            ENDCONTAINER
+            
+          ENDCONTROL 
+          
+        ENDCONTAINER
+        
+      ENDCONTROL 
+      
+      CONTROL BUTTON
+        PROPERTIES
+          Name                #Button
+          Text                #Build Links
+        ENDPROPERTIES
+        
+        METHODS
+          Version: 3
+          SOURCE #clicked
+            #void clicked()
+            #{
+            #    super();
+            #    FIN_GroupRowSet::createRowLinks();
+            #
+            #    FIN_GroupRowLink_ds.refresh();
+            #
+            #    Info('Link built complete');
+            #}
+          ENDSOURCE
+        ENDMETHODS
+      ENDCONTROL 
+      
+    ENDCONTAINER
+    
+  ENDDESIGN
+  
+ENDFORM

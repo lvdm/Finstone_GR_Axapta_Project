@@ -1,0 +1,1049 @@
+﻿  TABLE #FIN_GroupEntityDataSet
+    Id 50032
+    PROPERTIES
+      Name                #FIN_GroupEntityDataSet
+      Label               #Group Entity Datasets
+      ModifiedDateTime    #Yes
+      ModifiedBy          #Yes
+      CreatedDateTime     #Yes
+      CreatedBy           #Yes
+    ENDPROPERTIES
+    
+    FIELDS
+      FIELD #EntityCode
+        Id 50001
+        STRING
+        PROPERTIES
+          Name                #EntityCode
+          Mandatory           #Yes
+          Table               #FIN_GroupEntityDataSet
+          ExtendedDataType    
+            ARRAY 
+              #FIN_EntityCode
+              #
+            ENDARRAY
+        ENDPROPERTIES
+        
+      FIELD #DataSource
+        Id 50002
+        STRING
+        PROPERTIES
+          Name                #DataSource
+          Label               #Data source
+          Mandatory           #Yes
+          Table               #FIN_GroupEntityDataSet
+          ExtendedDataType    
+            ARRAY 
+              #FIN_DataSource
+              #
+            ENDARRAY
+          StringSize          #60
+        ENDPROPERTIES
+        
+      FIELD #DataSet
+        Id 50003
+        ENUM
+        PROPERTIES
+          Name                #DataSet
+          Mandatory           #Yes
+          Table               #FIN_GroupEntityDataSet
+          EnumType            #FIN_DataSet
+        ENDPROPERTIES
+        
+      FIELD #Description
+        Id 50004
+        STRING
+        PROPERTIES
+          Name                #Description
+          Table               #FIN_GroupEntityDataSet
+          ExtendedDataType    
+            ARRAY 
+              #Notes
+              #
+            ENDARRAY
+          StringSize          #(Memo)
+        ENDPROPERTIES
+        
+      FIELD #SQLQuery
+        Id 50005
+        STRING
+        PROPERTIES
+          Name                #SQLQuery
+          Label               #SQL Query
+          Table               #FIN_GroupEntityDataSet
+          ExtendedDataType    
+            ARRAY 
+              #Notes
+              #
+            ENDARRAY
+          StringSize          #(Memo)
+        ENDPROPERTIES
+        
+      FIELD #ExecutedDateTime
+        Id 50009
+        DATETIME
+        PROPERTIES
+          Name                #ExecutedDateTime
+          Label               #Executed Date Time
+          Table               #FIN_GroupEntityDataSet
+          ExtendedDataType    
+            ARRAY 
+              #DateTimeExecuted
+              #
+            ENDARRAY
+        ENDPROPERTIES
+        
+      FIELD #Info
+        Id 50010
+        STRING
+        PROPERTIES
+          Name                #Info
+          Table               #FIN_GroupEntityDataSet
+          ExtendedDataType    
+            ARRAY 
+              #InfologText
+              #
+            ENDARRAY
+          StringSize          #(Memo)
+        ENDPROPERTIES
+        
+      FIELD #Active
+        Id 50011
+        ENUM
+        PROPERTIES
+          Name                #Active
+          Label               #Is Active
+          Table               #FIN_GroupEntityDataSet
+          EnumType            #NoYes
+        ENDPROPERTIES
+        
+      FIELD #Delete_OBA
+        Id 50012
+        ENUM
+        PROPERTIES
+          Name                #Delete_OBA
+          Label               #Delete Opening Balances
+          HelpText            #During new transaction import Delete Current Opening Balances if existing for period
+          Table               #FIN_GroupEntityDataSet
+          EnumType            #NoYes
+        ENDPROPERTIES
+        
+      FIELD #Delete_ADJ
+        Id 50013
+        ENUM
+        PROPERTIES
+          Name                #Delete_ADJ
+          Label               #Delete Adjustments
+          HelpText            #During new transaction import Delete Adjustments  if existing for period
+          Table               #FIN_GroupEntityDataSet
+          EnumType            #NoYes
+        ENDPROPERTIES
+        
+      FIELD #Delete_CLS
+        Id 50014
+        ENUM
+        PROPERTIES
+          Name                #Delete_CLS
+          Label               #Delete Closing Balances
+          HelpText            #During new transaction import Delete Current Closing Balances if existing for period
+          Table               #FIN_GroupEntityDataSet
+          EnumType            #NoYes
+        ENDPROPERTIES
+        
+    ENDFIELDS
+    GROUPS
+      GROUP #AutoLookup
+        PROPERTIES
+          Name                #AutoLookup
+        ENDPROPERTIES
+        
+        GROUPFIELDS
+          #EntityCode
+          #DataSource
+          #DataSet
+        ENDGROUPFIELDS
+      ENDGROUP
+    ENDGROUPS
+    
+    INDICES
+      #DataSetIdx
+      Id 50001
+      PROPERTIES
+        Name                #DataSetIdx
+        AllowDuplicates     #No
+      ENDPROPERTIES
+      
+      INDEXFIELDS
+        #DataSource
+        #DataSet
+        #EntityCode
+      ENDINDEXFIELDS
+      
+    ENDINDICES
+    REFERENCES
+      REFERENCE #Entities
+        PROPERTIES
+          Name                #Entities
+          Table               #FIN_GroupEntities
+        ENDPROPERTIES
+        
+        FIELDREFERENCES
+          REFERENCETYPE NORMAL
+          PROPERTIES
+            Field               #EntityCode
+            RelatedField        #EntityCode
+          ENDPROPERTIES
+          
+        ENDFIELDREFERENCES
+      ENDREFERENCE
+    ENDREFERENCES
+    
+    DELETEACTIONS
+      #FIN_GroupEntityDataSetMap
+      PROPERTIES
+        Table               #FIN_GroupEntityDataSetMap
+        DeleteAction        #Cascade
+      ENDPROPERTIES
+      
+    ENDDELETEACTIONS
+    
+    METHODS
+      Version: 3
+      SOURCE #validateWrite
+        #public boolean validateWrite()
+        #{
+        #    boolean ret;
+        #
+        #    ret = super();
+        #
+        #    // Make sure SQL Query has Start and End date place holders.
+        #    if ( this.DataSet == FIN_DataSet::LedgerAdjustments || this.DataSet == FIN_DataSet::LedgerData)
+        #    {
+        #        //info (int2str(strscan(this.SQLQuery,"'<STARTDATE>'",1,5000)));
+        #        //info (int2str(strscan(this.SQLQuery,"'<ENDDATE>'",1,5000)));
+        #
+        #        if (strscan(this.SQLQuery,"'<STARTDATE>'",1,10000) < 1 || strscan(this.SQLQuery,"'<ENDDATE>'",1,10000) < 1)
+        #            return checkfailed("SQL Query must contain <STARTDATE> and <ENDDATE> placeholders!");
+        #
+        #    }
+        #
+        #    return ret;
+        #}
+      ENDSOURCE
+      SOURCE #BuildFieldMap
+        #public static void BuildFieldMap(FIN_GroupEntityDataSet _dataSet)
+        #{
+        #    FIN_GroupEntityDataSetMap   tabMap;
+        #    DictTable   dictTable;
+        #    FieldId     fieldId;
+        #    DictField   dictField;
+        #    boolean     mergeData;
+        #
+        #    ;
+        #
+        #    select firstonly * from tabMap where tabMap.DataSet == _dataSet.DataSet
+        #                    && tabMap.DataSource == _dataSet.DataSource
+        #                    && tabMap.EntityCode == _dataSet.EntityCode;
+        #
+        #
+        #    if (tabMap.RecId)
+        #    {
+        #        if (box::yesNo('Field mappings found. Should the existing mapping and new fields be MERGED?\n\rThe original fields that are the same will be kept.'
+        #                        , dialogButton::Yes, 'Confirmation') == dialogButton::Yes)
+        #        {
+        #            try
+        #            {
+        #                mergeData = true;
+        #                ttsbegin;
+        #                while select forupdate *
+        #                    from tabMap
+        #                    where tabMap.DataSet == _dataSet.DataSet
+        #                        && tabMap.DataSource == _dataSet.DataSource
+        #                        && tabMap.EntityCode == _dataSet.EntityCode
+        #                {
+        #
+        #                    tabMap.ToFieldName = '##MERGE##';
+        #                    tabMap.update();
+        #                }
+        #                ttscommit;
+        #            }
+        #            catch
+        #            {
+        #                throw error('Unable to MERGE field mappings!');
+        #            }
+        #        }
+        #        else
+        #        {
+        #
+        #            if (box::yesNo('Should the existing mappings be DELETED and rebuilt?'
+        #                            , dialogButton::Yes, 'Confirmation') == dialogButton::Yes)
+        #            {
+        #
+        #                Delete_from tabMap where tabMap.DataSet == _dataSet.DataSet
+        #                        && tabMap.DataSource == _dataSet.DataSource
+        #                        && tabMap.EntityCode == _dataSet.EntityCode;
+        #
+        #            }
+        #            else
+        #                return;
+        #        }
+        #
+        #
+        #
+        #    }
+        #
+        #    dictTable = FIN_GroupEntityDataSet::dataSetToDictTable(_dataSet);
+        #
+        #    fieldId = dictTable.fieldNext(0);
+        #
+        #    try
+        #    {
+        #        ttsbegin;
+        #        While(fieldId)
+        #        {
+        #            dictField = dictTable.fieldObject(fieldId);
+        #
+        #            select forupdate *
+        #                from tabMap
+        #                where  tabMap.ToFieldId == fieldId
+        #                    && tabMap.DataSet == _dataSet.DataSet
+        #                    && tabMap.DataSource == _dataSet.DataSource
+        #                    && tabMap.EntityCode == _dataSet.EntityCode;
+        #
+        #
+        #            if (mergeData && tabMap.RecId)
+        #            {
+        #                tabMap.ToFieldName  = dictField.label();
+        #                tabMap.update();
+        #
+        #            }
+        #            else
+        #            {
+        #
+        #                tabMap.initValue();
+        #                tabMap.DataSet      = _dataSet.DataSet;
+        #                tabMap.DataSource   = _dataSet.DataSource;
+        #                tabMap.EntityCode   = _dataSet.EntityCode;
+        #                tabMap.ToFieldId    = fieldId;
+        #                tabMap.ToFieldName  = dictField.label();
+        #
+        #                tabMap.doInsert();
+        #            }
+        #
+        #
+        #            fieldId = dictTable.fieldNext(fieldId);
+        #        }
+        #
+        #        //Delete fields which are no longer in table from the mappings.
+        #        Delete_from tabMap where  tabMap.ToFieldName    == '##MERGE##'
+        #                                && tabMap.DataSet       == _dataSet.DataSet
+        #                                && tabMap.DataSource    == _dataSet.DataSource
+        #                                && tabMap.EntityCode    == _dataSet.EntityCode;
+        #
+        #
+        #        ttscommit;
+        #    }
+        #    catch
+        #    {
+        #        throw error('Error building new field Mappings');
+        #    }
+        #
+        #    return;
+        #}
+      ENDSOURCE
+      SOURCE #dataSetToDictTable
+        #public static DictTable dataSetToDictTable(FIN_GroupEntityDataSet _dataSet)
+        #{
+        #    DictTable   dictTable;
+        #    ;
+        #
+        #    Switch (_dataSet.DataSet)
+        #    {
+        #        case FIN_DataSet::LedgerAccounts:
+        #            dictTable   = new SysDictTable(tableNum(FIN_GroupLedgerTable));
+        #            break;
+        #
+        #        case FIN_DataSet::LedgerMappings:
+        #            dictTable   = new SysDictTable(tableNum(FIN_GroupLedgerMapping));
+        #            break;
+        #
+        #        case FIN_DataSet::LedgerData:
+        #            dictTable   = new SysDictTable(tableNum(FIN_GroupLedgerData));
+        #            break;
+        #
+        #        case FIN_DataSet::LedgerAdjustments:
+        #            dictTable   = new SysDictTable(tableNum(FIN_GroupLedgerAdjustmentData));
+        #            break;
+        #
+        #        case FIN_DataSet::InventoryData:
+        #            dictTable   = new SysDictTable(tableNum(FIN_GroupInventoryData));
+        #            break;
+        #    }
+        #
+        #    return dictTable;
+        #}
+      ENDSOURCE
+      SOURCE #deleteData
+        #server public static boolean deleteData(FIN_EntityCode _entityCode, FIN_DataSet _dataSet,date _startDate,date _endDate,NoYes _silent = NoYes::No)
+        #{
+        #    FIN_GroupLedgerData             tabLedgerData;
+        #    FIN_GroupLedgerMapping          tabMapping;
+        #    FIN_GroupLedgerAdjustmentData   tabAdjustment;
+        #    FIN_GroupLedgerTable            tabLedger;
+        #    FIN_GroupInventoryData          tabInventoryData;
+        #    FIN_GroupEntityPeriod           tabEntityPeriod;
+        #    FIN_GroupEntityDataSet          tabEntityDataSet;
+        #
+        #    ;
+        #
+        #    if (!_entityCode)
+        #        throw error('No entity code supplied so data cannot be deleted.');
+        #
+        #
+        #    // Add check to see if entity period was Locked by User or Admin only if the following types of data
+        #    if (_dataSet == FIN_DataSet::LedgerAdjustments
+        #        || _dataSet == FIN_DataSet::LedgerData
+        #        || _dataSet == FIN_DataSet::InventoryData)
+        #    {
+        #
+        #        tabEntityPeriod = FIN_GroupEntityPeriod::find(_entityCode,FIN_GroupPeriod::findEndDate(_startDate));
+        #
+        #        If (tabEntityPeriod.LockedByAdmin || tabEntityPeriod.LockedByUser)
+        #        {
+        #            warning(strfmt('Selected period for %1 already locked and no changes can be made!',_entityCode));
+        #            return false;
+        #        }
+        #    }
+        #
+        #
+        #    // Get Dataset Setup to see which types of Transactions should be deleted or not..
+        #    Select firstonly * from tabEntityDataSet
+        #            order by tabEntityDataSet.modifiedDateTime desc
+        #            where tabEntityDataSet.EntityCode == _entityCode
+        #                                && tabEntityDataSet.DataSet == _dataSet
+        #                                && tabEntityDataSet.Active == NoYes::Yes;
+        #
+        #
+        #    switch (_dataSet)
+        #    {
+        #
+        #        case FIN_DataSet::LedgerAccounts :
+        #
+        #            select * from tabLedger where tabLedger.EntityCode == _entityCode;
+        #            if (tabLedger.RecId)
+        #            {
+        #                if ( _silent == NoYes::Yes || box::yesNo(strfmt('Ledger Accounts found for entity %1. Should it be deleted?',_entityCode)
+        #                        , dialogButton::Yes, 'Confirmation') == dialogButton::Yes )
+        #                {
+        #                    Delete_from tabLedger where tabLedger.EntityCode == _entityCode && tabLedger.Locked ==  NoYes::No;
+        #
+        #                    FIN_GroupEntityLog::addEntry(_entityCode,FIN_LogEntryType::Accounts_Deleted);
+        #                }
+        #                else
+        #                    return false;
+        #            }
+        #            break;
+        #
+        #        case FIN_DataSet::LedgerAdjustments :
+        #
+        #            select * from tabAdjustment where tabAdjustment.EntityCode == _entityCode
+        #                                            && tabAdjustment.Date >= _startDate
+        #                                            && tabAdjustment.Date <= _endDate;
+        #            if (tabAdjustment.RecId)
+        #            {
+        #                if ( _silent == NoYes::Yes ||  box::yesNo(strfmt('Ledger Adustments found for entity %1 between %2 and %3. Should it be deleted?'
+        #                                       ,_entityCode
+        #                                       ,date2str(_startDate,123,2,1,3,1,4)
+        #                                       ,date2str(_endDate,123,2,1,3,1,4))
+        #                        , dialogButton::Yes, 'Confirmation') == dialogButton::Yes)
+        #                {
+        #                    Delete_from tabAdjustment where tabAdjustment.EntityCode == _entityCode
+        #                                            && tabAdjustment.Date >= _startDate
+        #                                            && tabAdjustment.Date <= _endDate;
+        #
+        #                    FIN_GroupEntityLog::addEntry(_entityCode,FIN_LogEntryType::AdjData_Deleted,curUserId(),_startDate,_endDate);
+        #
+        #                }
+        #                else
+        #                    return false;
+        #            }
+        #            break;
+        #
+        #        case FIN_DataSet::LedgerData :
+        #
+        #            // NOTE!!! Lucia is also captures ADJ manually!!
+        #
+        #
+        #           // Check if entries are locked then stop
+        #           select firstonly * from tabLedgerData where tabLedgerData.EntityCode == _entityCode
+        #                                            && tabLedgerData.TransDate >= _startDate
+        #                                            && tabLedgerData.TransDate <= _endDate
+        #                                            && (tabLedgerData.LockedByAdmin == NoYes::Yes || tabLedgerData.LockedByUser == NoYes::Yes)
+        #                                            && tabLedgerData.Category == 'MAIN'     //ONLY check to delete MAIN and ACT data lines.
+        #                                            && (tabLedgerData.ScenarioCode == 'ACT' ||
+        #                                                (tabLedgerData.ScenarioCode == 'OBA' && tabEntityDataSet.Delete_OBA) ||
+        #                                                (tabLedgerData.ScenarioCode == 'ADJ' && tabEntityDataSet.Delete_ADJ) ||
+        #                                                (tabLedgerData.ScenarioCode == 'CLS' && tabEntityDataSet.Delete_CLS));
+        #
+        #            if (tabLedgerData.RecId)
+        #            {
+        #                warning(strfmt('Ledger Data for %1 already locked and no changes can be made!',_entityCode));
+        #                return false;
+        #            }
+        #
+        #           select firstonly * from tabLedgerData where tabLedgerData.EntityCode == _entityCode
+        #                                            && tabLedgerData.TransDate >= _startDate
+        #                                            && tabLedgerData.TransDate <= _endDate
+        #                                            && tabLedgerData.Category == 'MAIN'     //ONLY check to delete MAIN and ACT and ADJ data lines.
+        #                                            && (tabLedgerData.ScenarioCode == 'ACT' ||
+        #                                                (tabLedgerData.ScenarioCode == 'OBA' && tabEntityDataSet.Delete_OBA) ||
+        #                                                (tabLedgerData.ScenarioCode == 'ADJ' && tabEntityDataSet.Delete_ADJ) ||
+        #                                                (tabLedgerData.ScenarioCode == 'CLS' && tabEntityDataSet.Delete_CLS));
+        #
+        #            if (tabLedgerData.RecId)
+        #            {
+        #
+        #                if ( _silent == NoYes::Yes ||  box::yesNo(strfmt('Ledger Data found for entity %1 between %2 and %3. Should it be deleted?'
+        #                                       ,_entityCode
+        #                                       ,date2str(_startDate,123,2,1,3,1,4)
+        #                                       ,date2str(_endDate,123,2,1,3,1,4))
+        #                        , dialogButton::Yes, 'Confirmation') == dialogButton::Yes)
+        #                {
+        #                    Delete_from tabLedgerData where tabLedgerData.EntityCode == _entityCode
+        #                                            && tabLedgerData.TransDate >= _startDate
+        #                                            && tabLedgerData.TransDate <= _endDate
+        #                                            && tabLedgerData.Category == 'MAIN'     //ONLY check to delete MAIN and ACT and ADJ data lines.
+        #                                            && (tabLedgerData.ScenarioCode == 'ACT' ||
+        #                                                (tabLedgerData.ScenarioCode == 'OBA' && tabEntityDataSet.Delete_OBA) ||
+        #                                                (tabLedgerData.ScenarioCode == 'ADJ' && tabEntityDataSet.Delete_ADJ) ||
+        #                                                (tabLedgerData.ScenarioCode == 'CLS' && tabEntityDataSet.Delete_CLS));
+        #
+        #                    FIN_GroupEntityLog::addEntry(_entityCode,FIN_LogEntryType::LedgerData_Deleted,curUserId(),_startDate,_endDate);
+        #
+        #                }
+        #                else
+        #                    return false;
+        #            }
+        #
+        #            break;
+        #
+        #
+        #        case FIN_DataSet::LedgerMappings :
+        #            select * from tabMapping where tabMapping.FromEntityCode == _entityCode;
+        #            if (tabMapping.RecId)
+        #            {
+        #                if ( _silent == NoYes::Yes || box::yesNo(strfmt('Ledger Mappings found for entity %1. Should it be deleted?',_entityCode)
+        #                        , dialogButton::Yes, 'Confirmation') == dialogButton::Yes)
+        #                {
+        #                    Delete_from tabMapping where tabMapping.FromEntityCode == _entityCode;
+        #
+        #                    FIN_GroupEntityLog::addEntry(_entityCode,FIN_LogEntryType::Mapping_Deleted,curUserId(),_startDate,_endDate);
+        #                }
+        #                else
+        #                    return false;
+        #            }
+        #
+        #
+        #            break;
+        #
+        #       case FIN_DataSet::InventoryData :
+        #
+        #          select * from tabInventoryData where tabInventoryData.EntityCode == _entityCode
+        #                                            && tabInventoryData.TransDate >= _startDate
+        #                                            && tabInventoryData.TransDate <= _endDate;
+        #                                           // && tabInventoryData.Category == 'MAIN';
+        #
+        #            if (tabInventoryData.RecId)
+        #            {
+        #                if ( _silent == NoYes::Yes || box::yesNo(strfmt('Inventory Data found for entity %1 between %2 and %3. Should it be deleted?'
+        #                                       ,_entityCode
+        #                                       ,date2str(_startDate,123,2,1,3,1,4)
+        #                                       ,date2str(_endDate,123,2,1,3,1,4))
+        #                        , dialogButton::Yes, 'Confirmation') == dialogButton::Yes)
+        #                {
+        #                    Delete_from tabInventoryData where tabInventoryData.EntityCode == _entityCode
+        #                                            && tabInventoryData.TransDate >= _startDate
+        #                                            && tabInventoryData.TransDate <= _endDate;
+        #                                           // && tabInventoryData.Category == 'MAIN' ;
+        #
+        #                    FIN_GroupEntityLog::addEntry(_entityCode,FIN_LogEntryType::InventData_Deleted,curUserId(),_startDate,_endDate);
+        #                }
+        #                else
+        #                    return false;
+        #            }
+        #
+        #            break;
+        #
+        #    }
+        #
+        #    return true; // Continue
+        #}
+      ENDSOURCE
+      SOURCE #exists
+        #static NoYes exists(FIN_EntityCode _entityCode
+        #                                    , FIN_DataSet   _dataSet)
+        #{
+        #    FIN_GroupEntityDataSet  fin_GroupEntityDataSet;
+        #
+        #    if (_entityCode)
+        #    {
+        #        select firstonly RecId
+        #            from fin_GroupEntityDataSet
+        #                where fin_GroupEntityDataSet.DataSet == _dataSet
+        #                    && fin_GroupEntityDataSet.EntityCode == _entityCode;
+        #    }
+        #
+        #    return fin_GroupEntityDataSet.RecId ? NoYes::Yes : NoYes::No;
+        #}
+      ENDSOURCE
+      SOURCE #find
+        #static FIN_GroupEntityDataSet find(FIN_DataSource   _dataSource
+        #                                    , FIN_EntityCode _entityCode
+        #                                    , FIN_DataSet   _dataSet
+        #                                    ,boolean         _forUpdate = false)
+        #{
+        #    FIN_GroupEntityDataSet  fin_GroupEntityDataSet;
+        #
+        #    if (_dataSource && _entityCode)
+        #    {
+        #        fin_GroupEntityDataSet.selectForUpdate(_forUpdate);
+        #
+        #        select firstonly *
+        #            from fin_GroupEntityDataSet
+        #                where fin_GroupEntityDataSet.DataSource == _dataSource
+        #                    && fin_GroupEntityDataSet.DataSet == _dataSet
+        #                    && fin_GroupEntityDataSet.EntityCode == _entityCode;
+        #    }
+        #
+        #    return fin_GroupEntityDataSet;
+        #}
+      ENDSOURCE
+      SOURCE #getDataConnection
+        #public static FIN_DataConnection getDataConnection(FIN_GroupEntityDataSet _dataSet)
+        #{
+        #
+        #
+        #    return FIN_DataConnection::newFromDataSet(_dataSet);
+        #}
+      ENDSOURCE
+      SOURCE #getDataSetFieldMap
+        #public static map getDataSetFieldMap(FIN_GroupEntityDataSet _dataSet)
+        #{
+        #    Map         fieldsMap   = new Map(TYPES::Integer,TYPES::String);
+        #    DictTable   dictTable;
+        #    FieldId     fieldId;
+        #    DictField   dictField;
+        #
+        #    ;
+        #
+        #    dictTable = FIN_GroupEntityDataSet::dataSetToDictTable(_dataSet);
+        #
+        #    fieldId = dictTable.fieldNext(0);
+        #
+        #    While(fieldId)
+        #    {
+        #        dictField = dictTable.fieldObject(fieldId);
+        #
+        #        fieldsMap.insert(fieldId,dictField.label());
+        #
+        #        fieldId = dictTable.fieldNext(fieldId);
+        #    }
+        #
+        #    return fieldsMap;
+        #}
+      ENDSOURCE
+      SOURCE #getFieldMap
+        #public static map getFieldMap(FIN_GroupEntityDataSet _dataSet)
+        #{
+        #    // Creates a map of the fields
+        #    // with the ToFieldID and then a containder [FromFieldId, DefaultValue]
+        #
+        #    Map                             fieldsMap = new Map(TYPES::Integer,TYPES::Container);
+        #    FIN_GroupEntityDataSetMap       tabMap;
+        #    Container                       con;
+        #
+        #    ;
+        #
+        #    while select *
+        #        from tabMap
+        #        order by tabMap.FromFieldId
+        #        where tabMap.DataSet == _dataSet.DataSet
+        #            && tabMap.DataSource == _dataSet.DataSource
+        #            && tabMap.EntityCode == _dataSet.EntityCode
+        #    {
+        #
+        #
+        #        if (tabMap.FromFieldId >= 0 || tabMap.DefaultValue != '')
+        #        {
+        #            con = conpoke(con,1,tabMap.FromFieldId,tabMap.DefaultValue);
+        #            fieldsMap.insert(tabMap.ToFieldId,con);
+        #        }
+        #
+        #    }
+        #    return fieldsMap;
+        #}
+      ENDSOURCE
+      SOURCE #getQueryFieldMap
+        #public static map getQueryFieldMap(FIN_GroupEntityDataSet _dataSet)
+        #{
+        #
+        #
+        #    return FIN_DataConnection::newFromDataSet(_dataSet).getQueryFieldMap();
+        #}
+      ENDSOURCE
+      SOURCE #latest_LockedDate
+        #// This method returns the latest date of which either the Entity's Period was Locked by the Admin or User
+        #// or the latest date the Entity's transactions was locked.
+        #// This method is mostly used to determin from where the last data can be deleted and re-imported,
+        #// without removing the locked periods or transaction data.
+        #
+        #server public static TransDate latest_LockedDate(FIN_EntityCode _entityCode)
+        #{
+        #    FIN_GroupLedgerData             tabLedgerData;
+        #    FIN_GroupEntityPeriod           tabEntityPeriod;
+        #    TransDate                       latestPeriodLockedDate;
+        #    TransDate                       latestDataLockedDate;
+        #
+        #    ;
+        #
+        #    if (!_entityCode)
+        #        throw error('No entity code supplied so data cannot be deleted.');
+        #
+        #
+        #    //Get latest locked period date
+        #
+        #    select firstonly PeriodEnd from tabEntityPeriod
+        #    order by tabEntityPeriod.PeriodEnd desc
+        #    where   tabEntityPeriod.EntityCode == _entityCode
+        #           && ( tabEntityPeriod.LockedByAdmin == true || tabEntityPeriod.LockedByUser == true);
+        #
+        #    latestPeriodLockedDate = tabEntityPeriod.PeriodEnd;
+        #
+        #
+        #    //Get latest locked transaction date
+        #
+        #    select firstonly TransDate from tabLedgerData
+        #        order by  tabLedgerData.TransDate desc
+        #        where tabLedgerData.EntityCode == _entityCode
+        #             && (tabLedgerData.LockedByAdmin == NoYes::Yes || tabLedgerData.LockedByUser == NoYes::Yes)
+        #             && tabLedgerData.Category == 'MAIN'     //ONLY check to delete MAIN and ACT data lines.
+        #             && (tabLedgerData.ScenarioCode == 'ACT' ||
+        #                 tabLedgerData.ScenarioCode == 'OBA' ||
+        #                 tabLedgerData.ScenarioCode == 'CLS');
+        #
+        #
+        #    latestDataLockedDate = tabLedgerData.TransDate;
+        #
+        #    return latestDataLockedDate > latestPeriodLockedDate ? latestDataLockedDate : latestPeriodLockedDate;
+        #}
+      ENDSOURCE
+      SOURCE #loadData
+        #public static void loadData(FIN_EntityCode _entityCode, FIN_DataSet _dataSet)
+        #{
+        #    FIN_GroupEntityDataSet  tabDataSet;
+        #
+        #    FIN_DataConnection      clsDC;
+        #    Common                  record;
+        #
+        #    Date                    startDate, endDate;
+        #
+        #    dialogField             dialogStartDate;
+        #    dialogField             dialogEndDate;
+        #    dialogField             dialogEnityCode;
+        #    dialogField             dialogDataSet;
+        #    Dialog                  dialog;
+        #
+        #    #AviFiles
+        #    // Progress Bar
+        #    SysOperationProgress progress = new SysOperationProgress(1, NoYes::Yes);
+        #    int                     counter;
+        #
+        #
+        #    ;
+        #
+        #    dialog = new Dialog("Load data from DataSource");
+        #    dialog.caption("Load Data");
+        #
+        #    dialogEnityCode     =   dialog.addField(typeId(FIN_EntityCode));
+        #    dialogDataSet       =   dialog.addField(typeId(FIN_DataSet));
+        #
+        #    if(_dataSet == FIN_DataSet::LedgerAdjustments || _dataSet == FIN_DataSet::LedgerData || _dataSet == FIN_DataSet::InventoryData)
+        #    {
+        #        dialogStartDate     =   dialog.addField(typeId(TransDate),"Start Date");
+        #        dialogEndDate       =   dialog.addField(typeId(TransDate),"End Date");
+        #    }
+        #
+        #    dialogEnityCode.value(_entityCode);
+        #    dialogDataSet.value(_dataSet);
+        #
+        #
+        #    if(!dialog.run())
+        #        return;
+        #    if(_dataSet == FIN_DataSet::LedgerAdjustments || _dataSet == FIN_DataSet::LedgerData || _dataSet == FIN_DataSet::InventoryData)
+        #    {
+        #        startDate           =   dialogStartDate.value();
+        #        endDate             =   dialogEndDate.value();
+        #    }
+        #
+        #    _entityCode         =   dialogEnityCode.value();
+        #    _dataSet            =   dialogDataSet.value();
+        #
+        #
+        #
+        #    Select firstonly * from tabDataSet
+        #            order by tabDataSet.modifiedDateTime desc
+        #            where tabDataSet.EntityCode == _entityCode
+        #                                && tabDataSet.DataSet == _dataSet
+        #                                && tabDataSet.Active == NoYes::Yes;
+        #
+        #    //Select firstonly * from tabDataSet where tabDataSet.EntityCode == _entityCode
+        #    //                            && tabDataSet.DataSet == _dataSet
+        #    //                            && tabDataSet.Active == NoYes::Yes;
+        #
+        #    if (!tabDataSet.RecId)
+        #        throw error(strfmt('Unable to find DataSet entry for Entity : %1,   DataSet : %2',_entityCode,enum2str(_dataSet)));
+        #
+        #
+        #   // Delete existing records
+        #   if (!FIN_GroupEntityDataSet::deleteData(_entityCode,_dataSet,startDate,endDate) && _dataSet != FIN_DataSet::LedgerMappings)
+        #       throw error('Data loading cancelled because of existing data.');
+        #
+        #   startlengthyoperation();
+        #
+        #   // Progress Caption & Animation
+        #   progress.setCaption("Importing data...");
+        #   progress.setAnimation(#AviUpdate);
+        #
+        #
+        #   // Import new data
+        #   clsDC = FIN_DataConnection::newFromDataSet(tabDataSet);
+        #
+        #   clsDC.openConnection();
+        #
+        #   clsDC.parmStartDate(startDate);
+        #   clsDC.parmEndDate(endDate);
+        #
+        #
+        #   try
+        #   {
+        #       clsDC.executeQuery();
+        #       ttsbegin;
+        #       while (!clsDC.isEOF())
+        #       {
+        #            record = clsDC.mapToDataSetRecord();
+        #            //if (!record.checkRecord())
+        #            //    throw error('Import record structure NULL.');
+        #
+        #            record.insert();
+        #
+        #            clsDC.nextRecord();
+        #
+        #            counter++;
+        #
+        #            // Refresh every 10th cycle
+        #            if ((counter mod 10) == 0)
+        #            {
+        #                progress.setText(strfmt("Importing data : %1", counter));
+        #                progress.setTotal(counter, 1);
+        #            }
+        #       }
+        #       ttscommit;
+        #   }
+        #   catch
+        #   {
+        #        error("Error occured importing data!");
+        #   }
+        #
+        #   clsDC.closeConnection();
+        #
+        #   FIN_GroupEntityLog::addEntityLog_Import_DataSet(_entityCode,_dataSet,curUserId(),startDate,endDate);
+        #
+        #   progress.kill();
+        #   endlengthyoperation();
+        #}
+      ENDSOURCE
+      SOURCE #loadData_bulk
+        #server public static void loadData_bulk(FIN_EntityCode _entityCode, FIN_DataSet _dataSet,Date _startDate,Date _endDate, NoYes _silent= NoYes::No)
+        #{
+        #    FIN_GroupEntityDataSet  tabDataSet;
+        #
+        #    FIN_DataConnection      clsDC;
+        #    Common                  record;
+        #
+        #    Date                    startDate, endDate;
+        #
+        #    utcDateTime date1 = DateTimeUtil::newDateTime(systemDateGet(), timeNow());
+        #    utcDateTime date2;
+        #
+        #    #AviFiles
+        #    // Progress Bar
+        #    SysOperationProgress progress = new SysOperationProgress(1, NoYes::Yes);
+        #    int                     counter;
+        #
+        #    ;
+        #
+        #    if(_dataSet == FIN_DataSet::LedgerAdjustments || _dataSet == FIN_DataSet::LedgerData || _dataSet == FIN_DataSet::InventoryData )
+        #    {
+        #        startDate           =   _startDate;
+        #        endDate             =   _endDate;
+        #    }
+        #
+        #    Select firstonly * from tabDataSet
+        #            order by tabDataSet.modifiedDateTime desc
+        #            where tabDataSet.EntityCode == _entityCode
+        #                                && tabDataSet.DataSet == _dataSet
+        #                                && tabDataSet.Active == NoYes::Yes;
+        #
+        #    if (!tabDataSet.RecId)
+        #        throw error(strfmt('Unable to find DataSet entry for Entity : %1,   DataSet : %2',_entityCode,enum2str(_dataSet)));
+        #
+        #    // Silent used whenin batch mode so then do info logging for debugging
+        #    if (_silent)
+        #        info(strFmt("Before Delete existing Data  in loadData_bulk at %1"
+        #                ,DateTimeUtil ::toStr(
+        #                    DateTimeUtil ::utcNow())
+        #                ));
+        #
+        #   // Delete existing records
+        #   if (!FIN_GroupEntityDataSet::deleteData(_entityCode,_dataSet,startDate,endDate,_silent) && _dataSet != FIN_DataSet::LedgerMappings)
+        #       throw error('Data loading cancelled because of existing data.');
+        #
+        #   if (_silent)
+        #        info(strFmt("After Delete existing Data  in loadData_bulk at %1"
+        #                ,DateTimeUtil ::toStr(
+        #                    DateTimeUtil ::utcNow())
+        #                ));
+        #
+        #   startlengthyoperation();
+        #
+        #   // Progress Caption & Animation
+        #   progress.setCaption("Importing data...");
+        #   progress.setAnimation(#AviUpdate);
+        #
+        #
+        #   if (_silent)
+        #        info(strFmt("Before opening DataConnection in loadData_bulk at %1"
+        #                ,DateTimeUtil ::toStr(
+        #                    DateTimeUtil ::utcNow())
+        #                ));
+        #
+        #   // Import new data
+        #   clsDC = FIN_DataConnection::newFromDataSet(tabDataSet);
+        #
+        #   clsDC.openConnection();
+        #
+        #   clsDC.parmStartDate(startDate);
+        #   clsDC.parmEndDate(endDate);
+        #
+        #
+        #   try
+        #   {
+        #       if (_silent)
+        #            info(strFmt("Before executingQuery in loadData_bulk at %1"
+        #                ,DateTimeUtil ::toStr(
+        #                    DateTimeUtil ::utcNow())
+        #                ));
+        #
+        #       clsDC.executeQuery();
+        #       ttsbegin;
+        #       while (!clsDC.isEOF())
+        #       {
+        #            record = clsDC.mapToDataSetRecord();
+        #            //if (record. == null)
+        #            //    throw error('Import record structure NULL.');
+        #            record.insert();
+        #
+        #            clsDC.nextRecord();
+        #
+        #            counter++;
+        #
+        #            // Refresh every 10th cycle
+        #            if ((counter mod 10) == 0)
+        #            {
+        #                progress.setText(strfmt("Importing data : %1", counter));
+        #                progress.setTotal(counter, 1);
+        #            }
+        #       }
+        #       ttscommit;
+        #
+        #   } catch {
+        #
+        #        info(strFmt("ERROR importing data in loadData_bulk at %1"
+        #                ,DateTimeUtil ::toStr(
+        #                    DateTimeUtil ::utcNow())
+        #                ));
+        #
+        #        error("Error occured importing data!");
+        #
+        #   }
+        #
+        #   clsDC.closeConnection();
+        #
+        #   if (_silent)
+        #        info(strFmt("After closing DataConnection in loadData_bulk at %1"
+        #                ,DateTimeUtil ::toStr(
+        #                    DateTimeUtil ::utcNow())
+        #                ));
+        #
+        #   FIN_GroupEntityLog::addEntityLog_Import_DataSet(_entityCode,_dataSet,curUserId(),startDate,endDate);
+        #
+        #   progress.kill();
+        #   endlengthyoperation();
+        #
+        #   date2 = DateTimeUtil::newDateTime(systemDateGet(), timeNow());
+        #
+        #   // when NOT IN batch mode print progress
+        #   if (_silent == NoYes::No)
+        #   {
+        #
+        #        print(strFmt("Total time consumed: %1 (seconds)   %2  (records)",DateTimeUtil::getDifference(date2, date1),int2str(counter) ));
+        #   } else
+        #   {
+        #        info(strFmt("Total time consumed: %1 (seconds)   %2  (records)",
+        #                DateTimeUtil::getDifference(date2, date1),int2str(counter) ));
+        #   }
+        #}
+      ENDSOURCE
+      SOURCE #updateExecutedDateTime
+        #public static void updateExecutedDateTime(FIN_DataSource   _dataSource
+        #                                    , FIN_EntityCode _entityCode
+        #                                    , FIN_DataSet   _dataSet
+        #                                    ,utcDateTime         _dateTime = DatetimeUtil::getSystemDateTime() )
+        #{
+        #    FIN_GroupEntityDataSet  fin_GroupEntityDataSet;
+        #
+        #    if (_dataSource && _entityCode && _dataSet)
+        #    {
+        #        try
+        #        {
+        #            ttsbegin;
+        #
+        #            fin_GroupEntityDataSet.selectForUpdate(true);
+        #
+        #            select firstonly *
+        #                from fin_GroupEntityDataSet
+        #                    where fin_GroupEntityDataSet.DataSource == _dataSource
+        #                        && fin_GroupEntityDataSet.DataSet == _dataSet
+        #                        && fin_GroupEntityDataSet.EntityCode == _entityCode;
+        #
+        #            fin_GroupEntityDataSet.ExecutedDateTime = _dateTime;
+        #
+        #            fin_GroupentityDataSet.update();
+        #
+        #            ttscommit;
+        #        }
+        #        catch
+        #        {
+        #            throw error('Unable to updated Executed Date Time for DataSet!');
+        #        }
+        #
+        #
+        #     }
+        #     else
+        #        throw error('Data Set Executed Date Time not set!');
+        #
+        #    return;
+        #}
+      ENDSOURCE
+    ENDMETHODS
+  ENDTABLE

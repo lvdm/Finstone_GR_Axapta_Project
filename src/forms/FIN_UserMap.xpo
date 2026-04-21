@@ -1,0 +1,454 @@
+﻿FORM #FIN_UserMap
+  PROPERTIES
+    Name                #FIN_UserMap
+  ENDPROPERTIES
+  
+  METHODS
+    Version: 3
+    SOURCE #classDeclaration
+      #public class FormRun extends ObjectRun
+      #{
+      #    FIN_FormTreeDatasource  treeDatasource;
+      #    ImageListAppl_checkbox  imageList;
+      #    //map                     checkedMap;
+      #    #resAppl
+      #}
+    ENDSOURCE
+    SOURCE #AddUserToEntities
+      #void AddUserToEntities()
+      #{
+      #    MapEnumerator me;
+      #    FIN_GroupUserEntity tabUserEntity;
+      #
+      #    ;
+      #
+      #    if (FIN_GroupUsers.UserName)
+      #    {
+      #        me = treeDatasource.getSelectedMap().getEnumerator();
+      #
+      #        print "Number of elements : " + int2str(treeDatasource.getSelectedMap().elements());
+      #
+      #        while (me.moveNext())
+      #        {
+      #            print any2str(me.currentKey());
+      #
+      #            try
+      #            {
+      #                if (me.currentKey() != "")
+      #                {
+      #                    if (! FIN_GroupUserEntity::find(me.currentKey(),FIN_GroupUsers.UserName))
+      #                    {
+      #                        tabUserEntity.clear();
+      #                        tabUserEntity.UserName = FIN_GroupUsers.UserName;
+      #                        tabUserEntity.EntityCode = me.currentKey();
+      #                        tabuserEntity.Position = 'Admin';
+      #                        tabUserEntity.insert();
+      #                        print strfmt('User %1 added to entity %2.',FIN_GroupUsers.UserName,me.currentKey());
+      #                    }
+      #                    else
+      #                    {
+      #                        print strfmt('User %1 ALREADY added to entity %2.',FIN_GroupUsers.UserName,me.currentKey());
+      #                    }
+      #                }
+      #            }
+      #            catch (Exception::Error)
+      #            {
+      #
+      #            }
+      #        }
+      #
+      #    }
+      #    else
+      #        error('No User selected!');
+      #
+      #
+      #
+      #
+      #
+      #}
+    ENDSOURCE
+    SOURCE #task
+      #// catch "return" to initiate exit
+      #int task(int p1)
+      #{
+      #   int                 ret;
+      #   ;
+      #   ret = super(p1);
+      #   if (p1 == 288)  // Enter
+      #       element.exit();
+      #   Return ret;
+      #}
+    ENDSOURCE
+    SOURCE #run
+      #public void run()
+      #{
+      #   FormControl hostControl;
+      #   ;
+      #   super();
+      #
+      #   // initialize tree
+      #   this.InitTree();
+      #
+      #   SysFormTreeControl::expandTree(tree, tree.getRoot());
+      #
+      #
+      #}
+    ENDSOURCE
+    SOURCE #exit
+      #void exit()
+      #{
+      #;
+      #   // on exit, return data of currently selected node
+      #   element.closeSelect(treedatasource.selectedData());
+      #}
+    ENDSOURCE
+    SOURCE #ExpandAndSelectRec
+      #// simple recursive ExpandAndSelect function
+      #// ok, not so simple, but simpler then the one from Axapta, which was using a stack here
+      #int ExpandAndSelectRec(FIN_EntityCode ChildId)
+      #{
+      #   int node;
+      #   FIN_GroupEntities     table;
+      #   str IdTree;
+      #   ;
+      #   // recursively search for parent Ids to be expanded first
+      #   select firstonly table where table.EntityCode == ChildId;
+      #   if (table) {
+      #       node = this.ExpandAndSelectRec(table.ParentEntityCode);
+      #
+      #       // expand found node
+      #       tree.expand(node, FormTreeExpand::EXPAND);
+      #
+      #       // search for my node starting from parent
+      #       IdTree   = tree.getItem(node).data();
+      #       while (ChildId != IdTree)
+      #       {
+      #        node = tree.getNextVisible(node);
+      #        IdTree   = tree.getItem(node).data();
+      #       }
+      #   } else {
+      #       // if no parent was found, then we reached the root node
+      #       node = tree.getRoot();
+      #   }
+      #
+      #   // select  and return found node
+      #   tree.select(node);
+      #   return node;
+      #}
+    ENDSOURCE
+    SOURCE #ExpandAndSelect
+      #// wrapper for ExpandAndSelectRec
+      #// speeds up build of tree, by disabling tree updates
+      #void ExpandAndSelect(str ChildId)
+      #{
+      #    tree.lockWindowUpdate(true);
+      #    this.ExpandAndSelectRec(ChildId);
+      #    tree.lockWindowUpdate(false);
+      #}
+    ENDSOURCE
+    SOURCE #InitTree
+      #void InitTree()
+      #{
+      #
+      #    ;
+      #    //checkedMap = new Map(Types::String,Types::String);
+      #
+      #    // create datasource for tree
+      #    treeDatasource = new FIN_FormTreeDatasource(FIN_GroupEntities_DS, tree,
+      #                                           fieldnum(FIN_GroupEntities,EntityCode),
+      #                                           fieldnum(FIN_GroupEntities,ParentEntityCode),
+      #                                           fieldnum(FIN_GroupEntities,EntityName),
+      #                                           false,false
+      #                                          );
+      #
+      #    //imageList = new ImageListAppl_checkbox();
+      #
+      #    // initialize root node
+      #    treeDatasource.initRoot("Finstone Group",'',7);
+      #
+      #    //tree.setImagelist(imageList.imageList());
+      #
+      #
+      #    //imagelist = new Imagelist(Imagelist::smallIconWidth(), Imagelist::smallIconHeight());
+      #    //imagelist.add(new Image(#RES_NODE_COMPANY));
+      #    //imagelist.add(new Image(#RES_COMPANY));
+      #
+      #    //tree.setImagelist(imagelist);
+      #
+      #
+      #}
+    ENDSOURCE
+  ENDMETHODS
+  OBJECTBANK
+    PROPERTIES
+    ENDPROPERTIES
+    
+    DATASOURCE
+      OBJECTPOOL
+        PROPERTIES
+          Name                #FIN_GroupEntities
+          Table               #FIN_GroupEntities
+        ENDPROPERTIES
+        
+        FIELDLIST
+        ENDFIELDLIST
+      ENDOBJECTPOOL
+      METHODS
+        Version: 3
+        SOURCE #init
+          #public void init()
+          #{
+          #    super();
+          #    this.query().dataSourceNo(1).clearDynalinks();
+          #}
+        ENDSOURCE
+      ENDMETHODS
+    ENDDATASOURCE
+    DATASOURCE
+      OBJECTPOOL
+        PROPERTIES
+          Name                #FIN_GroupUsers
+          Table               #FIN_GroupUsers
+          AllowEdit           #No
+          AllowCreate         #No
+          InsertAtEnd         #No
+          InsertIfEmpty       #No
+        ENDPROPERTIES
+        
+        FIELDLIST
+        ENDFIELDLIST
+      ENDOBJECTPOOL
+    ENDDATASOURCE
+    DATASOURCE
+      OBJECTPOOL
+        PROPERTIES
+          Name                #FIN_GroupUserEntity
+          Table               #FIN_GroupUserEntity
+          JoinSource          #FIN_GroupEntities
+          InsertAtEnd         #No
+          InsertIfEmpty       #No
+        ENDPROPERTIES
+        
+        FIELDLIST
+        ENDFIELDLIST
+      ENDOBJECTPOOL
+    ENDDATASOURCE
+  ENDOBJECTBANK
+  
+  JOINS
+    FIN_GroupUserEntity FIN_GroupEntities
+  ENDJOINS
+  
+  DESIGN
+    PROPERTIES
+      Caption             #Data Import
+      Columns             #3
+      ArrangeGuide        
+        ARRAY INDEX Columns 
+          #0
+          #0
+          #0
+        ENDARRAY
+    ENDPROPERTIES
+    
+    CONTAINER
+      CONTROL GROUP
+        PROPERTIES
+          Name                #GroupUsers
+          Width               #Column width
+          Height              #Column height
+        ENDPROPERTIES
+        
+          CONTAINER
+            CONTROL GRID
+              PROPERTIES
+                Name                #Grid
+                Width               #Column width
+                Height              #Column height
+                DataSource          #FIN_GroupUsers
+              ENDPROPERTIES
+              
+                CONTAINER
+                  CONTROL STRINGEDIT
+                    PROPERTIES
+                      Name                #FIN_GroupUsers_FirstName
+                      DataSource          #FIN_GroupUsers
+                      DataField           #FirstName
+                    ENDPROPERTIES
+                    
+                  ENDCONTROL 
+                  
+                  CONTROL STRINGEDIT
+                    PROPERTIES
+                      Name                #FIN_GroupUsers_LastName
+                      DataSource          #FIN_GroupUsers
+                      DataField           #LastName
+                    ENDPROPERTIES
+                    
+                  ENDCONTROL 
+                  
+                ENDCONTAINER
+                
+            ENDCONTROL 
+            
+          ENDCONTAINER
+          
+      ENDCONTROL 
+      
+      CONTROL GROUP
+        PROPERTIES
+          Name                #GroupEntities
+          Width               #500
+          Height              #Column height
+        ENDPROPERTIES
+        
+          CONTAINER
+            CONTROL TREE
+              PROPERTIES
+                Name                #tree
+                Width               #Column width
+                Height              #Column height
+              ENDPROPERTIES
+              
+              METHODS
+                Version: 3
+                SOURCE #keyDown
+                  #boolean keyDown(int vKey, boolean ctrl, boolean shift)
+                  #{
+                  #    return treeDatasource.keyDown(vKey,ctrl,shift);
+                  #
+                  #    //return super(vKey, ctrl, shift);
+                  #}
+                ENDSOURCE
+                SOURCE #mouseDown
+                  #int mouseDown(int x, int y, int button, boolean ctrl, boolean shift)
+                  #{
+                  #    ;
+                  #    return treeDatasource.mouseDown(x,y,button,ctrl,shift);
+                  #
+                  #    //return super(x, y, button, ctrl, shift);
+                  #}
+                  #
+                  #
+                  #
+                  #
+                ENDSOURCE
+                SOURCE #selectionChanged
+                  #void selectionChanged(FormTreeItem oldItem, FormTreeItem newItem, FormTreeSelect how)
+                  #{
+                  #    ;
+                  #    super(oldItem, newItem, how);
+                  #
+                  #    // on select of node in tree, update datasource to fetch new record
+                  #    treeDatasource.selectionChanged(oldItem,newItem);
+                  #
+                  #}
+                ENDSOURCE
+                SOURCE #expanding
+                  #boolean expanding(int idx, FormTreeExpand action, anytype data)
+                  #{
+                  #   boolean ret;
+                  #   ;
+                  #   ret = super(idx, action, data);
+                  #
+                  #   treeDatasource.expanding(idx, action, data); // expand node
+                  #
+                  #   Return ret;
+                  #}
+                ENDSOURCE
+                SOURCE #mouseDblClick
+                  #// catch double click to initiate exit
+                  #public int mouseDblClick(int _x, int _y, int _button, boolean _Ctrl, boolean _Shift)
+                  #{
+                  #   int ret;
+                  #   ;
+                  #   ret = super(_x, _y, _button, _Ctrl, _Shift);
+                  #
+                  #  // element.exit(); // exit and return selected node value
+                  #
+                  #   return ret;
+                  #}
+                ENDSOURCE
+              ENDMETHODS
+            ENDCONTROL 
+            
+          ENDCONTAINER
+          
+      ENDCONTROL 
+      
+      CONTROL GROUP
+        PROPERTIES
+          Name                #Group
+          Width               #Column width
+          Height              #Column height
+        ENDPROPERTIES
+        
+          CONTAINER
+            CONTROL BUTTON
+              PROPERTIES
+                Name                #Button
+                Text                #Load User on Entities
+              ENDPROPERTIES
+              
+              METHODS
+                Version: 3
+                SOURCE #clicked
+                  #void clicked()
+                  #{
+                  #    super();
+                  #    element.AddUserToEntities();
+                  #
+                  #}
+                ENDSOURCE
+              ENDMETHODS
+            ENDCONTROL 
+            
+            CONTROL GRID
+              PROPERTIES
+                Name                #Grid1
+                Width               #Column width
+                Height              #Column height
+                DataSource          #FIN_GroupUserEntity
+              ENDPROPERTIES
+              
+                CONTAINER
+                  CONTROL STRINGEDIT
+                    PROPERTIES
+                      Name                #FIN_GroupUserEntity_EntityCode
+                      DataSource          #FIN_GroupUserEntity
+                      DataField           #EntityCode
+                    ENDPROPERTIES
+                    
+                  ENDCONTROL 
+                  
+                  CONTROL STRINGEDIT
+                    PROPERTIES
+                      Name                #FIN_GroupUserEntity_UserName
+                      DataSource          #FIN_GroupUserEntity
+                      DataField           #UserName
+                    ENDPROPERTIES
+                    
+                  ENDCONTROL 
+                  
+                  CONTROL STRINGEDIT
+                    PROPERTIES
+                      Name                #FIN_GroupUserEntity_Position
+                      DataSource          #FIN_GroupUserEntity
+                      DataField           #Position
+                    ENDPROPERTIES
+                    
+                  ENDCONTROL 
+                  
+                ENDCONTAINER
+                
+            ENDCONTROL 
+            
+          ENDCONTAINER
+          
+      ENDCONTROL 
+      
+    ENDCONTAINER
+    
+  ENDDESIGN
+  
+ENDFORM

@@ -1,0 +1,86 @@
+﻿  TABLE #FIN_GroupCategory
+    Id 50029
+    PROPERTIES
+      Name                #FIN_GroupCategory
+      Label               #Group Category
+      PrimaryIndex        #CategoryIdx
+      ModifiedDateTime    #Yes
+      ModifiedBy          #Yes
+      CreatedDateTime     #Yes
+      CreatedBy           #Yes
+    ENDPROPERTIES
+    
+    FIELDS
+      FIELD #Category
+        Id 50001
+        STRING
+        PROPERTIES
+          Name                #Category
+          Table               #FIN_GroupCategory
+          ExtendedDataType    
+            ARRAY 
+              #FIN_Category
+              #
+            ENDARRAY
+        ENDPROPERTIES
+        
+      FIELD #Descriptoin
+        Id 50002
+        STRING
+        PROPERTIES
+          Name                #Descriptoin
+          Label               #Description
+          Table               #FIN_GroupCategory
+          ExtendedDataType    
+            ARRAY 
+              #Description
+              #
+            ENDARRAY
+          StringSize          #60
+        ENDPROPERTIES
+        
+    ENDFIELDS
+    GROUPS
+    ENDGROUPS
+    
+    INDICES
+      #CategoryIdx
+      Id 50001
+      PROPERTIES
+        Name                #CategoryIdx
+        AllowDuplicates     #No
+      ENDPROPERTIES
+      
+      INDEXFIELDS
+        #Category
+      ENDINDEXFIELDS
+      
+    ENDINDICES
+    REFERENCES
+    ENDREFERENCES
+    
+    DELETEACTIONS
+    ENDDELETEACTIONS
+    
+    METHODS
+      Version: 3
+      SOURCE #find
+        #static fin_GroupCategory find(FIN_Category _category ,
+        #                             boolean         _forUpdate = false)
+        #{
+        #    fin_GroupCategory  fin_GroupCategory;
+        #
+        #    if (_category)
+        #    {
+        #        fin_GroupCategory.selectForUpdate(_forUpdate);
+        #
+        #        select firstonly *
+        #            from fin_GroupCategory
+        #                where fin_GroupCategory.Category== _category;
+        #    }
+        #
+        #    return fin_GroupCategory;
+        #}
+      ENDSOURCE
+    ENDMETHODS
+  ENDTABLE

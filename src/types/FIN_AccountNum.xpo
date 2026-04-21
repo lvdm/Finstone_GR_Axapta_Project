@@ -1,0 +1,23 @@
+﻿  USERTYPE #FIN_AccountNum
+  Id 50010
+  STRING
+    PROPERTIES
+      Name                #FIN_AccountNum
+      Label               #Account Number
+      FormHelp            #FIN_LedgerAccountLookup
+      StringSize          #30
+    ENDPROPERTIES
+    
+    TYPEELEMENTS
+    ENDTYPEELEMENTS
+    
+    TYPEREFERENCES
+      TYPEREFERENCETYPE DATASET
+      PROPERTIES
+        Table               #FIN_GroupLedgerTable
+        RelatedField        #AccountNum
+      ENDPROPERTIES
+      
+    ENDTYPEREFERENCES
+    
+  ENDUSERTYPE

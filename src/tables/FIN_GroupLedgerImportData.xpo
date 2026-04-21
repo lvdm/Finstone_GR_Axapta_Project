@@ -1,0 +1,837 @@
+﻿  TABLE #FIN_GroupLedgerImportData
+    Id 50024
+    PROPERTIES
+      Name                #FIN_GroupLedgerImportData
+      Label               #Finstone Group Import Data
+    ENDPROPERTIES
+    
+    FIELDS
+      FIELD #AccountNo
+        Id 50001
+        STRING
+        PROPERTIES
+          Name                #AccountNo
+          Table               #FIN_GroupLedgerImportData
+          StringSize          #30
+        ENDPROPERTIES
+        
+      FIELD #AccountName
+        Id 50002
+        STRING
+        PROPERTIES
+          Name                #AccountName
+          Table               #FIN_GroupLedgerImportData
+          StringSize          #100
+        ENDPROPERTIES
+        
+      FIELD #OpenBalance
+        Id 50003
+        STRING
+        PROPERTIES
+          Name                #OpenBalance
+          Label               #Open Balance
+          Table               #FIN_GroupLedgerImportData
+          StringSize          #20
+        ENDPROPERTIES
+        
+      FIELD #Debit
+        Id 50004
+        STRING
+        PROPERTIES
+          Name                #Debit
+          Table               #FIN_GroupLedgerImportData
+          StringSize          #20
+        ENDPROPERTIES
+        
+      FIELD #Credit
+        Id 50005
+        STRING
+        PROPERTIES
+          Name                #Credit
+          Table               #FIN_GroupLedgerImportData
+          StringSize          #20
+        ENDPROPERTIES
+        
+      FIELD #EndBalance
+        Id 50006
+        STRING
+        PROPERTIES
+          Name                #EndBalance
+          Label               #End Balance
+          Table               #FIN_GroupLedgerImportData
+          StringSize          #20
+        ENDPROPERTIES
+        
+      FIELD #Date
+        Id 50007
+        DATE
+        PROPERTIES
+          Name                #Date
+          Table               #FIN_GroupLedgerImportData
+        ENDPROPERTIES
+        
+      FIELD #DebitAmount
+        Id 50010
+        REAL
+        PROPERTIES
+          Name                #DebitAmount
+          Label               #Debit Amount
+          Table               #FIN_GroupLedgerImportData
+          ExtendedDataType    
+            ARRAY 
+              #Amount
+              #
+            ENDARRAY
+        ENDPROPERTIES
+        
+      FIELD #CreditAmount
+        Id 50011
+        REAL
+        PROPERTIES
+          Name                #CreditAmount
+          Label               #Credit Amount
+          Table               #FIN_GroupLedgerImportData
+          ExtendedDataType    
+            ARRAY 
+              #Amount
+              #
+            ENDARRAY
+        ENDPROPERTIES
+        
+      FIELD #OpenBalanceAmount
+        Id 50012
+        REAL
+        PROPERTIES
+          Name                #OpenBalanceAmount
+          Label               #Open Balance Amount
+          Table               #FIN_GroupLedgerImportData
+          ExtendedDataType    
+            ARRAY 
+              #Amount
+              #
+            ENDARRAY
+        ENDPROPERTIES
+        
+      FIELD #EndBalanceAmount
+        Id 50013
+        REAL
+        PROPERTIES
+          Name                #EndBalanceAmount
+          Label               #End Balance Amount
+          Table               #FIN_GroupLedgerImportData
+          ExtendedDataType    
+            ARRAY 
+              #Amount
+              #
+            ENDARRAY
+        ENDPROPERTIES
+        
+      FIELD #EntityCode
+        Id 50014
+        STRING
+        PROPERTIES
+          Name                #EntityCode
+          Table               #FIN_GroupLedgerImportData
+          ExtendedDataType    
+            ARRAY 
+              #FIN_EntityCode
+              #
+            ENDARRAY
+        ENDPROPERTIES
+        
+      FIELD #CostCenter
+        Id 50015
+        STRING
+        PROPERTIES
+          Name                #CostCenter
+          Label               #Cost Center
+          Table               #FIN_GroupLedgerImportData
+        ENDPROPERTIES
+        
+      FIELD #Department
+        Id 50016
+        STRING
+        PROPERTIES
+          Name                #Department
+          Table               #FIN_GroupLedgerImportData
+        ENDPROPERTIES
+        
+      FIELD #Purpose
+        Id 50017
+        STRING
+        PROPERTIES
+          Name                #Purpose
+          Table               #FIN_GroupLedgerImportData
+        ENDPROPERTIES
+        
+      FIELD #ScenarioCode
+        Id 50019
+        STRING
+        PROPERTIES
+          Name                #ScenarioCode
+          Label               #Scenario
+          Table               #FIN_GroupLedgerImportData
+          ExtendedDataType    
+            ARRAY 
+              #FIN_ScenarioCode
+              #
+            ENDARRAY
+        ENDPROPERTIES
+        
+      FIELD #HasError
+        Id 50020
+        ENUM
+        PROPERTIES
+          Name                #HasError
+          Label               #Has Error
+          Table               #FIN_GroupLedgerImportData
+          EnumType            #NoYes
+        ENDPROPERTIES
+        
+      FIELD #CurrencyCode
+        Id 50021
+        STRING
+        PROPERTIES
+          Name                #CurrencyCode
+          Table               #FIN_GroupLedgerImportData
+          ExtendedDataType    
+            ARRAY 
+              #CurrencyCode
+              #
+            ENDARRAY
+          StringSize          #3
+        ENDPROPERTIES
+        
+      FIELD #Error
+        Id 50022
+        STRING
+        PROPERTIES
+          Name                #Error
+          Table               #FIN_GroupLedgerImportData
+          ExtendedDataType    
+            ARRAY 
+              #Description
+              #
+            ENDARRAY
+          StringSize          #60
+        ENDPROPERTIES
+        
+      FIELD #PeriodClosed
+        Id 50023
+        ENUM
+        PROPERTIES
+          Name                #PeriodClosed
+          Label               #Period Closed
+          Table               #FIN_GroupLedgerImportData
+          EnumType            #NoYes
+        ENDPROPERTIES
+        
+      FIELD #Category
+        Id 50024
+        STRING
+        PROPERTIES
+          Name                #Category
+          Table               #FIN_GroupLedgerImportData
+          ExtendedDataType    
+            ARRAY 
+              #FIN_Category
+              #
+            ENDARRAY
+        ENDPROPERTIES
+        
+      FIELD #Converted
+        Id 50025
+        ENUM
+        PROPERTIES
+          Name                #Converted
+          Table               #FIN_GroupLedgerImportData
+          EnumType            #NoYes
+        ENDPROPERTIES
+        
+    ENDFIELDS
+    GROUPS
+    ENDGROUPS
+    
+    INDICES
+      #EntityCodeIdx
+      Id 50001
+      PROPERTIES
+        Name                #EntityCodeIdx
+      ENDPROPERTIES
+      
+      INDEXFIELDS
+        #Date
+        #EntityCode
+      ENDINDEXFIELDS
+      
+    ENDINDICES
+    REFERENCES
+    ENDREFERENCES
+    
+    DELETEACTIONS
+    ENDDELETEACTIONS
+    
+    METHODS
+      Version: 3
+      SOURCE #dataExist
+        #NoYes dataExist(FIN_EntityCode _entity,TransDate _date, NoYes _promtToDelete = NoYes::Yes)
+        #{
+        #    FIN_GroupLedgerImportData  data;
+        #    Date                        startDate, endDate;
+        #    ;
+        #
+        #    if (!_entity)
+        #        throw error('In order to check data an Entity must be specified!');
+        #
+        #    if (!_date)
+        #        throw error('In order to check data a Period must be specified!');
+        #
+        #    startDate   = DateStartMth(_date);
+        #    endDate     = endMth(_date);
+        #
+        #    select  recid from data where data.EntityCode == _entity
+        #            && data.Date >= startDate
+        #            && data.Date <= endDate;
+        #
+        #
+        #    if (data.RecId)
+        #    {
+        #        if (_promtToDelete)
+        #        {
+        #            if (box::yesNo('Data already exist for specified period. Should it be DELETED?',
+        #                        dialogButton::Yes, 'Confirmation') == dialogButton::Yes)
+        #            {
+        #                this.DeleteDatainPeriod(_entity,_date);
+        #                return NoYes::No;  // When data deleted return NO as no data should exist anymore.
+        #            }
+        #            else
+        #                return NoYes::Yes; // When user said NO return YES as data still exist.
+        #        }
+        #
+        #        return NoYes::Yes;
+        #
+        #
+        #
+        #    }
+        #    else
+        #        return NoYes::No;
+        #
+        #}
+      ENDSOURCE
+      SOURCE #DEL_ImportFromExcel
+        #void DEL_ImportFromExcel(FIN_EntityCode _entityCode = "")
+        #{
+        #    SysExcelApplication             application;
+        #    SysExcelWorkbooks               workbooks;
+        #    SysExcelWorkbook                workbook;
+        #    SysExcelWorksheets              worksheets;
+        #    SysExcelWorksheet               worksheet;
+        #    SysExcelCells                   cells;
+        #    COMVariantType                  type;
+        #    System.DateTime                 ShlefDate;
+        #
+        #    FilenameOpen                    filename;
+        #    int                             sheetNum = 1;
+        #    Date                            importDate;
+        #    FIN_EntityCode                  entityCode;
+        #    dialogField                     dialogFilename;
+        #    dialogField                     dialogSheetNum;
+        #    dialogField                     dialogImportDate;
+        #    dialogField                     dialogEnityCode;
+        #    Dialog                          dialog;
+        #
+        #    #AviFiles
+        #    // Progress Bar
+        #    SysOperationProgress progress = new SysOperationProgress(1, NoYes::Yes);
+        #
+        #    FIN_GroupLedgerImportData       _LedgerImport;  // Table name and decleration
+        #    str                             x_accountNo;
+        #    str                             x_accountName;
+        #
+        #    str                             x_openBalanceStr,
+        #                                    x_endBalanceStr,
+        #                                    x_dtStr,
+        #                                    x_ctStr;
+        #
+        #    //str                             effectiveDate;
+        #    int                             datevalue,
+        #                                    row = 0;
+        #
+        #
+        #    Date                            dater;
+        #
+        #    #Excel
+        #
+        #    str COMVariant2Str(COMVariant _cv,
+        #                       int _decimals = 2,
+        #                       int _characters = 0,
+        #                       int _separator1 = 0,
+        #                       int _separator2 = 0)
+        #    {
+        #        switch(_cv.variantType())
+        #        {
+        #            case (COMVariantType::VT_BSTR):
+        #                return _cv.bStr();
+        #
+        #            case (COMVariantType::VT_R4):
+        #                return num2str(_cv.float(),
+        #                                _characters,
+        #                                _decimals,
+        #                                _separator1,
+        #                                _separator2);
+        #
+        #            case (COMVariantType::VT_R8):
+        #                return num2str(_cv.double(),
+        #                                _characters,
+        #                                _decimals,
+        #                                _separator1,
+        #                                _separator2);
+        #
+        #            case (COMVariantType::VT_DECIMAL):
+        #                return num2str(_cv.decimal(),
+        #                                _characters,
+        #                                _decimals,
+        #                                _separator1,
+        #                                _separator2);
+        #
+        #            case (COMVariantType::VT_DATE):
+        #                return date2str(_cv.date(),
+        #                                123,
+        #                                2,
+        #                                1,
+        #                                2,
+        #                                1,
+        #                                4);
+        #
+        #            case (COMVariantType::VT_EMPTY):
+        #                return "";
+        #
+        #            default:
+        #                throw error(strfmt("@SYS26908",
+        #                                    _cv.variantType()));
+        #
+        #        }
+        #
+        #        return "";
+        #    }
+        #    ;
+        #
+        #    dialog = new Dialog("ExcelUpload");
+        #    dialog.caption("Excel Upload");
+        #
+        #    dialogEnityCode     =   dialog.addField(typeId(FIN_EntityCode));
+        #
+        #    dialogFilename      =   dialog.addField(typeId(FilenameOpen));
+        #    dialog.filenameLookupFilter([ "@SYS28576",#XLSX,"@SYS28576",#XLS]);
+        #    dialog.filenameLookupTitle("Upload from Excel");
+        #
+        #    dialogSheetNum      =   dialog.addField(types::Integer,"Sheet Number");
+        #    dialogImportDate    =   dialog.addField(typeId(TransDate),"Period");
+        #
+        #    dialogEnityCode.value(_entityCode);
+        #    dialogFilename.value(filename);
+        #    dialogSheetNum.value(sheetNum);
+        #    dialogImportDate.value(importDate);
+        #
+        #
+        #    if(!dialog.run())
+        #        return;
+        #
+        #    filename            =   dialogFilename.value();
+        #    sheetNum            =   dialogSheetNum.value();
+        #    importDate          =   endmth(dialogImportDate.value());
+        #    entityCode          =   dialogEnityCode.value();
+        #    application         =   SysExcelApplication::construct();
+        #    workbooks           =   application.workbooks();
+        #
+        #    if (!entityCode)
+        #       throw error('Entity must bes specified.');
+        #
+        #    if (sheetNum < 1)
+        #       throw error('Sheet Number cannot be smaller than 1.');
+        #    if (!importDate)
+        #        throw error('Please specify a Period.');
+        #
+        #    //Check if data already exist and prompt for delete
+        #    if (this.dataExist(entityCode,importDate))
+        #        return;
+        #
+        #
+        #    try
+        #    {
+        #        workbooks.open(filename);
+        #    }
+        #
+        #    catch (Exception::Error)
+        #    {
+        #        throw error("File cannot be opened.");
+        #    }
+        #
+        #    workbook    = workbooks.item(1);
+        #    worksheets  = workbook.worksheets();
+        #    worksheet   = worksheets.itemFromNum(sheetNum);
+        #    cells       = worksheet.cells();
+        #
+        #    info(worksheet.name());
+        #    info(workbook.name());
+        #
+        #    // Progress Caption & Animation
+        #    progress.setCaption("Copying..");
+        #    progress.setAnimation(#AviUpdate);
+        #
+        #    row = 1; // First row has heading so skip
+        #    ttsbegin;
+        #    do
+        #    {
+        #        try
+        #        {
+        #
+        #            row++;
+        #            // Getting AccountNum value form Excel Row wise and assigning as str
+        #            x_accountNo = COMVariant2Str(cells.item(row,1).value());
+        #
+        #            // Getting AccountName value form Excel Row wise and assigning as str
+        #            x_accountName = COMVariant2Str(cells.item(row,6).value());
+        #
+        #            // Getting Opening Balance value form Excel Row wise and assigning as str
+        #            x_openBalanceStr = COMVariant2Str(cells.item(row,7).value());
+        #
+        #             // Getting Debit Amount value form Excel Row wise and assigning as str
+        #            x_dtStr    = COMVariant2Str(cells.item(row,8).value());
+        #
+        #            // Getting Debit Amount value form Excel Row wise and assigning as str
+        #            x_ctStr    = COMVariant2Str(cells.item(row,9).value());
+        #
+        #            // Getting Debit Amount value form Excel Row wise and assigning as str
+        #            x_endBalanceStr    = COMVariant2Str(cells.item(row,10).value());
+        #
+        #
+        #            // Getting Date value form Excel Row wise and assigning as str
+        #            //effectiveDate = COMVariant2Str(cells.item(row,3).value());
+        #
+        #            //  Converting String to Date
+        #            //dater = str2Date(effectiveDate,123);
+        #
+        #
+        #            if (row > 1)
+        #            {
+        #                // Progress bar Text and Total
+        #                progress.setText(strfmt("Importing to Ax Table : %1", row));
+        #                progress.setTotal(row, 1);
+        #
+        #                _LedgerImport.initValue();
+        #                _LedgerImport.EntityCode    = entityCode;
+        #                _LedgerImport.AccountNo     = x_accountNo;
+        #                _LedgerImport.AccountName   = x_accountName;
+        #                _LedgerImport.Debit         = x_dtStr;
+        #                _LedgerImport.Credit        = x_ctStr;
+        #                _LedgerImport.OpenBalance   = x_openBalanceStr;
+        #                _LedgerImport.EndBalance    = x_endBalanceStr;
+        #
+        #
+        #                _LedgerImport.Date          = endmth(importDate);
+        #
+        #                _LedgerImport.insert();
+        #
+        #            }
+        #
+        #        }
+        #
+        #        catch
+        #        {
+        #            Error(strfmt("Upload Failed in row %1", row));
+        #        }
+        #
+        #        // Check if next row first column is EMPTY
+        #        type = cells.item(row + 1, 1).value().variantType();
+        #
+        #    } while (type!= COMVariantType::VT_EMPTY );
+        #
+        #    ttscommit;
+        #
+        #
+        #    info(strfmt("Transaction Details Uploaded Successfully.  Rows %1",int2str(row)));
+        #
+        #    application.displayAlerts(false);
+        #    application.quit();
+        #
+        #
+        #    // Converting imported fields to Amounts
+        #    progress.setText(strfmt("Converting text to data..."));
+        #    FIN_GroupLedgerImportData::DEL_ConvertImportData(_entityCode,NoYes::No, importDate);
+        #
+        #
+        #
+        #
+        #
+        #}
+      ENDSOURCE
+      SOURCE #DeleteDatainPeriod
+        #void DeleteDatainPeriod(FIN_EntityCode _entity,TransDate _date)
+        #{
+        #    FIN_GroupLedgerImportData   data;
+        #    Date                        startDate, endDate;
+        #    ;
+        #
+        #    if (!_entity)
+        #        throw error('In order to delete data an Entity must be specified!');
+        #
+        #    if (!_date)
+        #        throw error('In order to delete data a Period must be specified!');
+        #
+        #    startDate   = DateStartMth(_date);
+        #    endDate     = endMth(_date);
+        #
+        #    Delete_from data where data.EntityCode == _entity
+        #        && data.Date >= startDate
+        #        && data.Date <= endDate;
+        #
+        #
+        #}
+      ENDSOURCE
+      SOURCE #initValue
+        #public void initValue()
+        #{
+        #    super();
+        #
+        #    this.AccountName        = "";
+        #    this.AccountNo          = "";
+        #    this.Credit             = "";
+        #    this.Debit              = "";
+        #    this.OpenBalance        = "";
+        #    this.EndBalance         = "";
+        #    this.Department         = "";
+        #    this.Purpose            = "";
+        #    this.CostCenter         = "";
+        #    this.CurrencyCode       = "";
+        #    this.HasError           = NoYes::No;
+        #    this.Converted          = NoYes::No;
+        #
+        #
+        #    this.OpenBalanceAmount  = 0;
+        #    this.EndBalanceAmount   = 0;
+        #    this.DebitAmount        = 0;
+        #    this.CreditAmount       = 0;
+        #}
+      ENDSOURCE
+      SOURCE #validateDelete
+        #public boolean validateDelete()
+        #{
+        #    boolean ret;
+        #
+        #    if (this.PeriodClosed && this.orig().PeriodClosed)
+        #        return checkFailed("Data cannot be changed as record has been locked due to period closed.");
+        #
+        #    ret = super();
+        #
+        #    return ret;
+        #}
+      ENDSOURCE
+      SOURCE #validateWrite
+        #public boolean validateWrite()
+        #{
+        #    boolean ret;
+        #
+        #    if (this.PeriodClosed && this.orig().PeriodClosed)
+        #        return checkFailed("Data cannot be changed as record has been locked due to period closed.");
+        #
+        #
+        #
+        #    ret = super();
+        #
+        #    return ret;
+        #}
+      ENDSOURCE
+      SOURCE #DEL_ConvertImportData
+        #public static void DEL_ConvertImportData(FIN_EntityCode _entityCode,NoYes _promptForDate = NoYes::No, Date _importDate = systemDateGet() )
+        #{
+        #        FIN_GroupLedgerImportData       _ledgerImport;
+        #        FIN_GroupLedgerData             _ledgerData;
+        #        FIN_GroupEntities               _entities;
+        #
+        #        dialogField                     dialogImportDate;
+        #        Dialog                          dialog;
+        #
+        #        #AviFiles
+        #        // Progress Bar
+        #        SysOperationProgress progress = new SysOperationProgress(1, NoYes::Yes);
+        #        int                             row;
+        #
+        #        int                             fieldlen;
+        #        str                             fieldvalue;
+        #
+        #        NoYes                           isOpeningBalance = NoYes::No;
+        #        FIN_ScenarioCode                scenario = 'ACT';
+        #        FIN_Category                    category  = 'MAIN';
+        #        Date                            startDate, EndDate;
+        #        boolean                         hasErrors = false;
+        #        ;
+        #
+        #        if (_promptForDate)
+        #        {
+        #            dialog = new Dialog("Convert Data");
+        #            dialog.caption("Convert Imported Data");
+        #            dialogImportDate    =   dialog.addField(typeId(TransDate),"Period");
+        #            dialog.addText("Note: Select 1 of January to import Opening Balances");
+        #
+        #            if(!dialog.run())
+        #                return;
+        #
+        #            _importDate = dialogImportDate.value();
+        #        }
+        #
+        #        startDate   = mkdate(1,1,year(_importDate));
+        #        endDate     = endMth(_importDate);
+        #
+        #        //check if date is 1 Jan
+        #        if (mthofyr(_importDate) == 1 && dayofmth(_importDate) == 1)
+        #        {
+        #            scenario = 'OBA';
+        #            isOpeningBalance = NoYes::Yes;
+        #
+        #        }
+        #
+        #
+        #        if (!_importDate)
+        #            throw error('Date required to convert Imported data.');
+        #
+        #        if (!_entityCode)
+        #            throw error('Entity code required to convert Imported data.');
+        #
+        #        // Check if ledger data already exist for enity and date and prompt to delete
+        #        if (scenario == 'OBA')
+        #        {
+        # //           if (_ledgerData.dataExist(_entityCode,_importDate,NoYes::Yes,'OBA'))
+        #                return;
+        #        }
+        #        else
+        #        {
+        #  //          if (_ledgerData.dataExist(_entityCode,_importDate,NoYes::Yes))
+        #                return;
+        #        }
+        #
+        #        _entities = FIN_GroupEntities::find(_entityCode);
+        #        if (!_entities)
+        #            throw error(strfmt('Unable to find Entity record for code : %1',_entityCode));
+        #
+        #       // Progress Caption & Animation
+        #        progress.setCaption("Converting..");
+        #        progress.setAnimation(#AviUpdate);
+        #
+        #        try
+        #        {
+        #            ttsbegin;
+        #            while select forupdate * from _ledgerImport
+        #                where _ledgerImport.Date >= startDate &&
+        #                      _ledgerImport.Date <= endDate
+        #            {
+        #
+        #                //Clear error on record
+        #                _ledgerImport.HasError      = NoYes::No;
+        #                _ledgerImport.Error         = "";
+        #
+        #
+        #                _ledgerImport.DebitAmount   = any2real(_ledgerImport.Debit);
+        #                _ledgerImport.CreditAmount  = any2real(_ledgerImport.Credit);
+        #
+        #                //Convert OpenBalance to Amount
+        #                _ledgerImport.OpenBalance   = strLTrim(strRTrim(_ledgerImport.OpenBalance));
+        #
+        #                fieldvalue = _ledgerImport.OpenBalance;
+        #                fieldlen = strlen(fieldvalue);
+        #
+        #                fieldvalue   = strDel(fieldvalue,fieldlen,-1);  // Remove C at end
+        #                fieldvalue   = strrem(strrem(fieldvalue,"."),"-"); //Remove thousand seperator and minus
+        #                fieldvalue   = strReplace(fieldvalue,",","."); // Replace , with . for decimal
+        #
+        #                if (substr(_ledgerImport.OpenBalance,fieldlen,-1) == "C")
+        #                    _ledgerImport.OpenBalanceAmount = any2real(fieldvalue) * -1;
+        #                else
+        #                    _ledgerImport.OpenBalanceAmount = any2real(fieldvalue);
+        #
+        #                //Convert EndBalance to Amount
+        #                _ledgerImport.EndBalance   = strLTrim(strRTrim(_ledgerImport.EndBalance));
+        #
+        #                fieldvalue = _ledgerImport.EndBalance;
+        #                fieldlen = strlen(fieldvalue);
+        #
+        #                fieldvalue   = strDel(fieldvalue,fieldlen,-1);  // Remove C at end
+        #                fieldvalue   = strrem(strrem(fieldvalue,"."),"-"); //Remove thousand seperator and minus
+        #                fieldvalue   = strReplace(fieldvalue,",","."); // Replace , with . for decimal
+        #
+        #                if (substr(_ledgerImport.EndBalance,fieldlen,-1) == "C")
+        #                    _ledgerImport.EndBalanceAmount = any2real(fieldvalue) * -1;
+        #                else
+        #                    _ledgerImport.EndBalanceAmount = any2real(fieldvalue);
+        #
+        #
+        #
+        #                if ( (_ledgerImport.DebitAmount - _ledgerImport.CreditAmount) !=
+        #                   (_ledgerImport.EndBalanceAmount - _ledgerImport.OpenBalanceAmount) )
+        #                {
+        #                    _ledgerImport.HasError  = NoYes::Yes;
+        #                    _ledgerImport.Error     = 'Debit - Credit amount does not match End Balance - OpenBalance.';
+        #                    hasErrors               = true;
+        #                }
+        #
+        #                // Check if Account number exists
+        #                else if (!FIN_GroupLedgerTable::find(_entityCode,_ledgerImport.AccountNo).RecId)
+        #                {
+        #                    _ledgerImport.HasError  = NoYes::Yes;
+        #                    _ledgerImport.Error     = 'Account does not exist for company. Please add it and run convert again.';
+        #                    hasErrors               = true;
+        #                }
+        #                else if ((_ledgerImport.DebitAmount - _ledgerImport.CreditAmount != 0) ||
+        #                         (isOpeningBalance && _ledgerImport.OpenBalanceAmount != 0))
+        #                {
+        #                    // Add the entry into the LedgerData table
+        #                    _ledgerData.initValue();
+        #                    _ledgerData.AccountNum      = _ledgerImport.AccountNo;
+        #                    _ledgerData.EntityCode      = _entityCode;
+        #                    _ledgerData.TransDate       = isOpeningBalance ? _importDate : _ledgerImport.Date; //importDate;
+        #                    _ledgerData.PeriodStart     = Datestartmth( _ledgerData.TransDate);
+        #                    _ledgerData.CurrencyCode    = _ledgerImport.CurrencyCode ? _ledgerImport.CurrencyCode : _entities.CurrencyCode;
+        #                    _ledgerData.Amount          = _ledgerImport.DebitAmount - _ledgerImport.CreditAmount;
+        #                    _ledgerData.AmountMST       = _ledgerImport.DebitAmount - _ledgerImport.CreditAmount;
+        #                    _ledgerData.ScenarioCode    = _ledgerImport.ScenarioCode ? _ledgerImport.ScenarioCode : scenario;
+        #                    _ledgerData.CostCenter      = _ledgerImport.CostCenter ? _ledgerImport.CostCenter : strUpr(_entities.ShortCode) + '_ND';
+        #                    _ledgerData.Purpose         = _ledgerImport.Purpose ? _ledgerImport.Purpose : strUpr(_entities.ShortCode) + '_ND';
+        #                    _ledgerData.Department      = _ledgerImport.Department ? _ledgerImport.Department :  strUpr(_entities.ShortCode) + '_ND';
+        #                    _ledgerData.Category        = _ledgerImport.Category ? _ledgerImport.Category : category;
+        #
+        #                    // If loading opening balances overwrite with open balance amount
+        #                    if (isOpeningBalance)
+        #                    {
+        #                        _ledgerData.AmountMST   = _ledgerImport.OpenBalanceAmount;
+        #                        _ledgerData.Amount      = _ledgerData.AmountMST;
+        #                    }
+        #                    _ledgerData.insert();
+        #                }
+        #
+        #                _LedgerImport.Converted = NoYes::Yes;
+        #                _LedgerImport.update();
+        #
+        #                row++;
+        #                // Progress bar Text and Total
+        #                progress.setText(strfmt("Converting import record : %1", row));
+        #                progress.setTotal(row, 1);
+        #
+        #            }
+        #            ttscommit;
+        #
+        #            if (! hasErrors)
+        #                info(strfmt("Transcation Details Conversion Successful."));
+        #            else
+        #                warning(strfmt("Transcation Details Converted with Errors!"));
+        #        }
+        #
+        #        catch
+        #        {
+        #            Error(strfmt("Transcation Details Conversion Failed"));
+        #        }
+        #
+        #
+        #}
+      ENDSOURCE
+    ENDMETHODS
+  ENDTABLE

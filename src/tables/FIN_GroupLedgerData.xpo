@@ -1,0 +1,595 @@
+﻿  TABLE #FIN_GroupLedgerData
+    Id 50027
+    PROPERTIES
+      Name                #FIN_GroupLedgerData
+      Label               #Finstone Group Ledger Data
+      CreateRecIdIndex    #Yes
+      ModifiedDateTime    #Yes
+      ModifiedBy          #Yes
+      CreatedDateTime     #Yes
+      CreatedBy           #Yes
+    ENDPROPERTIES
+    
+    FIELDS
+      FIELD #ScenarioCode
+        Id 50001
+        STRING
+        PROPERTIES
+          Name                #ScenarioCode
+          Label               #Scenario
+          Table               #FIN_GroupLedgerData
+          ExtendedDataType    
+            ARRAY 
+              #FIN_ScenarioCode
+              #
+            ENDARRAY
+        ENDPROPERTIES
+        
+      FIELD #TransDate
+        Id 50008
+        DATE
+        PROPERTIES
+          Name                #TransDate
+          Table               #FIN_GroupLedgerData
+          ExtendedDataType    
+            ARRAY 
+              #TransDate
+              #
+            ENDARRAY
+        ENDPROPERTIES
+        
+      FIELD #Amount
+        Id 50009
+        REAL
+        PROPERTIES
+          Name                #Amount
+          Table               #FIN_GroupLedgerData
+          ExtendedDataType    
+            ARRAY 
+              #Amount
+              #
+            ENDARRAY
+        ENDPROPERTIES
+        
+      FIELD #EntityCode
+        Id 50013
+        STRING
+        PROPERTIES
+          Name                #EntityCode
+          Table               #FIN_GroupLedgerData
+          ExtendedDataType    
+            ARRAY 
+              #FIN_EntityCode
+              #
+            ENDARRAY
+        ENDPROPERTIES
+        
+      FIELD #CostCenter
+        Id 50014
+        STRING
+        PROPERTIES
+          Name                #CostCenter
+          Label               #Cost Center
+          Table               #FIN_GroupLedgerData
+        ENDPROPERTIES
+        
+      FIELD #Department
+        Id 50015
+        STRING
+        PROPERTIES
+          Name                #Department
+          Table               #FIN_GroupLedgerData
+        ENDPROPERTIES
+        
+      FIELD #Purpose
+        Id 50016
+        STRING
+        PROPERTIES
+          Name                #Purpose
+          Table               #FIN_GroupLedgerData
+        ENDPROPERTIES
+        
+      FIELD #AccountNum
+        Id 50017
+        STRING
+        PROPERTIES
+          Name                #AccountNum
+          Label               #Account Number
+          Table               #FIN_GroupLedgerData
+          ExtendedDataType    
+            ARRAY 
+              #FIN_AccountNum
+              #
+            ENDARRAY
+          StringSize          #30
+        ENDPROPERTIES
+        
+      FIELD #AmountMST
+        Id 50018
+        REAL
+        PROPERTIES
+          Name                #AmountMST
+          Label               #Amount MST
+          Table               #FIN_GroupLedgerData
+          ExtendedDataType    
+            ARRAY 
+              #AmountMST
+              #
+            ENDARRAY
+        ENDPROPERTIES
+        
+      FIELD #CurrencyCode
+        Id 50020
+        STRING
+        PROPERTIES
+          Name                #CurrencyCode
+          Table               #FIN_GroupLedgerData
+          ExtendedDataType    
+            ARRAY 
+              #CurrencyCode
+              #
+            ENDARRAY
+          StringSize          #3
+        ENDPROPERTIES
+        
+      FIELD #PeriodStart
+        Id 50023
+        DATE
+        PROPERTIES
+          Name                #PeriodStart
+          Label               #Period
+          Table               #FIN_GroupLedgerData
+          ExtendedDataType    
+            ARRAY 
+              #FIN_PeriodStart
+              #
+            ENDARRAY
+        ENDPROPERTIES
+        
+      FIELD #PeriodClosed
+        Id 50024
+        ENUM
+        PROPERTIES
+          Name                #PeriodClosed
+          Label               #Period Closed
+          Table               #FIN_GroupLedgerData
+          EnumType            #NoYes
+        ENDPROPERTIES
+        
+      FIELD #Category
+        Id 50025
+        STRING
+        PROPERTIES
+          Name                #Category
+          Table               #FIN_GroupLedgerData
+          ExtendedDataType    
+            ARRAY 
+              #FIN_Category
+              #
+            ENDARRAY
+        ENDPROPERTIES
+        
+      FIELD #LockedByUser
+        Id 50026
+        ENUM
+        PROPERTIES
+          Name                #LockedByUser
+          Label               #Locked User
+          Table               #FIN_GroupLedgerData
+          EnumType            #NoYes
+        ENDPROPERTIES
+        
+      FIELD #LockedByAdmin
+        Id 50027
+        ENUM
+        PROPERTIES
+          Name                #LockedByAdmin
+          Label               #Locked Admin
+          Table               #FIN_GroupLedgerData
+          EnumType            #NoYes
+        ENDPROPERTIES
+        
+      FIELD #AccDimKey
+        Id 50028
+        STRING
+        PROPERTIES
+          Name                #AccDimKey
+          Label               #Account Dimension Key
+          Table               #FIN_GroupLedgerData
+          StringSize          #70
+        ENDPROPERTIES
+        
+    ENDFIELDS
+    GROUPS
+    ENDGROUPS
+    
+    INDICES
+      #EntityCodeIdx
+      Id 50001
+      PROPERTIES
+        Name                #EntityCodeIdx
+      ENDPROPERTIES
+      
+      INDEXFIELDS
+        #TransDate
+        #EntityCode
+      ENDINDEXFIELDS
+      
+      #AccountBalanceIdx
+      Id 50002
+      PROPERTIES
+        Name                #AccountBalanceIdx
+      ENDPROPERTIES
+      
+      INDEXFIELDS
+        #EntityCode
+        #AccountNum
+        #Category
+        #PeriodStart
+        #ScenarioCode
+        #CostCenter
+        #Department
+        #Purpose
+      ENDINDEXFIELDS
+      
+    ENDINDICES
+    REFERENCES
+    ENDREFERENCES
+    
+    DELETEACTIONS
+    ENDDELETEACTIONS
+    
+    METHODS
+      Version: 3
+      SOURCE #build_AccDimKey
+        #private void build_AccDimKey()
+        #{
+        #    str 10  lEntityCode;
+        #    str 30  lAccountNum;
+        #    str 10  lCostCenter;
+        #    str 10  lDepartment;
+        #    str 10  lPurpose;
+        #
+        #    ;
+        #
+        #    lEntityCode = strLTrim(strRTrim(this.EntityCode));
+        #    lAccountNum = strLTrim(strRTrim(this.AccountNum));
+        #    lCostCenter = strLTrim(strRTrim(this.CostCenter));
+        #    lDepartment = strLTrim(strRTrim(this.Department));
+        #    lPurpose    = strLTrim(strRTrim(this.Purpose));
+        #
+        #    lEntityCode = lEntityCode == '' ? '_' : lEntityCode;
+        #    lAccountNum = lAccountNum == '' ? '_' : lAccountNum;
+        #    lCostCenter = lCostCenter == '' ? '_' : lCostCenter;
+        #    lDepartment = lDepartment == '' ? '_' : lDepartment;
+        #    lPurpose    = lPurpose    == '' ? '_' : lPurpose;
+        #
+        #    this.AccDimKey =  lEntityCode + ':' + lAccountNum + ':' + lCostCenter + ':' + lDepartment + ':' + lPurpose;
+        #
+        #
+        #}
+      ENDSOURCE
+      SOURCE #ConvertImportData_DEL
+        #// Convert the string values from ImportData record to the Amount fields
+        #void ConvertImportData_DEL()
+        #{
+        #        FIN_GroupLedgerImportData       _LedgerImport;
+        #        int                             fieldlen;
+        #        str                             fieldvalue;
+        #        ;
+        #
+        #        try
+        #        {
+        #            ttsbegin;
+        #            while select forupdate * from _LedgerImport
+        #            {
+        #                _LedgerImport.DebitAmount   = any2real(_LedgerImport.Debit);
+        #                _LedgerImport.CreditAmount  = any2real(_LedgerImport.Credit);
+        #
+        #                //Convert OpenBalance to Amount
+        #                _LedgerImport.OpenBalance   = strLTrim(strRTrim(_LedgerImport.OpenBalance));
+        #
+        #                fieldvalue = _LedgerImport.OpenBalance;
+        #                fieldlen = strlen(fieldvalue);
+        #
+        #                fieldvalue   = strDel(fieldvalue,fieldlen,-1);  // Remove C at end
+        #                fieldvalue   = strrem(strrem(fieldvalue,"."),"-"); //Remove thousand seperator and minus
+        #                fieldvalue   = strReplace(fieldvalue,",","."); // Replace , with . for decimal
+        #
+        #                if (substr(_LedgerImport.OpenBalance,fieldlen,-1) == "C")
+        #                    _LedgerImport.OpenBalanceAmount = any2real(fieldvalue) * -1;
+        #                else
+        #                    _LedgerImport.OpenBalanceAmount = any2real(fieldvalue);
+        #
+        #
+        #                //Convert EndBalance to Amount
+        #                _LedgerImport.EndBalance   = strLTrim(strRTrim(_LedgerImport.EndBalance));
+        #
+        #                fieldvalue = _LedgerImport.EndBalance;
+        #                fieldlen = strlen(fieldvalue);
+        #
+        #                fieldvalue   = strDel(fieldvalue,fieldlen,-1);  // Remove C at end
+        #                fieldvalue   = strrem(strrem(fieldvalue,"."),"-"); //Remove thousand seperator and minus
+        #                fieldvalue   = strReplace(fieldvalue,",","."); // Replace , with . for decimal
+        #
+        #                if (substr(_LedgerImport.EndBalance,fieldlen,-1) == "C")
+        #                    _LedgerImport.EndBalanceAmount = any2real(fieldvalue) * -1;
+        #                else
+        #                    _LedgerImport.EndBalanceAmount = any2real(fieldvalue);
+        #
+        #
+        #               _LedgerImport.update();
+        #
+        #            }
+        #            ttscommit;
+        #
+        #            info(strfmt("Transcation Details Conversion Success."));
+        #        }
+        #
+        #        catch
+        #        {
+        #            Error(strfmt("Transcation Details Conversion Failed"));
+        #        }
+        #
+        #
+        #}
+      ENDSOURCE
+      SOURCE #DEL_DeleteDatainPeriod
+        #void DEL_DeleteDatainPeriod(FIN_EntityCode _entity,FIN_PeriodStart _period,FIN_ScenarioCode _scenario = "")
+        #{
+        #    FIN_GroupLedgerData  tabData;
+        #    FIN_GroupPeriod      tabPeriod;
+        #
+        #    ;
+        #
+        #    tabPeriod = FIN_GroupPeriod::find(_period,true);
+        #
+        #    if (!_entity)
+        #        throw error('In order to delete data an Entity must be specified!');
+        #
+        #    if (!tabPeriod.RecId)
+        #        throw error('In order to delete data a Period must be specified!');
+        #
+        #    if (_scenario == "")
+        #    {
+        #
+        #        Delete_from tabData where tabData.EntityCode == _entity
+        #                && tabData.TransDate >= tabPeriod.PeriodStart
+        #                && tabData.TransDate <= tabPeriod.PeriodEnd
+        #                && tabData.PeriodClosed != NoYes::Yes
+        #                && tabData.LockedByAdmin != NoYes::Yes
+        #                && tabData.LockedByUser != NoYes::Yes;
+        #
+        #    }
+        #    else
+        #    {
+        #        Delete_from tabData where tabData.EntityCode == _entity
+        #                && tabData.TransDate >= tabPeriod.PeriodStart
+        #                && tabData.TransDate <= tabPeriod.PeriodEnd
+        #                && tabData.ScenarioCode == _scenario
+        #                && tabData.PeriodClosed != NoYes::Yes
+        #                && tabData.LockedByAdmin != NoYes::Yes
+        #                && tabData.LockedByUser != NoYes::Yes;
+        #
+        #    }
+        #}
+      ENDSOURCE
+      SOURCE #initValue
+        #public void initValue()
+        #{
+        #    super();
+        #
+        #    this.AccountNum          = "";
+        #    this.Department         = "";
+        #    this.Purpose            = "";
+        #    this.CostCenter         = "";
+        #    this.CurrencyCode       = "";
+        #    this.EntityCode         = "";
+        #    this.ScenarioCode       = "";
+        #    this.Category           = "MAIN";
+        #    this.LockedByAdmin      = NoYes::No;
+        #    this.LockedByUser       = Noyes::No;
+        #
+        #    this.PeriodClosed       = NoYes::No;
+        #
+        #
+        #    this.Amount             = 0;
+        #    this.AmountMST          = 0;
+        #}
+      ENDSOURCE
+      SOURCE #insert
+        #public void insert()
+        #{
+        #    FIN_GroupLedgerTable tabLedgerTable;
+        #
+        #    ;
+        #    if (!this.PeriodStart)
+        #        this.PeriodStart = Datestartmth(this.TransDate);
+        #
+        #
+        #    // Build the Account Dimension Key
+        #    this.build_AccDimKey();
+        #
+        #    if (!FIN_GroupLedgerTable::find(this.EntityCode,this.AccountNum,true))
+        #    {
+        #        try
+        #        {
+        #            ttsbegin;
+        #            tabLedgerTable.clear();
+        #            tabLedgerTable.EntityCode = this.EntityCode;
+        #            tabLedgerTable.AccountNum = this.AccountNum;
+        #            tabLedgerTable.AccountName = 'NEW FROM IMPORT!! PLEASE UPDATE!';
+        #            tabLedgerTable.insert();
+        #            ttscommit;
+        #        }
+        #        catch
+        #        {
+        #            error("Error adding missing Ledger Account!");
+        #        }
+        #
+        #    }
+        #
+        #    super();
+        #}
+      ENDSOURCE
+      SOURCE #update
+        #public void update()
+        #{
+        #    ;
+        #
+        #    // Build the Account Dimension Key
+        #    this.build_AccDimKey();
+        #
+        #    super();
+        #}
+      ENDSOURCE
+      SOURCE #validateDelete
+        #public boolean validateDelete()
+        #{
+        #    boolean ret;
+        #
+        #    if (this.PeriodClosed && this.orig().PeriodClosed)
+        #        return checkFailed("Data cannot be changed as record has been locked due to period closed.");
+        #
+        #    if (this.LockedByAdmin && this.orig().LockedByAdmin)
+        #        return checkFailed("Data cannot be changed as record has been locked by Admin.");
+        #
+        #     if (this.LockedByUser && this.orig().LockedByUser)
+        #        return checkFailed("Data cannot be changed as record has been locked by User.");
+        #
+        #
+        #    ret = super();
+        #
+        #    return ret;
+        #}
+      ENDSOURCE
+      SOURCE #validateWrite
+        #public boolean validateWrite()
+        #{
+        #    boolean ret;
+        #
+        #    if (this.PeriodClosed && this.orig().PeriodClosed)
+        #        return checkFailed("Data cannot be changed as record has been locked due to period closed.");
+        #
+        #
+        #    if (!this.PeriodStart)
+        #        this.PeriodStart = Datestartmth(this.TransDate);
+        #
+        #
+        #    ret = super();
+        #
+        #    return ret;
+        #}
+      ENDSOURCE
+      SOURCE #dataExist
+        #static NoYes dataExist(FIN_EntityCode _entity,FIN_PeriodStart _period,FIN_ScenarioCode _scenario = "")
+        #{
+        #    FIN_GroupLedgerData     tabData;
+        #    FIN_GroupPeriod         tabPeriod;
+        #    ;
+        #
+        #
+        #    tabPeriod = FIN_GroupPeriod::find(_period,true);
+        #
+        #    if (!_entity)
+        #        throw error('In order to check data an Entity must be specified!');
+        #
+        #    if (!tabPeriod.RecId)
+        #        throw error('In order to check data a Period must be specified!');
+        #
+        #
+        #
+        #    if (_scenario == "")
+        #    {
+        #        //Check for all scenarios
+        #        select  firstonly recid from tabData where tabData.EntityCode == _entity
+        #                && tabData.TransDate >= tabPeriod.PeriodStart
+        #                && tabData.TransDate <= tabPeriod.PeriodEnd;
+        #    }
+        #    else
+        #    {
+        #        //Check for specified scenarios
+        #        select  firstonly recid from tabData where tabData.EntityCode == _entity
+        #                && tabData.TransDate >= tabPeriod.PeriodStart
+        #                && tabData.TransDate <= tabPeriod.PeriodEnd
+        #                && tabData.ScenarioCode == _scenario;
+        #
+        #    }
+        #
+        #    if (tabData.RecId)
+        #    {
+        #        return NoYes::Yes;
+        #    }
+        #    else
+        #        return NoYes::No;
+        #
+        #}
+      ENDSOURCE
+      SOURCE #lockData_Admin
+        #public static void lockData_Admin(FIN_EntityCode _entityCode,FIN_PeriodStart _period )
+        #{
+        #    FIN_GroupLedgerData tabLedgerData;
+        #
+        #    ;
+        #
+        #    if (!_entityCode)
+        #        throw error('Entity Code required to Lock Data');
+        #
+        #    if (!_period)
+        #        throw error('Period required to Lock Data');
+        #
+        #
+        #    ttsbegin;
+        #    startlengthyoperation();
+        #
+        #    while select * from tabLedgerData
+        #        where tabLedgerData.EntityCode == _entityCode
+        #                && tabLedgerData.PeriodStart == _period
+        #    {
+        #
+        #        tabLedgerData.LockedByAdmin = NoYes::Yes;
+        #
+        #    }
+        #
+        #    FIN_GroupEntityLog::addEntry(_entityCode,FIN_LogEntryType::LedgerData_LockAdmin,curUserId(),_period,_period);
+        #
+        #    endlengthyoperation();
+        #    ttscommit;
+        #
+        #
+        #}
+      ENDSOURCE
+      SOURCE #lockData_User
+        #public static void lockData_User(FIN_EntityCode _entityCode,FIN_PeriodStart _period )
+        #{
+        #    FIN_GroupLedgerData tabLedgerData;
+        #
+        #    ;
+        #
+        #    if (!_entityCode)
+        #        throw error('Entity Code required to Lock Data');
+        #
+        #    if (!_period)
+        #        throw error('Period required to Lock Data');
+        #
+        #
+        #    ttsbegin;
+        #    startlengthyoperation();
+        #
+        #    while select * from tabLedgerData
+        #        where tabLedgerData.EntityCode == _entityCode
+        #                && tabLedgerData.PeriodStart == _period
+        #    {
+        #
+        #        tabLedgerData.LockedByUser = NoYes::Yes;
+        #
+        #    }
+        #
+        #    FIN_GroupEntityLog::addEntry(_entityCode,FIN_LogEntryType::LedgerData_LockUser,curUserId(),_period,_period);
+        #
+        #    endlengthyoperation();
+        #    ttscommit;
+        #}
+      ENDSOURCE
+    ENDMETHODS
+  ENDTABLE

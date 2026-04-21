@@ -1,0 +1,21 @@
+﻿  USERTYPE #FIN_RowSetCode
+  Id 50017
+  STRING
+    PROPERTIES
+      Name                #FIN_RowSetCode
+      Label               #RowSet Code
+    ENDPROPERTIES
+    
+    TYPEELEMENTS
+    ENDTYPEELEMENTS
+    
+    TYPEREFERENCES
+      TYPEREFERENCETYPE DATASET
+      PROPERTIES
+        Table               #FIN_GroupRowSet
+        RelatedField        #RowSetCode
+      ENDPROPERTIES
+      
+    ENDTYPEREFERENCES
+    
+  ENDUSERTYPE

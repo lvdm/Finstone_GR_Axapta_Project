@@ -1,0 +1,206 @@
+﻿  TABLE #FIN_GroupExchLedgerAccRates
+    Id 50037
+    PROPERTIES
+      Name                #FIN_GroupExchLedgerAccRates
+      Label               #Group Exchange Ledger AccontRates
+      PrimaryIndex        #ExchRateIdx
+      ModifiedDateTime    #Yes
+      ModifiedBy          #Yes
+      CreatedDateTime     #Yes
+      CreatedBy           #Yes
+    ENDPROPERTIES
+    
+    FIELDS
+      FIELD #CurrencyCode
+        Id 50001
+        STRING
+        PROPERTIES
+          Name                #CurrencyCode
+          Table               #FIN_GroupExchLedgerAccRates
+          ExtendedDataType    
+            ARRAY 
+              #CurrencyCode
+              #
+            ENDARRAY
+          StringSize          #3
+        ENDPROPERTIES
+        
+      FIELD #ClosingExchRate
+        Id 50002
+        REAL
+        PROPERTIES
+          Name                #ClosingExchRate
+          Label               #Closing Rate
+          Table               #FIN_GroupExchLedgerAccRates
+          ExtendedDataType    
+            ARRAY 
+              #ExchRate
+              #
+            ENDARRAY
+        ENDPROPERTIES
+        
+      FIELD #PeriodStart
+        Id 50003
+        DATE
+        PROPERTIES
+          Name                #PeriodStart
+          Label               #@SYS3008
+          HelpText            #@SYS428
+          Mandatory           #Yes
+          AllowEdit           #No
+          Table               #FIN_GroupExchLedgerAccRates
+          ExtendedDataType    
+            ARRAY 
+              #FIN_PeriodStart
+              #
+            ENDARRAY
+        ENDPROPERTIES
+        
+      FIELD #AvgExchRate
+        Id 50004
+        REAL
+        PROPERTIES
+          Name                #AvgExchRate
+          Label               #Average Rate
+          Table               #FIN_GroupExchLedgerAccRates
+          ExtendedDataType    
+            ARRAY 
+              #ExchRate
+              #
+            ENDARRAY
+        ENDPROPERTIES
+        
+      FIELD #AccountNum
+        Id 50005
+        STRING
+        PROPERTIES
+          Name                #AccountNum
+          Mandatory           #Yes
+          Table               #FIN_GroupExchLedgerAccRates
+          ExtendedDataType    
+            ARRAY 
+              #FIN_AccountNum
+              #
+            ENDARRAY
+          StringSize          #30
+        ENDPROPERTIES
+        
+      FIELD #EntityCode
+        Id 50006
+        STRING
+        PROPERTIES
+          Name                #EntityCode
+          Mandatory           #Yes
+          Table               #FIN_GroupExchLedgerAccRates
+          ExtendedDataType    
+            ARRAY 
+              #FIN_EntityCode
+              #
+            ENDARRAY
+        ENDPROPERTIES
+        
+    ENDFIELDS
+    GROUPS
+    ENDGROUPS
+    
+    INDICES
+      #ExchRateIdx
+      Id 50001
+      PROPERTIES
+        Name                #ExchRateIdx
+        AllowDuplicates     #No
+      ENDPROPERTIES
+      
+      INDEXFIELDS
+        #AccountNum
+        #CurrencyCode
+        #PeriodStart
+        #EntityCode
+      ENDINDEXFIELDS
+      
+    ENDINDICES
+    REFERENCES
+      REFERENCE #GroupLedgerTable
+        PROPERTIES
+          Name                #GroupLedgerTable
+          Table               #FIN_GroupLedgerTable
+        ENDPROPERTIES
+        
+        FIELDREFERENCES
+          REFERENCETYPE NORMAL
+          PROPERTIES
+            Field               #AccountNum
+            RelatedField        #AccountNum
+          ENDPROPERTIES
+          
+        ENDFIELDREFERENCES
+      ENDREFERENCE
+    ENDREFERENCES
+    
+    DELETEACTIONS
+    ENDDELETEACTIONS
+    
+    METHODS
+      Version: 3
+      SOURCE #AccountName
+        #display AccountName AccountName()
+        #{
+        #       FIN_GroupLedgerTable tabLedger;
+        #       ;
+        #
+        #       if (this.AccountNum && this.EntityCode)
+        #       {
+        #            Select AccountName
+        #                from tabLedger
+        #                    where tabLedger.AccountNum == this.AccountNum && tabLedger.EntityCode == this.EntityCode;
+        #            return tabLedger.AccountName;
+        #       }
+        #       else
+        #            return "";
+        #
+        # }
+      ENDSOURCE
+      SOURCE #find
+        #// Finds the exchange rate entry either for the Exact period specified
+        #// or fthe nearest rate found.
+        #static FIN_GroupExchLedgerAccRates find(FIN_EntityCode _entityCode,
+        #                                   FIN_AccountNum _accountNum,
+        #                                   CurrencyCode _currencyCode,
+        #                                   FIN_PeriodStart _period,
+        #                                   NoYes    _exactPeriod = NoYes::Yes,
+        #                                   boolean         _forUpdate = false)
+        #{
+        #    FIN_GroupExchLedgerAccRates  fin_GroupExchLedgerAccRates;
+        #
+        #    if (_currencyCode && _period && _accountNum && _entityCode)
+        #    {
+        #        fin_GroupExchLedgerAccRates.selectForUpdate(_forUpdate);
+        #
+        #        if (_exactPeriod)
+        #        {  //Returns entry for the exact period specified
+        #            select firstonly *
+        #                from fin_GroupExchLedgerAccRates
+        #                    where fin_GroupExchLedgerAccRates.EntityCode == _entityCode &&
+        #                          fin_GroupExchLedgerAccRates.AccountNum == _accountNum &&
+        #                          fin_GroupExchLedgerAccRates.CurrencyCode == _currencyCode &&
+        #                          fin_GroupExchLedgerAccRates.PeriodStart  == _period;
+        #        }
+        #        else
+        #        {
+        #            //Returns the entry for the latest rate specified
+        #            select firstonly *
+        #                from fin_GroupExchLedgerAccRates
+        #                   order by fin_GroupExchLedgerAccRates.PeriodStart desc
+        #                    where fin_GroupExchLedgerAccRates.EntityCode == _entityCode &&
+        #                          fin_GroupExchLedgerAccRates.AccountNum == _accountNum &&
+        #                          fin_GroupExchLedgerAccRates.CurrencyCode == _currencyCode &&
+        #                          fin_GroupExchLedgerAccRates.PeriodStart  <= _period;
+        #
+        #        }
+        #    }
+        #
+        #    return fin_GroupExchLedgerAccRates;
+        #}
+      ENDSOURCE
+    ENDMETHODS
+  ENDTABLE

@@ -1,0 +1,120 @@
+﻿FORM #FIN_EntityLookup
+  PROPERTIES
+    Name                #FIN_EntityLookup
+  ENDPROPERTIES
+  
+  METHODS
+    Version: 3
+    SOURCE #classDeclaration
+      #public class FormRun extends ObjectRun
+      #{
+      #
+      #    FormStringControl callingControl;
+      #
+      #}
+    ENDSOURCE
+    SOURCE #init
+      #public void init()
+      #{
+      #
+      #    ;
+      #   // callingControl = SysTableLookup::getCallerStringControl(element.args());
+      #    super();
+      #    callingControl = SysTableLookup::getCallerStringControl(element.args());
+      #
+      #}
+    ENDSOURCE
+    SOURCE #run
+      #public void run()
+      #{
+      #    //FormStringControl callingControl = SysTableLookup::getCallerStringControl(element.args());
+      #    boolean filterLookup;
+      #    ;
+      #
+      #    element.selectMode(FIN_GroupEntities_EntityCode);
+      #    if (callingControl.dataField() != fieldNum(FIN_GroupEntities,ParentEntityCode))
+      #    {
+      #        filterLookup = SysTableLookup::FilterLookupPreRun(callingControl, FIN_GroupEntities_EntityCode, FIN_GroupEntities_ds);
+      #    }
+      #    super();
+      #
+      #    SysTableLookup::FilterLookupPostRun(filterLookup, callingControl.text(), FIN_GroupEntities_EntityCode, FIN_GroupEntities_ds);
+      #
+      #
+      #
+      #}
+      #
+    ENDSOURCE
+  ENDMETHODS
+  OBJECTBANK
+    PROPERTIES
+    ENDPROPERTIES
+    
+    DATASOURCE
+      OBJECTPOOL
+        PROPERTIES
+          Name                #FIN_GroupEntities
+          Table               #FIN_GroupEntities
+          AllowEdit           #No
+          AllowCreate         #No
+          AllowDelete         #No
+          AutoNotify          #No
+          InsertAtEnd         #No
+          InsertIfEmpty       #No
+        ENDPROPERTIES
+        
+        FIELDLIST
+        ENDFIELDLIST
+      ENDOBJECTPOOL
+    ENDDATASOURCE
+  ENDOBJECTBANK
+  
+  JOINS
+  ENDJOINS
+  
+  DESIGN
+    PROPERTIES
+      Frame               #Border
+      WindowType          #Popup
+      DataSource          #
+    ENDPROPERTIES
+    
+    CONTAINER
+      CONTROL GRID
+        PROPERTIES
+          Name                #Grid
+          Width               #Column width
+          Height              #Column height
+          ShowRowLabels       #No
+          DataSource          #FIN_GroupEntities
+        ENDPROPERTIES
+        
+          CONTAINER
+            CONTROL STRINGEDIT
+              PROPERTIES
+                Name                #FIN_GroupEntities_EntityCode
+                AutoDeclaration     #Yes
+                DataSource          #FIN_GroupEntities
+                DataField           #EntityCode
+              ENDPROPERTIES
+              
+            ENDCONTROL 
+            
+            CONTROL STRINGEDIT
+              PROPERTIES
+                Name                #CopyOfAutoLookup_EntityName
+                DataSource          #FIN_GroupEntities
+                DataField           #EntityName
+              ENDPROPERTIES
+              
+            ENDCONTROL 
+            
+          ENDCONTAINER
+          
+      ENDCONTROL 
+      
+    ENDCONTAINER
+    
+  ENDDESIGN
+  
+ENDFORM

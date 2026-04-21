@@ -1,0 +1,224 @@
+﻿  TABLE #FIN_GroupEntityDataSetMap
+    Id 50034
+    PROPERTIES
+      Name                #FIN_GroupEntityDataSetMap
+      Label               #Group Entity Datasets Mappings
+      ModifiedDateTime    #Yes
+      ModifiedBy          #Yes
+      CreatedDateTime     #Yes
+      CreatedBy           #Yes
+    ENDPROPERTIES
+    
+    FIELDS
+      FIELD #EntityCode
+        Id 50001
+        STRING
+        PROPERTIES
+          Name                #EntityCode
+          Mandatory           #Yes
+          Table               #FIN_GroupEntityDataSetMap
+          ExtendedDataType    
+            ARRAY 
+              #FIN_EntityCode
+              #
+            ENDARRAY
+        ENDPROPERTIES
+        
+      FIELD #DataSource
+        Id 50002
+        STRING
+        PROPERTIES
+          Name                #DataSource
+          Label               #Data source
+          Mandatory           #Yes
+          Table               #FIN_GroupEntityDataSetMap
+          ExtendedDataType    
+            ARRAY 
+              #FIN_DataSource
+              #
+            ENDARRAY
+          StringSize          #60
+        ENDPROPERTIES
+        
+      FIELD #DataSet
+        Id 50003
+        ENUM
+        PROPERTIES
+          Name                #DataSet
+          Mandatory           #Yes
+          Table               #FIN_GroupEntityDataSetMap
+          EnumType            #FIN_DataSet
+        ENDPROPERTIES
+        
+      FIELD #Description
+        Id 50004
+        STRING
+        PROPERTIES
+          Name                #Description
+          Table               #FIN_GroupEntityDataSetMap
+          ExtendedDataType    
+            ARRAY 
+              #Notes
+              #
+            ENDARRAY
+          StringSize          #(Memo)
+        ENDPROPERTIES
+        
+      FIELD #ToFieldId
+        Id 50008
+        INT
+        PROPERTIES
+          Name                #ToFieldId
+          Label               #To FieldId
+          Mandatory           #Yes
+          Table               #FIN_GroupEntityDataSetMap
+        ENDPROPERTIES
+        
+      FIELD #FromFieldId
+        Id 50009
+        INT
+        PROPERTIES
+          Name                #FromFieldId
+          Label               #From FieldId
+          Table               #FIN_GroupEntityDataSetMap
+        ENDPROPERTIES
+        
+      FIELD #DefaultValue
+        Id 50010
+        STRING
+        PROPERTIES
+          Name                #DefaultValue
+          Label               #Default Value
+          Table               #FIN_GroupEntityDataSetMap
+        ENDPROPERTIES
+        
+      FIELD #ToFieldName
+        Id 50011
+        STRING
+        PROPERTIES
+          Name                #ToFieldName
+          Label               #To FieldName
+          Table               #FIN_GroupEntityDataSetMap
+          ExtendedDataType    
+            ARRAY 
+              #Name
+              #
+            ENDARRAY
+          StringSize          #60
+        ENDPROPERTIES
+        
+      FIELD #FieldType
+        Id 50012
+        STRING
+        PROPERTIES
+          Name                #FieldType
+          Label               #Type
+          Table               #FIN_GroupEntityDataSetMap
+        ENDPROPERTIES
+        
+    ENDFIELDS
+    GROUPS
+      GROUP #AutoLookup
+        PROPERTIES
+          Name                #AutoLookup
+        ENDPROPERTIES
+        
+        GROUPFIELDS
+          #EntityCode
+          #DataSource
+          #DataSet
+        ENDGROUPFIELDS
+      ENDGROUP
+    ENDGROUPS
+    
+    INDICES
+      #DataSetIdx
+      Id 50001
+      PROPERTIES
+        Name                #DataSetIdx
+        AllowDuplicates     #No
+      ENDPROPERTIES
+      
+      INDEXFIELDS
+        #DataSet
+        #DataSource
+        #EntityCode
+        #ToFieldId
+      ENDINDEXFIELDS
+      
+    ENDINDICES
+    REFERENCES
+      REFERENCE #EntitiesDataSets
+        PROPERTIES
+          Name                #EntitiesDataSets
+          Table               #FIN_GroupEntityDataSet
+        ENDPROPERTIES
+        
+        FIELDREFERENCES
+          REFERENCETYPE NORMAL
+          PROPERTIES
+            Field               #DataSet
+            RelatedField        #DataSet
+          ENDPROPERTIES
+          
+          REFERENCETYPE NORMAL
+          PROPERTIES
+            Field               #DataSource
+            RelatedField        #DataSource
+          ENDPROPERTIES
+          
+          REFERENCETYPE NORMAL
+          PROPERTIES
+            Field               #EntityCode
+            RelatedField        #EntityCode
+          ENDPROPERTIES
+          
+        ENDFIELDREFERENCES
+      ENDREFERENCE
+    ENDREFERENCES
+    
+    DELETEACTIONS
+    ENDDELETEACTIONS
+    
+    METHODS
+      Version: 3
+      SOURCE #initValue
+        #public void initValue()
+        #{
+        #    super();
+        #
+        #    this.ToFieldName    = "";
+        #    this.ToFieldId      = 0;
+        #    this.FromFieldId    = -1;
+        #    this.DataSet        = 0;
+        #    this.DataSource     = "";
+        #    this.EntityCode     = "";
+        #    this.DefaultValue   = "";
+        #    this.FieldType      = "";
+        #
+        #}
+      ENDSOURCE
+      SOURCE #find
+        #static FIN_GroupEntityDataSetMap find(FIN_DataSource   _dataSource
+        #                                    , FIN_EntityCode _entityCode
+        #                                    , FIN_DataSet   _dataSet
+        #                                    ,boolean         _forUpdate = false)
+        #{
+        #    FIN_GroupEntityDataSetMap  fin_GroupEntityDataSet;
+        #
+        #    if (_dataSource && _entityCode)
+        #    {
+        #        fin_GroupEntityDataSet.selectForUpdate(_forUpdate);
+        #
+        #        select firstonly *
+        #            from fin_GroupEntityDataSet
+        #                where fin_GroupEntityDataSet.DataSource == _dataSource
+        #                    && fin_GroupEntityDataSet.DataSet == _dataSet
+        #                    && fin_GroupEntityDataSet.EntityCode == _entityCode;
+        #    }
+        #
+        #    return fin_GroupEntityDataSet;
+        #}
+      ENDSOURCE
+    ENDMETHODS
+  ENDTABLE

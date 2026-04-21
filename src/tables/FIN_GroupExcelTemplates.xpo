@@ -1,0 +1,168 @@
+﻿  TABLE #FIN_GroupExcelTemplates
+    Id 50044
+    PROPERTIES
+      Name                #FIN_GroupExcelTemplates
+      Label               #Excel worbook templates
+      PrimaryIndex        #NameIdx
+      ModifiedDateTime    #Yes
+      ModifiedBy          #Yes
+      CreatedDateTime     #Yes
+      CreatedBy           #Yes
+    ENDPROPERTIES
+    
+    FIELDS
+      FIELD #Name
+        Id 50001
+        STRING
+        PROPERTIES
+          Name                #Name
+          Table               #FIN_GroupExcelTemplates
+          ExtendedDataType    
+            ARRAY 
+              #Name
+              #
+            ENDARRAY
+          StringSize          #60
+        ENDPROPERTIES
+        
+      FIELD #Description
+        Id 50002
+        STRING
+        PROPERTIES
+          Name                #Description
+          Table               #FIN_GroupExcelTemplates
+          ExtendedDataType    
+            ARRAY 
+              #Notes
+              #
+            ENDARRAY
+          StringSize          #(Memo)
+        ENDPROPERTIES
+        
+      FIELD #Owner
+        Id 50003
+        STRING
+        PROPERTIES
+          Name                #Owner
+          Table               #FIN_GroupExcelTemplates
+          ExtendedDataType    
+            ARRAY 
+              #Name
+              #
+            ENDARRAY
+          StringSize          #60
+        ENDPROPERTIES
+        
+      FIELD #TemplateData
+        Id 50006
+        STRING
+        PROPERTIES
+          Name                #TemplateData
+          Label               #Template Data (Base64)
+          Table               #FIN_GroupExcelTemplates
+          StringSize          #(Memo)
+        ENDPROPERTIES
+        
+      FIELD #Sheets
+        Id 50007
+        STRING
+        PROPERTIES
+          Name                #Sheets
+          Label               #Sheets (json)
+          Table               #FIN_GroupExcelTemplates
+          StringSize          #1000
+        ENDPROPERTIES
+        
+      FIELD #IsPublic
+        Id 50010
+        ENUM
+        PROPERTIES
+          Name                #IsPublic
+          Label               #Is public
+          Table               #FIN_GroupExcelTemplates
+          EnumType            #NoYes
+        ENDPROPERTIES
+        
+    ENDFIELDS
+    GROUPS
+      GROUP #GridGroup
+        PROPERTIES
+          Name                #GridGroup
+          Label               #GridGroup
+        ENDPROPERTIES
+        
+        GROUPFIELDS
+          #Name
+          #Owner
+          #Description
+          #IsPublic
+        ENDGROUPFIELDS
+      ENDGROUP
+    ENDGROUPS
+    
+    INDICES
+      #NameIdx
+      Id 50001
+      PROPERTIES
+        Name                #NameIdx
+        AllowDuplicates     #No
+      ENDPROPERTIES
+      
+      INDEXFIELDS
+        #Name
+      ENDINDEXFIELDS
+      
+    ENDINDICES
+    REFERENCES
+    ENDREFERENCES
+    
+    DELETEACTIONS
+    ENDDELETEACTIONS
+    
+    METHODS
+      Version: 3
+      SOURCE #insert
+        #public void insert()
+        #{
+        #
+        #    //systemSequence sysSeq = new systemSequence();
+        #    //TableId tableId = this.TableId;
+        #    //FIN_GroupExcelTemplates localTable;
+        #    //SystemSequences seq;
+        #
+        #    //get the maximum recId
+        #    //select maxOf(RecId) from localTable;
+        #
+        #    /*
+        #    //get the nextValue from the sequence table
+        #    select crossCompany seq
+        #        where seq.id == -1
+        #            && seq.tabId == tableId
+        #            && seq.dataAreaId == 'dat';
+        #
+        #    //the nextVal will be the next number if it was inserted with the trigger on the table
+        #    if(localTable.RecId <= seq.nextVal - 1)
+        #    {
+        #        //we get records inserted from external system and need to fix the sequence before inserting
+        #        //suspend recid
+        #
+        #        sysSeq.reserveValues(100,tableId);
+        #        sysSeq.suspendRecIds(tableId);
+        #
+        #        //flush the cached recId's
+        #    //sysSeq.  flushValues(tableId);!!!!!!!!!!!!!!!!!!!!!!
+        #
+        #        //remove the suspension which will grab another block (starting from the number updated from the trigger) of recId's and increment the nextVal (about 750 record ID's)
+        #        sysSeq.removeRecIdSuspension(tableId);
+        #
+        #        print "Done";
+        #
+        #    }
+        #  */
+        #
+        #    //insert the new record
+        #    super();
+        #}
+      ENDSOURCE
+    ENDMETHODS
+  ENDTABLE

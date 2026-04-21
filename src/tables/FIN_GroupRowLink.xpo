@@ -1,0 +1,88 @@
+﻿  TABLE #FIN_GroupRowLink
+    Id 50055
+    PROPERTIES
+      Name                #FIN_GroupRowLink
+      Label               #Group Row Link Table
+    ENDPROPERTIES
+    
+    FIELDS
+      FIELD #RowLinkId
+        Id 50001
+        INT64
+        PROPERTIES
+          Name                #RowLinkId
+          Label               #Row link id
+          Table               #FIN_GroupRowLink
+          ExtendedDataType    
+            ARRAY 
+              #RefRecId
+              #
+            ENDARRAY
+        ENDPROPERTIES
+        
+      FIELD #DataLinkKey
+        Id 50003
+        STRING
+        PROPERTIES
+          Name                #DataLinkKey
+          Table               #FIN_GroupRowLink
+          StringSize          #70
+        ENDPROPERTIES
+        
+      FIELD #FromEntityCode
+        Id 50004
+        STRING
+        PROPERTIES
+          Name                #FromEntityCode
+          Label               #From Entity
+          Table               #FIN_GroupRowLink
+          ExtendedDataType    
+            ARRAY 
+              #FIN_EntityCode
+              #
+            ENDARRAY
+        ENDPROPERTIES
+        
+    ENDFIELDS
+    GROUPS
+    ENDGROUPS
+    
+    INDICES
+    ENDINDICES
+    REFERENCES
+      REFERENCE #DataLine
+        PROPERTIES
+          Name                #DataLine
+          Table               #FIN_GroupLedgerData
+        ENDPROPERTIES
+        
+        FIELDREFERENCES
+          REFERENCETYPE NORMAL
+          PROPERTIES
+            Field               #DataLinkKey
+            RelatedField        #AccDimKey
+          ENDPROPERTIES
+          
+        ENDFIELDREFERENCES
+      ENDREFERENCE
+      REFERENCE #RowLines
+        PROPERTIES
+          Name                #RowLines
+          Table               #FIN_GroupRowLine
+        ENDPROPERTIES
+        
+        FIELDREFERENCES
+          REFERENCETYPE NORMAL
+          PROPERTIES
+            Field               #RowLinkId
+            RelatedField        #RecId
+          ENDPROPERTIES
+          
+        ENDFIELDREFERENCES
+      ENDREFERENCE
+    ENDREFERENCES
+    
+    DELETEACTIONS
+    ENDDELETEACTIONS
+    
+  ENDTABLE

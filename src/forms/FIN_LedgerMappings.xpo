@@ -1,0 +1,938 @@
+﻿FORM #FIN_LedgerMappings
+  PROPERTIES
+    Name                #FIN_LedgerMappings
+  ENDPROPERTIES
+  
+  METHODS
+    Version: 3
+    SOURCE #classDeclaration
+      #public class FormRun extends ObjectRun
+      #{
+      #
+      #   str 200              heading;
+      #   QueryBuildRange      qbr_Mapping_ToEntityCode;
+      #   QueryBuildRange      qbr_Mapping_FromEntityCode;
+      #   QueryBuildRange      qbr_LedgerAccount_EntityCode;
+      #
+      #   FIN_EntityCode       fromEntityCode, toEntityCode;
+      #
+      #   Map                  applyMap;
+      #
+      #   TreeItemIdx          dragItemIdx;
+      #
+      #   FIN_PeriodStart      balancePeriod;
+      #
+      #
+      #
+      #
+      #}
+    ENDSOURCE
+    SOURCE #canClose
+      #public boolean canClose()
+      #{
+      #    boolean ret;
+      #
+      #    if (applyMap.elements())
+      #    {
+      #        if (! box::yesNo('Changes have not been APPLIED yet! \n\rAre you sure you want to close the window?',
+      #                        dialogButton::Yes, 'Confirmation') == dialogButton::Yes)
+      #        {
+      #           return false;
+      #        }
+      #
+      #    }
+      #
+      #    ret = super();
+      #
+      #    return ret;
+      #}
+    ENDSOURCE
+    SOURCE #applyMapping
+      #void applyMapping()
+      #{
+      #    FIN_GroupLedgerMapping  tabMapping;
+      #    FIN_GroupLedgerTable    tabLedgerTable;
+      #    FIN_AccountNum          fromAccountNum, toAccountNum;
+      #    MapIterator             mi;
+      #
+      #    ;
+      #
+      #
+      #
+      #    mi = new MapIterator(applyMap);
+      #
+      #    try
+      #    {
+      #        ttsbegin;
+      #
+      #        while (mi.more())
+      #        {
+      #            fromAccountNum = mi.key();
+      #            toAccountNum = mi.value();
+      #
+      #            if (fromAccountNum && toAccountNum && toAccountNum != 'REMOVE' )
+      #            {
+      #                // check if from account exist
+      #                select RecId from tabLedgerTable where tabLedgerTable.AccountNum == fromAccountNum
+      #                        && tabLedgerTable.EntityCode == fromEntityCode;
+      #
+      #                if (!tabLedgerTable.RecId)
+      #                    throw error(strfmt('The from account number does not exsist! %1',fromAccountNum));
+      #
+      #                // check if to account exist
+      #                select RecId from tabLedgerTable where tabLedgerTable.AccountNum == toAccountNum
+      #                        && tabLedgerTable.EntityCode == toEntityCode;
+      #
+      #                if (!tabLedgerTable.RecId)
+      #                    throw error(strfmt('The from account number does not exsist! %1',toAccountNum));
+      #
+      #
+      #                select  forupdate * from tabMapping
+      #                    where tabMapping.FromEntityCode == fromEntityCode
+      #                            && tabMapping.ToEntityCode == toEntityCode
+      #                            && tabMapping.FromAcountNum == fromAccountNum;
+      #
+      #                // if record already exist and we need to update it
+      #                if (tabMapping.RecId && tabMapping.ToAcountNum != toAccountNum)
+      #                {
+      #                    tabMapping.ToAcountNum = toAccountNum;
+      #                    tabMapping.update();
+      #
+      #                }
+      #                else if (tabMapping.RecId && tabMapping.ToAcountNum == toAccountNum)
+      #                {
+      #                    //dont do anything as nothing has changed.
+      #                }
+      #                else
+      #                { // else new record add it.
+      #                    tabMapping.FromEntityCode   = fromEntityCode;
+      #                    tabMapping.ToEntityCode     = toEntityCode;
+      #                    tabMapping.FromAcountNum    = fromAccountNum;
+      #                    tabMapping.ToAcountNum      = toAccountNum;
+      #
+      #                    tabMapping.insert();
+      #                }
+      #
+      #
+      #
+      #
+      #            }
+      #            else if (fromAccountNum && toAccountNum && toAccountNum == 'REMOVE')
+      #            {
+      #                select  forupdate * from tabMapping
+      #                    where tabMapping.FromEntityCode == fromEntityCode
+      #                            && tabMapping.ToEntityCode == toEntityCode
+      #                            && tabMapping.FromAcountNum == fromAccountNum;
+      #
+      #                if (tabMapping.RecId)
+      #                    tabMapping.delete();
+      #
+      #            }
+      #
+      #            applyMap.remove(fromAccountNum);
+      #
+      #            mi.next();
+      #        }
+      #        ttscommit;
+      #
+      #
+      #    }
+      #    catch
+      #    {
+      #        throw error('Error while applying mappings!');
+      #    }
+      #
+      #    //Enable/Disable apply button
+      #    ButtonApply.enabled(applyMap.elements());
+      #    ButtonUndo.enabled(applyMap.elements());
+      #}
+    ENDSOURCE
+    SOURCE #run
+      #public void run()
+      #{
+      #
+      #    super();
+      #
+      #    ctrlPeriod.dateValue(balancePeriod);
+      #
+      #    applyMap = new Map(Types::String,Types::String);
+      #
+      #    if (fromEntityCode)
+      #    {
+      #        //Build the tree structure
+      #        element.fillMappingTree();
+      #
+      #    }
+      #
+      #
+      #}
+    ENDSOURCE
+    SOURCE #init
+      #public void init()
+      #{
+      #    container           filters;
+      #    FIN_GroupEntities   tabEntities;
+      #
+      #    ;
+      #
+      #    if( element.args() )
+      #    {
+      #        // get string parameter
+      #        filters = str2con(element.args().parm());
+      #
+      #        fromEntityCode = conPeek(filters,1);
+      #        toEntityCode = conPeek(filters,2);
+      #
+      #    }
+      #
+      #    balancePeriod = str2date("1/12/2019",123);
+      #
+      #
+      #    super();
+      #
+      #
+      #
+      #    // Check for passed arguments
+      #    if( element.args() )
+      #    {
+      #        // get string parameter
+      #        filters = str2con(element.args().parm());
+      #
+      #        fromEntityCode = conPeek(filters,1);
+      #        toEntityCode = conPeek(filters,2);
+      #
+      #        qbr_Mapping_FromEntityCode.value(fromEntityCode);
+      #        qbr_Mapping_ToEntityCode.value(toEntityCode);
+      #        FIN_GroupLedgerMapping_ds.executeQuery();
+      #
+      #        qbr_LedgerAccount_EntityCode.value(queryValue(fromEntityCode));
+      #        FIN_GroupLedgerTable_ds.executeQuery();
+      #
+      #
+      #    }
+      #
+      #    if (fromEntityCode && toEntityCode)
+      #    {
+      #        Select * from tabEntities where tabEntities.EntityCode == fromEntityCode;
+      #
+      #        heading = "(" + tabEntities.EntityCode + ") " + tabEntities.EntityName;
+      #
+      #        Select * from tabEntities where tabEntities.EntityCode == toEntityCode;
+      #
+      #        heading = heading + "  -->  (" + tabEntities.EntityCode + ") " + tabEntities.EntityName;
+      #
+      #        HeadingText.text(heading);
+      #
+      #    }
+      #}
+    ENDSOURCE
+    SOURCE #fillMappingTree
+      #void fillMappingTree()
+      #{
+      #    TreeItemIdx treeItemIdx;
+      #    TreeItemIdx parentItemIdx;
+      #    FormTreeItem    item;
+      #    int             parentId = 0;
+      #
+      #   // ImageRes    imageRes    = imageListAppl_Tutorial.image(#imageFolder);
+      #
+      #    FIN_GroupLedgerTable    tabDestLedgerTable;
+      #    FIN_GroupLedgerMapping  tabMapped;
+      #
+      #    ;
+      #
+      #    startLengthyOperation();
+      #
+      #    formTreeControl.deleteAll();
+      #    formTreeControl.lock();
+      #
+      #
+      #    while select * from tabDestLedgerTable
+      #        order by tabDestLedgerTable.AccountNum
+      #        where tabDestLedgerTable.EntityCode == qbr_Mapping_ToEntityCode.value()
+      #            && tabDestLedgerTable.IsHeading == 0
+      #
+      #    {
+      #        item = new FormTreeItem();
+      #
+      #        item.stateBold(true);
+      #
+      #        item.data(tabDestLedgerTable.AccountNum);
+      #        item.stateExpanded(false);
+      #
+      #
+      #        item.text('(' + tabDestLedgerTable.AccountNum + ') ' + tabDestLedgerTable.Level0 + '  -  ' + tabDestLedgerTable.Level1 + '  -  ' + tabDestLedgerTable.Level2 + '  -  ' + tabDestLedgerTable.AccountName );
+      #
+      #        parentId = formTreeControl.addItem(0,0,item);
+      #
+      #         //Load mapped accounts
+      #        while select * from tabMapped
+      #            where tabMapped.FromEntityCode == qbr_Mapping_FromEntityCode.value()
+      #                && tabMapped.ToEntityCode == tabDestLedgerTable.EntityCode
+      #                && tabMapped.ToAcountNum == tabDestLedgerTable.AccountNum
+      #        {
+      #
+      #            item = new FormTreeItem();
+      #
+      #            item.stateBold(false);
+      #
+      #            item.data(tabMapped.FromAcountNum);
+      #            item.stateExpanded(true);
+      #
+      #
+      #            item.text('(' + tabMapped.FromAcountNum + ') ' + tabMapped.FromAccountName());
+      #
+      #            formTreeControl.addItem(parentId,0,item);
+      #
+      #        }
+      #
+      #
+      #    }
+      #    formtreecontrol.unLock(true);
+      #    endLengthyOperation();
+      #}
+    ENDSOURCE
+  ENDMETHODS
+  OBJECTBANK
+    PROPERTIES
+    ENDPROPERTIES
+    
+    DATASOURCE
+      OBJECTPOOL
+        PROPERTIES
+          Name                #FIN_GroupLedgerMapping
+          Table               #FIN_GroupLedgerMapping
+        ENDPROPERTIES
+        
+        FIELDLIST
+        ENDFIELDLIST
+      ENDOBJECTPOOL
+      METHODS
+        Version: 3
+        SOURCE #init
+          #public void init()
+          #{
+          #    super();
+          #
+          #    // Enable caching of the document handling display fields
+          #    FIN_GroupLedgerMapping_ds.cacheAddMethod(tablemethodstr(FIN_GroupLedgerMapping, FromAccountName));
+          #    FIN_GroupLedgerMapping_ds.cacheAddMethod(tablemethodstr(FIN_GroupLedgerMapping, ToAccountName));
+          #
+          #    qbr_Mapping_FromEntityCode = this.query().dataSourceName('FIN_GroupLedgerMapping').addRange(fieldNum(FIN_GroupLedgerMapping ,FromEntityCode));
+          #    qbr_Mapping_ToEntityCode = this.query().dataSourceName('FIN_GroupLedgerMapping').addRange(fieldNum(FIN_GroupLedgerMapping ,ToEntityCode));
+          #
+          #}
+        ENDSOURCE
+      ENDMETHODS
+    ENDDATASOURCE
+    DATASOURCE
+      OBJECTPOOL
+        PROPERTIES
+          Name                #FIN_GroupLedgerTable
+          Table               #FIN_GroupLedgerTable
+          InsertAtEnd         #No
+          InsertIfEmpty       #No
+        ENDPROPERTIES
+        
+        FIELDLIST
+        ENDFIELDLIST
+      ENDOBJECTPOOL
+      METHODS
+        Version: 3
+        SOURCE #init
+          #public void init()
+          #{
+          #    FIN_GroupLedgerMapping  tabMapped;
+          #    FIN_GroupLedgerTable    tabLedgerTable;
+          #
+          #    AmountMST               amountMST;
+          #    ;
+          #
+          #    super();
+          #
+          #    startLengthyOperation();
+          #
+          #    FIN_GroupLedgerTable.setTmp();
+          #
+          #    Delete_from FIN_GroupLedgerTable;
+          #
+          #    if (fromEntityCode)
+          #    {
+          #
+          #
+          #        while select * from tabLedgerTable
+          #                where tabLedgerTable.EntityCode == fromEntityCode
+          #                    && tabLedgerTable.IsHeading == Noyes::No
+          #                    && tabLedgerTable.IsTotal   == NoYes::No
+          #
+          #        {
+          #            select ToAcountNum from tabMapped
+          #                 where tabMapped.FromEntityCode == fromEntityCode
+          #                    && tabMapped.ToEntityCode   == toEntityCode
+          #                    && tabMapped.FromAcountNum  == tabLedgerTable.AccountNum;
+          #
+          #            if (!tabMapped.ToAcountNum)
+          #            {
+          #                FIN_GroupLedgerTable.data(tabLedgerTable.data());
+          #
+          #                amountMst = conpeek( FIN_GroupLedgerTable::getAccountBalance(fromEntityCode,FIN_GroupLedgerTable.AccountNum,balancePeriod,"MAIN"),2);
+          #                FIN_GroupLedgerTable.Level0 = num2str(amountMst, 1, 2, DecimalSeparator::Dot, ThousandSeparator::Comma);
+          #
+          #                FIN_GroupLedgerTable.doInsert();
+          #            }
+          #        }
+          #
+          #
+          #
+          #  //      FIN_GroupLedgerTable.setTmpData(tmpLedgerTable);
+          #
+          #    }
+          #
+          #
+          #    qbr_LedgerAccount_EntityCode = this.query().dataSourceNo(1).addRange(fieldNum(FIN_GroupLedgerTable , EntityCode));
+          #
+          #    endLengthyOperation();
+          #}
+        ENDSOURCE
+        SOURCE #initORDIG
+          #public void initORDIG()
+          #{
+          #    FIN_GroupLedgerMapping  tabMapped;
+          #    FIN_GroupLedgerTable    tabLedgerTable;
+          #    FIN_PeriodStart         _period;
+          #    AmountMST               amountMst;
+          #    ;
+          #
+          #    //super();
+          #
+          #    _period = str2date("1/12/2019",123);
+          #
+          #    FIN_GroupLedgerTable.setTmp();
+          #
+          #    if (fromEntityCode)
+          #    {
+          #
+          #        while select * from tabLedgerTable
+          #                where tabLedgerTable.EntityCode == fromEntityCode
+          #                    && tabLedgerTable.IsHeading == Noyes::No
+          #                    && tabLedgerTable.IsTotal   == NoYes::No
+          #            notExists join * from tabMapped
+          #                where tabMapped.FromEntityCode == fromEntityCode
+          #                    && tabMapped.ToEntityCode   == toEntityCode
+          #                    && tabMapped.FromAcountNum  == tabLedgerTable.AccountNum
+          #
+          #        {
+          #
+          #                FIN_GroupLedgerTable.data(tabLedgerTable.data());
+          #
+          #                amountMst = conpeek( FIN_GroupLedgerTable::getAccountBalance(fromEntityCode,FIN_GroupLedgerTable.AccountNum,_period,"MAIN"),2);
+          #                FIN_GroupLedgerTable.Level0 = num2str(amountMst, 1, 2, DecimalSeparator::Dot, ThousandSeparator::Comma);
+          #
+          #                FIN_GroupLedgerTable.doInsert();
+          #
+          #        }
+          #
+          #
+          #    }
+          #
+          #
+          #    qbr_LedgerAccount_EntityCode = this.query().dataSourceNo(1).addRange(fieldNum(FIN_GroupLedgerTable , EntityCode));
+          #}
+        ENDSOURCE
+        SOURCE #displayOption
+          #public void displayOption(Common _record, FormRowDisplayOption _options)
+          #{
+          #    FIN_GroupLedgerTable tabLedgerTable = _record;
+          #
+          #    ;
+          #    if (tabLedgerTable.IsHeading || tabLedgerTable.IsTotal)
+          #    {
+          #        _options.fontBold(true);
+          #        _options.backColor(WINAPI::rgb2int(200,200,200));
+          #
+          #    }
+          #    else
+          #    {
+          #        _options.fontBold(false);
+          #    }
+          #
+          #    super(_record, _options);
+          #}
+        ENDSOURCE
+      ENDMETHODS
+    ENDDATASOURCE
+  ENDOBJECTBANK
+  
+  JOINS
+  ENDJOINS
+  
+  DESIGN
+    PROPERTIES
+      Caption             #Ledger Mappings
+    ENDPROPERTIES
+    
+    CONTAINER
+      CONTROL GROUP
+        PROPERTIES
+          Name                #Group1
+          Width               #Column width
+        ENDPROPERTIES
+        
+          CONTAINER
+            CONTROL STATICTEXT
+              PROPERTIES
+                Name                #HeadingText
+                AutoDeclaration     #Yes
+                FontSize            #11
+                Bold                #Bold
+              ENDPROPERTIES
+              
+            ENDCONTROL 
+            
+            CONTROL DATEEDIT
+              PROPERTIES
+                Name                #ctrlPeriod
+                AutoDeclaration     #Yes
+                Label               #Period Balances
+              ENDPROPERTIES
+              
+              METHODS
+                Version: 3
+                SOURCE #modified
+                  #public boolean modified()
+                  #{
+                  #    boolean ret;
+                  #
+                  #    ret = super();
+                  #
+                  #    balancePeriod = this.dateValue();
+                  #    FIN_GroupLedgerTable_ds.init();
+                  #    FIN_GroupLedgerTable_ds.executeQuery();
+                  #
+                  #    return ret;
+                  #}
+                ENDSOURCE
+                SOURCE #lookup
+                  #public void lookup()
+                  #{
+                  #    ;
+                  #    FIN_GroupPeriod::lookupPeriodStart(this);
+                  #}
+                ENDSOURCE
+              ENDMETHODS
+            ENDCONTROL 
+            
+          ENDCONTAINER
+          
+      ENDCONTROL 
+      
+      CONTROL TAB
+        PROPERTIES
+          Name                #Tab
+          Width               #Column width
+          Height              #Column height
+          Tabs                #2
+        ENDPROPERTIES
+        
+        CONTAINER
+          CONTROL TABPAGE
+            PROPERTIES
+              Name                #TabPageTreeView
+              Width               #Column width
+              Height              #Column height
+              Caption             #Summary
+              Columns             #2
+              ArrangeGuide        
+                ARRAY INDEX Columns 
+                  #0
+                  #0
+                ENDARRAY
+            ENDPROPERTIES
+            
+            CONTAINER
+              CONTROL GRID
+                PROPERTIES
+                  Name                #GridLedgerTable
+                  AllowEdit           #No
+                  Width               #Column width
+                  Height              #Column height
+                  DragDrop            #Manual
+                  DataSource          #FIN_GroupLedgerTable
+                ENDPROPERTIES
+                
+                METHODS
+                  Version: 3
+                  SOURCE #drop
+                    #public void drop(FormControl _dragSource, FormDrag _dragMode, int _x, int _y)
+                    #{
+                    #    FIN_GroupLedgerTable tabLedgerTable;
+                    #    FormTreeItem    item;
+                    #    FIN_AccountNum  fromAccount, toAccountNum;
+                    #
+                    #    AmountMST               amountMST;
+                    #    ;
+                    #
+                    #    if (dragItemIdx > 0)
+                    #    {
+                    #
+                    #        item = formTreeControl.getItem(dragItemIdx);
+                    #        fromAccount = item.data();
+                    #        toAccountNum   = 'REMOVE';
+                    #
+                    #        if (!fromAccount)
+                    #            throw error ('Error removing mapping!');
+                    #
+                    #
+                    #        select * from tabLedgerTable where tabLedgerTable.EntityCode == fromEntityCode
+                    #                                    && tabLedgerTable.AccountNum == fromAccount;
+                    #
+                    #        formTreeControl.delete(item.idx());
+                    #
+                    #        FIN_GroupLedgerTable.initValue();
+                    #        FIN_GroupLedgerTable.data(tabLedgerTable.data());
+                    #
+                    #        amountMst = conpeek( FIN_GroupLedgerTable::getAccountBalance(fromEntityCode,FIN_GroupLedgerTable.AccountNum,balancePeriod,"MAIN"),2);
+                    #        FIN_GroupLedgerTable.Level0 = num2str(amountMst, 1, 2, DecimalSeparator::Dot, ThousandSeparator::Comma);
+                    #
+                    #        FIN_GroupLedgerTable.doInsert();
+                    #        FIN_GroupledgerTable_ds.executeQuery();
+                    #
+                    #
+                    #       // info (strfmt('From : %1      To : %2',fromAccount,toAccountNum));
+                    #
+                    #        if (applyMap.exists(fromAccount))
+                    #        {
+                    #
+                    #       // info (strfmt('Found From item in map : %1',fromAccount));
+                    #
+                    #            if (applyMap.lookup(fromAccount) != toAccountNum)
+                    #            {
+                    #       //         info (strfmt('Remove Found item in map : %1',fromAccount));
+                    #                applyMap.remove(fromAccount);
+                    #                applyMap.insert(fromAccount,toAccountNum);
+                    #            }
+                    #        }
+                    #        else
+                    #        {
+                    #        //     info (strfmt('Added new item %1   to  %2',fromAccount,toAccountNum));
+                    #             applyMap.insert(fromAccount,toAccountNum);
+                    #        }
+                    #
+                    #
+                    #
+                    #
+                    #    }
+                    #
+                    #    //Enable/Disable apply button
+                    #    ButtonApply.enabled(applyMap.elements());
+                    #    ButtonUndo.enabled(applyMap.elements());
+                    #
+                    #    super(_dragSource, _dragMode, _x, _y);
+                    #}
+                  ENDSOURCE
+                  SOURCE #beginDrag
+                    #public int beginDrag(int _x, int _y)
+                    #{
+                    #    int ret;
+                    #
+                    #    ret = super(_x, _y);
+                    #
+                    #    dragItemIdx = 0;  // Set Drag source to Grid
+                    #
+                    #    return ret;
+                    #}
+                  ENDSOURCE
+                ENDMETHODS
+                  CONTAINER
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupLedgerTable_AccountNum1
+                        DataSource          #FIN_GroupLedgerTable
+                        DataField           #AccountNum
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupLedgerTable_AccountName1
+                        DataSource          #FIN_GroupLedgerTable
+                        DataField           #AccountName
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupLedgerTable_Type1
+                        DataSource          #FIN_GroupLedgerTable
+                        DataField           #Type
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupLedgerTable_Level0
+                        Width               #100
+                        Alignment           #Right
+                        Label               #Balance
+                        DataSource          #FIN_GroupLedgerTable
+                        DataField           #Level0
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                  ENDCONTAINER
+                  
+              ENDCONTROL 
+              
+              CONTROL TREE
+                PROPERTIES
+                  Name                #formTreeControl
+                  Width               #Column width
+                  Height              #Column height
+                  DragDrop            #Manual
+                ENDPROPERTIES
+                
+                METHODS
+                  Version: 3
+                  SOURCE #beginDrag
+                    #public int beginDrag(int _x, int _y)
+                    #{
+                    #    int ret;
+                    #    TreeItemIdx     currItemIdx;
+                    #    FormTreeItem    item;
+                    #
+                    #
+                    #     ;
+                    #
+                    #    ret = super(_x, _y);
+                    #
+                    #    [dragItemIdx] = formTreeControl.hitTest(_x,_y);
+                    #    item =  formTreeControl.getItem(dragItemIdx);
+                    #
+                    #    if (item.stateBold())
+                    #        return false;
+                    #
+                    #    return ret;
+                    #}
+                  ENDSOURCE
+                  SOURCE #drop
+                    #public void drop(FormControl _dragSource, FormDrag _dragMode, int _x, int _y)
+                    #{
+                    #    TreeItemIdx     currItemIdx;
+                    #    FormTreeItem    item;
+                    #    FormTreeItem    sourceItem;
+                    #    FIN_AccountNum  toAccountNum, fromAccount;
+                    #    int             position;
+                    #
+                    #    FIN_GroupLedgerTable _ledgerTable;
+                    #
+                    #    ;
+                    #
+                    #    [currItemIdx] = formTreeControl.hitTest(_x,_y);
+                    #    if (!currItemIdx)
+                    #        return;
+                    #
+                    #    // If dragIdx then drag source is tree
+                    #    if (dragItemIdx)
+                    #    {
+                    #        sourceItem = formTreeControl.getItem(dragItemIdx);
+                    #    }
+                    #
+                    #    item = formTreeControl.getItem(currItemIdx);
+                    #
+                    #    // if mapping account
+                    #    if (item.stateBold())
+                    #    {
+                    #        toAccountNum    = item.data();
+                    #
+                    #    }
+                    #    else
+                    #    {
+                    #        // dropped on child account
+                    #        currItemIdx = formTreeControl.getParent(currItemIdx);
+                    #        item = formTreeControl.getItem(currItemIdx);
+                    #        toAccountNum    = item.data();
+                    #
+                    #
+                    #    }
+                    #
+                    #    if (sourceItem)
+                    #    {
+                    #        //Source was Tree
+                    #        item = sourceItem;
+                    #
+                    #        //Remove original item
+                    #        formTreeControl.delete(sourceItem.idx());
+                    #
+                    #        //Create new item
+                    #        formTreeControl.addItem(currItemIdx,0,item);
+                    #
+                    #        fromAccount     = item.data();
+                    #    }
+                    #    else
+                    #    {
+                    #        //Check if account types are the same
+                    #        select Type from _ledgerTable where _ledgerTable.AccountNum == toAccountNum && _ledgerTable.EntityCode == toEntityCode;
+                    #        if (FIN_GroupLedgerTable.Type != _ledgerTable.Type)
+                    #        {
+                    #            error(strfmt('An account cannot be mapped because account Types need to be the same. From Type: %1  To Type: %2',FIN_GroupLedgerTable.Type,_ledgerTable.Type));
+                    #            return;
+                    #        }
+                    #
+                    #        //Source was Grid
+                    #
+                    #        item = new FormTreeItem();
+                    #        item.stateBold(false);
+                    #        item.data(FIN_GroupLedgerTable.AccountNum);
+                    #        item.text('->   (' + FIN_GroupLedgerTable.AccountNum + ') ' + FIN_GroupLedgerTable.AccountName);
+                    #        formTreeControl.addItem(currItemIdx,0,item);
+                    #
+                    #        fromAccount     = item.data();
+                    #
+                    #        FIN_GroupLedgerTable.delete();
+                    #        //FIN_GroupLedgerTable_ds.executeQuery();
+                    #        position = FIN_GroupLedgerTable_ds.getPosition() - 1;
+                    #        FIN_GroupLedgerTable_ds.research(true);
+                    #        FIN_GroupLedgerTable_ds.setPosition(position);
+                    #
+                    #
+                    #    }
+                    #
+                    #   // info (strfmt('From : %1      To : %2',fromAccount,toAccountNum));
+                    #
+                    #    if (applyMap.exists(fromAccount))
+                    #    {
+                    #
+                    #   // info (strfmt('Found From item in map : %1',fromAccount));
+                    #
+                    #        if (applyMap.lookup(fromAccount) != toAccountNum)
+                    #        {
+                    #   //         info (strfmt('Remove Found item in map : %1',fromAccount));
+                    #            applyMap.remove(fromAccount);
+                    #            applyMap.insert(fromAccount,toAccountNum);
+                    #        }
+                    #    }
+                    #    else
+                    #    {
+                    #   //      info (strfmt('Added new item %1   to  %2',fromAccount,toAccountNum));
+                    #         applyMap.insert(fromAccount,toAccountNum);
+                    #    }
+                    #
+                    #    //Enable/Disable apply button
+                    #    ButtonApply.enabled(applyMap.elements());
+                    #    ButtonUndo.enabled(applyMap.elements());
+                    #
+                    #    if (position > 0)
+                    #        FIN_GroupLedgerTable_ds.setPosition(position);
+                    #    //super(_dragSource, _dragMode, _x, _y);
+                    #
+                    #
+                    #}
+                  ENDSOURCE
+                ENDMETHODS
+              ENDCONTROL 
+              
+              CONTROL GROUP
+                PROPERTIES
+                  Name                #Group
+                  Columns             #2
+                  ArrangeGuide        
+                    ARRAY INDEX Columns 
+                      #0
+                      #0
+                    ENDARRAY
+                ENDPROPERTIES
+                
+                  CONTAINER
+                    CONTROL BUTTON
+                      PROPERTIES
+                        Name                #ButtonApply
+                        AutoDeclaration     #Yes
+                        Enabled             #No
+                        Text                #Apply Mappings
+                      ENDPROPERTIES
+                      
+                      METHODS
+                        Version: 3
+                        SOURCE #clicked
+                          #void clicked()
+                          #{
+                          #    super();
+                          #
+                          #    element.applyMapping();
+                          #
+                          #}
+                        ENDSOURCE
+                      ENDMETHODS
+                    ENDCONTROL 
+                    
+                    CONTROL BUTTON
+                      PROPERTIES
+                        Name                #ButtonUndo
+                        AutoDeclaration     #Yes
+                        Enabled             #No
+                        Text                #Undo Mapping
+                      ENDPROPERTIES
+                      
+                      METHODS
+                        Version: 3
+                        SOURCE #clicked
+                          #void clicked()
+                          #{
+                          #    FIN_GroupLedgerTable    tabLedgerTable;
+                          #    FIN_GroupLedgerMapping  tabMapped;
+                          #    ;
+                          #
+                          #    super();
+                          #
+                          #    applyMap = new Map(Types::String,Types::String);
+                          #    ButtonApply.enabled(applyMap.elements());
+                          #    ButtonUndo.enabled(applyMap.elements());
+                          #
+                          #
+                          #    DELETE_From FIN_GroupLedgerTable;
+                          #
+                          #    while select * from tabLedgerTable
+                          #        where tabLedgerTable.EntityCode == fromEntityCode
+                          #
+                          #    {
+                          #        select ToAcountNum from tabMapped
+                          #             where tabMapped.FromEntityCode == fromEntityCode
+                          #                && tabMapped.ToEntityCode   == toEntityCode
+                          #                && tabMapped.FromAcountNum  == tabLedgerTable.AccountNum;
+                          #
+                          #        if (!tabMapped.ToAcountNum)
+                          #        {
+                          #            FIN_GroupLedgerTable.data(tabLedgerTable.data());
+                          #            FIN_GroupLedgerTable.doInsert();
+                          #        }
+                          #    }
+                          #
+                          #
+                          #    FIN_GroupLedgerTable_ds.executeQuery();
+                          #    element.fillMappingTree();
+                          #}
+                        ENDSOURCE
+                      ENDMETHODS
+                    ENDCONTROL 
+                    
+                  ENDCONTAINER
+                  
+              ENDCONTROL 
+              
+            ENDCONTAINER
+            
+          ENDCONTROL 
+          
+        ENDCONTAINER
+        
+      ENDCONTROL 
+      
+    ENDCONTAINER
+    
+  ENDDESIGN
+  
+ENDFORM

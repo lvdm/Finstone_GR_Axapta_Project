@@ -1,0 +1,1552 @@
+﻿FORM #FIN_GroupLedgers
+  PROPERTIES
+    Name                #FIN_GroupLedgers
+  ENDPROPERTIES
+  
+  METHODS
+    Version: 3
+    SOURCE #classDeclaration
+      #public class FormRun extends ObjectRun
+      #{
+      #   QueryBuildRange qbr_LedgerAccount_EntityCode;
+      #   QueryBuildRange qbr_Mapping_ToEntityCode;
+      #   QueryBuildRange qbr_Mapping_FromEntityCode;
+      #   QueryBuildRange qbr_MappingHistory_ToEntityCode;
+      #   QueryBuildRange qbr_MappingHistory_FromEntityCode;
+      #   QueryBuildRange qbr_Data_EntityCode;
+      #   QueryBuildRange qbr_InventData_EntityCode;
+      #   FIN_GroupEntities tabEntities;
+      #
+      #   TreeItemIdx             dragItemIdx;
+      #   TreeItemIdx             lastHilitedItemIdx;
+      #}
+    ENDSOURCE
+    SOURCE #init
+      #public void init()
+      #{
+      #    super();
+      #
+      #    this.fillCombo();
+      #}
+    ENDSOURCE
+    SOURCE #fillCombo
+      # public void fillCombo()
+      # {
+      #    NoYes first;
+      #    ;
+      #
+      #    first = NoYes::Yes;
+      #    ComboBoxEntity.clear();
+      #
+      #    while select * from tabEntities
+      #    {
+      #       if (first)
+      #       {
+      #            qbr_LedgerAccount_EntityCode.value(queryValue(tabEntities.EntityCode));
+      #            FIN_GroupLedgerTable_ds.executeQuery();
+      #
+      #            qbr_Mapping_FromEntityCode.value(queryValue(tabEntities.EntityCode));
+      #            qbr_Mapping_ToEntityCode.value(queryValue(tabEntities.EntityCode));
+      #            FIN_GroupLedgerMapping_ds.executeQuery();
+      #
+      #            qbr_MappingHistory_FromEntityCode.value(queryValue(tabEntities.EntityCode));
+      #            qbr_MappingHistory_ToEntityCode.value(queryValue(tabEntities.EntityCode));
+      #            FIN_GroupLedgerMapHistory_ds.executeQuery();
+      #
+      #            qbr_Data_EntityCode.value(queryValue(tabEntities.EntityCode));
+      #            FIN_GroupLedgerData_ds.executeQuery();
+      #
+      #            qbr_InventData_EntityCode.value(queryValue(tabEntities.EntityCode));
+      #            FIN_GroupInventoryData_ds.executeQuery();
+      #
+      #            first = NoYes::No;
+      #
+      #       }
+      #       ComboBoxEntity.add(tabEntities.EntityName);
+      #
+      #       ComboBoxToEntity.add(tabEntities.EntityName);
+      #
+      #    }
+      #    ComboBoxEntity.selection(0);
+      #
+      #
+      # }
+    ENDSOURCE
+  ENDMETHODS
+  OBJECTBANK
+    PROPERTIES
+    ENDPROPERTIES
+    
+    DATASOURCE
+      OBJECTPOOL
+        PROPERTIES
+          Name                #FIN_GroupLedgerTable
+          Table               #FIN_GroupLedgerTable
+          InsertIfEmpty       #No
+        ENDPROPERTIES
+        
+        FIELDLIST
+        ENDFIELDLIST
+      ENDOBJECTPOOL
+      METHODS
+        Version: 3
+        SOURCE #displayOption
+          #public void displayOption(Common _record, FormRowDisplayOption _options)
+          #{
+          #    FIN_GroupLedgerTable tabLedgerTable = _record;
+          #
+          #    ;
+          #    if (tabLedgerTable.IsHeading)
+          #    {
+          #        _options.fontBold(true);
+          #        _options.backColor(WINAPI::rgb2int(200,200,200));
+          #
+          #    }
+          #    else
+          #    {
+          #        _options.fontBold(false);
+          #    }
+          #
+          #    super(_record, _options);
+          #}
+        ENDSOURCE
+        SOURCE #init
+          #public void init()
+          #{
+          #    super();
+          #    qbr_LedgerAccount_EntityCode = this.query().dataSourceNo(1).addRange(fieldNum(FIN_GroupLedgerTable , EntityCode));
+          #}
+        ENDSOURCE
+      ENDMETHODS
+    ENDDATASOURCE
+    DATASOURCE
+      OBJECTPOOL
+        PROPERTIES
+          Name                #FIN_GroupEntities
+          Table               #FIN_GroupEntities
+        ENDPROPERTIES
+        
+        FIELDLIST
+        ENDFIELDLIST
+      ENDOBJECTPOOL
+    ENDDATASOURCE
+    DATASOURCE
+      OBJECTPOOL
+        PROPERTIES
+          Name                #FIN_GroupLedgerMapping
+          Table               #FIN_GroupLedgerMapping
+          InsertIfEmpty       #No
+        ENDPROPERTIES
+        
+        FIELDLIST
+        ENDFIELDLIST
+      ENDOBJECTPOOL
+      METHODS
+        Version: 3
+        SOURCE #init
+          #public void init()
+          #{
+          #    super();
+          #
+          #    // Enable caching of the document handling display fields
+          #    FIN_GroupLedgerMapping_ds.cacheAddMethod(tablemethodstr(FIN_GroupLedgerMapping, FromAccountName));
+          #    FIN_GroupLedgerMapping_ds.cacheAddMethod(tablemethodstr(FIN_GroupLedgerMapping, ToAccountName));
+          #
+          #    qbr_Mapping_FromEntityCode = this.query().dataSourceName('FIN_GroupLedgerMapping').addRange(fieldNum(FIN_GroupLedgerMapping ,FromEntityCode));
+          #    qbr_Mapping_ToEntityCode = this.query().dataSourceName('FIN_GroupLedgerMapping').addRange(fieldNum(FIN_GroupLedgerMapping ,ToEntityCode));
+          #}
+        ENDSOURCE
+      ENDMETHODS
+    ENDDATASOURCE
+    DATASOURCE
+      OBJECTPOOL
+        PROPERTIES
+          Name                #FIN_GroupLedgerData
+          Table               #FIN_GroupLedgerData
+          InsertAtEnd         #No
+          InsertIfEmpty       #No
+        ENDPROPERTIES
+        
+        FIELDLIST
+        ENDFIELDLIST
+      ENDOBJECTPOOL
+      METHODS
+        Version: 3
+        SOURCE #init
+          #public void init()
+          #{
+          #    super();
+          #     qbr_Data_EntityCode = this.query().dataSourceName('FIN_GroupLedgerData').addRange(fieldNum(FIN_GroupLedgerData ,EntityCode));
+          #}
+        ENDSOURCE
+      ENDMETHODS
+    ENDDATASOURCE
+    DATASOURCE
+      OBJECTPOOL
+        PROPERTIES
+          Name                #FIN_GroupInventoryData
+          Table               #FIN_GroupInventoryData
+          InsertAtEnd         #No
+          InsertIfEmpty       #No
+        ENDPROPERTIES
+        
+        FIELDLIST
+        ENDFIELDLIST
+      ENDOBJECTPOOL
+      METHODS
+        Version: 3
+        SOURCE #init
+          #public void init()
+          #{
+          #    super();
+          #    qbr_InventData_EntityCode = this.query().dataSourceName('FIN_GroupInventoryData').addRange(fieldNum(FIN_GroupInventoryData ,EntityCode));
+          #}
+        ENDSOURCE
+      ENDMETHODS
+    ENDDATASOURCE
+    DATASOURCE
+      OBJECTPOOL
+        PROPERTIES
+          Name                #FIN_GroupLedgerMapHistory
+          Table               #FIN_GroupLedgerMapHistory
+          InsertIfEmpty       #No
+        ENDPROPERTIES
+        
+        FIELDLIST
+        ENDFIELDLIST
+      ENDOBJECTPOOL
+      METHODS
+        Version: 3
+        SOURCE #init
+          #public void init()
+          #{
+          #    super();
+          #
+          #    // Enable caching of the document handling display fields
+          #    FIN_GroupLedgerMapHistory_ds.cacheAddMethod(tablemethodstr(FIN_GroupLedgerMapping, FromAccountName));
+          #    FIN_GroupLedgerMapHistory_ds.cacheAddMethod(tablemethodstr(FIN_GroupLedgerMapping, ToAccountName));
+          #
+          #    qbr_MappingHIstory_FromEntityCode = this.query().dataSourceName('FIN_GroupLedgerMapHistory').addRange(fieldNum(FIN_GroupLedgerMapHistory ,FromEntityCode));
+          #    qbr_MappingHistory_ToEntityCode = this.query().dataSourceName('FIN_GroupLedgerMapHistory').addRange(fieldNum(FIN_GroupLedgerMapHistory ,ToEntityCode));
+          #}
+        ENDSOURCE
+      ENDMETHODS
+    ENDDATASOURCE
+  ENDOBJECTBANK
+  
+  JOINS
+  ENDJOINS
+  
+  DESIGN
+    PROPERTIES
+      Caption             #Finstone Group Ledgers per Entity
+      WindowResize        #Dynamic
+    ENDPROPERTIES
+    
+    CONTAINER
+      CONTROL GROUP
+        PROPERTIES
+          Name                #Group
+          Width               #Column width
+        ENDPROPERTIES
+        
+          CONTAINER
+            CONTROL COMBOBOX
+              PROPERTIES
+                Name                #ComboBoxEntity
+                AutoDeclaration     #Yes
+                Width               #400
+                FontSize            #12
+                Label               #Entity
+                LabelFontSize       #12
+                LabelBold           #Bold
+              ENDPROPERTIES
+              
+              METHODS
+                Version: 3
+                SOURCE #modified
+                  #public boolean modified()
+                  #{
+                  #
+                  #    boolean ret;
+                  #
+                  #    ret = super();
+                  #
+                  #    if (ret)
+                  #    {
+                  #        this.valueStr();
+                  #
+                  #        Select EntityCode from tabEntities where tabEntities.EntityName == this.valueStr(); // this.selection();
+                  #        if (tabEntities.EntityCode)
+                  #        {
+                  #            qbr_LedgerAccount_EntityCode.value(queryValue(tabEntities.EntityCode));
+                  #            FIN_GroupLedgerTable_ds.executeQuery();
+                  #
+                  #            qbr_Mapping_FromEntityCode.value(queryValue(tabEntities.EntityCode));
+                  #            FIN_GroupLedgerMapping_ds.executeQuery();
+                  #
+                  #            qbr_MappingHistory_FromEntityCode.value(queryValue(tabEntities.EntityCode));
+                  #            FIN_GroupLedgerMapHistory_ds.executeQuery();
+                  #
+                  #            qbr_Data_EntityCode.value(queryValue(tabEntities.EntityCode));
+                  #            FIN_GroupLedgerData_ds.executeQuery();
+                  #
+                  #            qbr_InventData_EntityCode.value(queryValue(tabEntities.EntityCode));
+                  #            FIN_GroupInventoryData_ds.executeQuery();
+                  #        }
+                  #    }
+                  #
+                  #    return ret;
+                  #}
+                  #
+                  #
+                ENDSOURCE
+              ENDMETHODS
+            ENDCONTROL 
+            
+          ENDCONTAINER
+          
+      ENDCONTROL 
+      
+      CONTROL TAB
+        PROPERTIES
+          Name                #Tab
+          Width               #Column width
+          Height              #Column height
+        ENDPROPERTIES
+        
+        CONTAINER
+          CONTROL TABPAGE
+            PROPERTIES
+              Name                #TabPage_Accounts
+              Width               #Column width
+              Height              #Column height
+              Caption             #Accounts
+            ENDPROPERTIES
+            
+            CONTAINER
+              CONTROL GROUP
+                PROPERTIES
+                  Name                #Group2
+                  Width               #Column width
+                  Columns             #4
+                  ArrangeGuide        
+                    ARRAY INDEX Columns 
+                      #0
+                      #0
+                      #0
+                      #0
+                    ENDARRAY
+                ENDPROPERTIES
+                
+                  CONTAINER
+                    CONTROL BUTTON
+                      PROPERTIES
+                        Name                #ButtonSQLLoad
+                        Enabled             #No
+                        Text                #Load Data
+                      ENDPROPERTIES
+                      
+                      METHODS
+                        Version: 3
+                        SOURCE #clicked
+                          #void clicked()
+                          #{
+                          #    super();
+                          #
+                          #    if (box::yesNo('This process will REMOVE the current Account data for the entity and RE-IMPORT it again. Any changes made will be LOST! Do you want to continue?'
+                          #                        , dialogButton::Yes, 'Confirmation') == dialogButton::Yes)
+                          #    {
+                          #
+                          #        FIN_GroupEntityDataSet::loadData(tabEntities.EntityCode,FIN_DataSet::LedgerAccounts);
+                          #        FIN_GroupLedgerTable_ds.executeQuery();
+                          #    }
+                          #}
+                          #
+                        ENDSOURCE
+                      ENDMETHODS
+                    ENDCONTROL 
+                    
+                    CONTROL BUTTON
+                      PROPERTIES
+                        Name                #ButtonExchTranslation
+                        Text                #Currency Translation
+                      ENDPROPERTIES
+                      
+                      METHODS
+                        Version: 3
+                        SOURCE #clicked
+                          #void clicked()
+                          #{
+                          #    FIN_PeriodStart periodstart;
+                          #    FIN_PeriodStart periodEnd;
+                          #    FIN_Category    category;
+                          #    FIN_EntityCode  entityCode;
+                          #    CurrencyCode    currencyCode;
+                          #
+                          #    FIN_GroupPeriod tabPeriod;
+                          #    int i;
+                          #
+                          #    dialogField                     dialogStartPeriod;
+                          #    dialogField                     dialogEndPeriod;
+                          #    dialogField                     dialogEntityCode;
+                          #    dialogField                     dialogCurrency;
+                          #    dialogField                     dialogCategory;
+                          #    Dialog                          dialog;
+                          #
+                          #    ;
+                          #
+                          #    super();
+                          #
+                          #    dialog = new Dialog("Process currency exchange translations");
+                          #
+                          #    dialogEntityCode    =   dialog.addField(typeId(FIN_EntityCode));
+                          #    dialogCurrency      =   dialog.addField(typeId(CurrencyCode),"To  Currency");
+                          #    dialogStartPeriod   =   dialog.addField(typeId(FIN_PeriodStart),"Start Period");
+                          #    dialogEndPeriod     =   dialog.addField(typeId(FIN_PeriodStart),"End Period");
+                          #    dialogCategory      =   dialog.addField(typeId(FIN_Category),"Source Category");
+                          #
+                          #    dialogEntityCode.value(tabEntities.EntityCode);
+                          #    dialogCategory.value("MAIN");
+                          #
+                          #    if(!dialog.run())
+                          #        return;
+                          #
+                          #    periodStart         =   dialogStartPeriod.value();
+                          #    periodEnd           =   endmth(dialogEndPeriod.value());
+                          #    entityCode          =   dialogEntityCode.value();
+                          #    category            =   dialogCategory.value();
+                          #    currencyCode        =   dialogCurrency.value();
+                          #
+                          #
+                          #    if (!periodStart || !periodEnd)
+                          #        throw error('Valid start and end periods are required!');
+                          #
+                          #
+                          #    if (!entityCode)
+                          #        throw error('A valid entity code is required!');
+                          #
+                          #    if (!category)
+                          #        throw error('A valid category is required!');
+                          #
+                          #    if (!currencyCode)
+                          #        throw error('A valid currency is required!');
+                          #
+                          #
+                          #    while select * from tabPeriod
+                          #            where tabPeriod.PeriodStart >= periodStart && tabPeriod.PeriodEnd <= periodEnd
+                          #    {
+                          #        FIN_GroupEntities::doTranslationAdj(entityCode,currencyCode,tabPeriod.PeriodStart,Category,NoYes::Yes);
+                          #    }
+                          #
+                          #
+                          #
+                          #}
+                        ENDSOURCE
+                      ENDMETHODS
+                    ENDCONTROL 
+                    
+                    CONTROL BUTTON
+                      PROPERTIES
+                        Name                #ButtonExchFixRates
+                        Text                #Ledger Fixed Exchange Rates
+                      ENDPROPERTIES
+                      
+                      METHODS
+                        Version: 3
+                        SOURCE #clicked
+                          #void clicked()
+                          #{
+                          #    Args            args;
+                          #    FormRun         formRun;
+                          #    container       filter;
+                          #    str             containstr;
+                          #    ;
+                          #
+                          #    args = new args();
+                          #
+                          #    args.parm(tabEntities.EntityCode);
+                          #
+                          #    // Run FormB
+                          #
+                          #    args.name(formstr(FIN_GroupExchLedgerAccounts));
+                          #    formRun = classFactory.formRunClass(Args);
+                          #    formRun.init();
+                          #    formrun.run();
+                          #    formrun.wait();
+                          #
+                          #    super();
+                          #}
+                        ENDSOURCE
+                      ENDMETHODS
+                    ENDCONTROL 
+                    
+                    CONTROL BUTTON
+                      PROPERTIES
+                        Name                #ButtonMapped
+                        Text                #Mapped Accounts
+                      ENDPROPERTIES
+                      
+                      METHODS
+                        Version: 3
+                        SOURCE #clicked
+                          #void clicked()
+                          #{
+                          #    Args            args;
+                          #    FormRun         formRun;
+                          #    container       filter;
+                          #    str             containstr;
+                          #    ;
+                          #
+                          #    args = new args();
+                          #
+                          #    filter = ["'" + FIN_GroupLedgerTable.AccountNum + "'",qbr_Mapping_ToEntityCode.value()];
+                          #    containstr = con2Str(filter);
+                          #    args.parm(containstr);
+                          #
+                          #    // Run FormB
+                          #
+                          #    args.name(formstr(FIN_LedgerMappedTo));
+                          #    formRun = classFactory.formRunClass(Args);
+                          #    formRun.init();
+                          #    formrun.run();
+                          #    formrun.wait();
+                          #
+                          #    super();
+                          #}
+                        ENDSOURCE
+                      ENDMETHODS
+                    ENDCONTROL 
+                    
+                    CONTROL BUTTON
+                      PROPERTIES
+                        Name                #Button1
+                        Visible             #No
+                        Text                #Import Manacs Accounts
+                      ENDPROPERTIES
+                      
+                      METHODS
+                        Version: 3
+                        SOURCE #clicked
+                          #void clicked()
+                          #{
+                          #    super();
+                          #     FIN_GroupLedgerTable.ImportManacFromExcel();
+                          #}
+                        ENDSOURCE
+                      ENDMETHODS
+                    ENDCONTROL 
+                    
+                    CONTROL BUTTON
+                      PROPERTIES
+                        Name                #Button
+                        Visible             #No
+                        Text                #Import Company Accounts
+                      ENDPROPERTIES
+                      
+                      METHODS
+                        Version: 3
+                        SOURCE #clicked
+                          #void clicked()
+                          #{
+                          #    super();
+                          #    FIN_GroupLedgerTable.ImportAccountsFromExcel();
+                          #}
+                        ENDSOURCE
+                      ENDMETHODS
+                    ENDCONTROL 
+                    
+                  ENDCONTAINER
+                  
+              ENDCONTROL 
+              
+              CONTROL GRID
+                PROPERTIES
+                  Name                #Grid
+                  Width               #Column width
+                  Height              #Column height
+                  DataSource          #FIN_GroupLedgerTable
+                ENDPROPERTIES
+                
+                  CONTAINER
+                    CONTROL CHECKBOX
+                      PROPERTIES
+                        Name                #FIN_GroupLedgerTable_Locked
+                        BackgroundColor     #Window background
+                        DataSource          #FIN_GroupLedgerTable
+                        DataField           #Locked
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupLedgerTable_EntityCode
+                        AllowEdit           #No
+                        Skip                #Yes
+                        ColorScheme         #RGB
+                        BackgroundColor     #230 230 230
+                        DataSource          #FIN_GroupLedgerTable
+                        DataField           #EntityCode
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupLedgerTable_AccountNum
+                        LookupButton        #Never
+                        ReplaceOnLookup     #No
+                        DataSource          #FIN_GroupLedgerTable
+                        DataField           #AccountNum
+                      ENDPROPERTIES
+                      
+                      METHODS
+                        Version: 3
+                        SOURCE #lookup
+                          #public void lookup()
+                          #{
+                          #    return;
+                          #    //super();
+                          #}
+                        ENDSOURCE
+                      ENDMETHODS
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupLedgerTable_AccountName
+                        DataSource          #FIN_GroupLedgerTable
+                        DataField           #AccountName
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupLedgerTable_Type
+                        DataSource          #FIN_GroupLedgerTable
+                        DataField           #Type
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL COMBOBOX
+                      PROPERTIES
+                        Name                #FIN_GroupLedgerTable_ExchAdjType
+                        Label               #Exch Adjustment
+                        DataSource          #FIN_GroupLedgerTable
+                        DataField           #ExchAdjType
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL CHECKBOX
+                      PROPERTIES
+                        Name                #FIN_GroupLedgerTable_IsHeading
+                        BackgroundColor     #Window background
+                        DataSource          #FIN_GroupLedgerTable
+                        DataField           #IsHeading
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL CHECKBOX
+                      PROPERTIES
+                        Name                #FIN_GroupLedgerTable_IsTotal
+                        BackgroundColor     #Window background
+                        DataSource          #FIN_GroupLedgerTable
+                        DataField           #IsTotal
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupLedgerTable_Level0
+                        DataSource          #FIN_GroupLedgerTable
+                        DataField           #Level0
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL INTEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupLedgerTable_Level0_Sort
+                        DataSource          #FIN_GroupLedgerTable
+                        DataField           #Level0_Sort
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupLedgerTable_Level1
+                        DataSource          #FIN_GroupLedgerTable
+                        DataField           #Level1
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL INTEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupLedgerTable_Level1_Sort
+                        DataSource          #FIN_GroupLedgerTable
+                        DataField           #Level1_Sort
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupLedgerTable_Level2
+                        DataSource          #FIN_GroupLedgerTable
+                        DataField           #Level2
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL INTEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupLedgerTable_Level2_Sort
+                        DataSource          #FIN_GroupLedgerTable
+                        DataField           #Level2_Sort
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupLedgerTable_Level3
+                        DataSource          #FIN_GroupLedgerTable
+                        DataField           #Level3
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL INTEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupLedgerTable_Level3_Sort
+                        DataSource          #FIN_GroupLedgerTable
+                        DataField           #Level3_Sort
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupLedgerTable_Level4
+                        DataSource          #FIN_GroupLedgerTable
+                        DataField           #Level4
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL INTEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupLedgerTable_Level4_Sort
+                        DataSource          #FIN_GroupLedgerTable
+                        DataField           #Level4_Sort
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                  ENDCONTAINER
+                  
+              ENDCONTROL 
+              
+            ENDCONTAINER
+            
+          ENDCONTROL 
+          
+          CONTROL TABPAGE
+            PROPERTIES
+              Name                #TabPage_Mappings
+              Width               #Column width
+              Height              #Column height
+              Caption             #Mappings
+            ENDPROPERTIES
+            
+            CONTAINER
+              CONTROL COMBOBOX
+                PROPERTIES
+                  Name                #ComboBoxToEntity
+                  AutoDeclaration     #Yes
+                  Width               #300
+                  Label               #To Entity
+                  LabelBold           #Bold
+                ENDPROPERTIES
+                
+                METHODS
+                  Version: 3
+                  SOURCE #modified
+                    #public boolean modified()
+                    #{
+                    #
+                    #    boolean ret;
+                    #
+                    #    ret = super();
+                    #
+                    #    if (ret)
+                    #    {
+                    #        this.valueStr();
+                    #
+                    #        Select EntityCode from tabEntities where tabEntities.EntityName == this.valueStr(); // this.selection();
+                    #        if (tabEntities.EntityCode)
+                    #        {
+                    #            qbr_Mapping_ToEntityCode.value(queryValue(tabEntities.EntityCode));
+                    #            FIN_GroupLedgerMapping_ds.executeQuery();
+                    #
+                    #            qbr_MappingHistory_ToEntityCode.value(queryValue(tabEntities.EntityCode));
+                    #            FIN_GroupLedgerMapHistory_ds.executeQuery();
+                    #
+                    #        }
+                    #    }
+                    #
+                    #    return ret;
+                    #}
+                    #
+                    #
+                  ENDSOURCE
+                ENDMETHODS
+              ENDCONTROL 
+              
+              CONTROL TAB
+                PROPERTIES
+                  Name                #Tab1
+                  Width               #Column width
+                  Height              #Column height
+                ENDPROPERTIES
+                
+                CONTAINER
+                  CONTROL TABPAGE
+                    PROPERTIES
+                      Name                #TabPageCurrent
+                      Caption             #Active
+                    ENDPROPERTIES
+                    
+                    CONTAINER
+                      CONTROL GROUP
+                        PROPERTIES
+                          Name                #Group1
+                          Width               #Column width
+                          Columns             #3
+                          ArrangeGuide        
+                            ARRAY INDEX Columns 
+                              #0
+                              #0
+                              #0
+                            ENDARRAY
+                        ENDPROPERTIES
+                        
+                          CONTAINER
+                            CONTROL BUTTON
+                              PROPERTIES
+                                Name                #ButtonMapping
+                                Text                #Mappings Structure
+                              ENDPROPERTIES
+                              
+                              METHODS
+                                Version: 3
+                                SOURCE #clicked
+                                  #void clicked()
+                                  #{
+                                  #    Args            args;
+                                  #    FormRun         formRun;
+                                  #    container       filter;
+                                  #    str             containstr;
+                                  #    ;
+                                  #
+                                  #    args = new args();
+                                  #
+                                  #    filter = [qbr_Mapping_FromEntityCode.value(),qbr_Mapping_ToEntityCode.value()];
+                                  #    containstr = con2Str(filter);
+                                  #    args.parm(containstr);
+                                  #
+                                  #    // Run FormB
+                                  #
+                                  #    args.name(formstr(FIN_LedgerMappings));
+                                  #    formRun = classFactory.formRunClass(Args);
+                                  #    formRun.init();
+                                  #    formrun.run();
+                                  #    formrun.wait();
+                                  #
+                                  #    super();
+                                  #}
+                                ENDSOURCE
+                              ENDMETHODS
+                            ENDCONTROL 
+                            
+                            CONTROL BUTTON
+                              PROPERTIES
+                                Name                #ButtonCopyMapping
+                                HelpText            #Copy Mappings from Other Entity
+                                Text                #Copy Mapping
+                              ENDPROPERTIES
+                              
+                              METHODS
+                                Version: 3
+                                SOURCE #clicked
+                                  #void clicked()
+                                  #{
+                                  #    super();
+                                  #    FIN_GroupLedgerMapping::copyMapping(qbr_Mapping_FromEntityCode.value());
+                                  #    FIN_GroupLedgerMapping_ds.executeQuery();
+                                  #}
+                                ENDSOURCE
+                              ENDMETHODS
+                            ENDCONTROL 
+                            
+                          ENDCONTAINER
+                          
+                      ENDCONTROL 
+                      
+                      CONTROL GRID
+                        PROPERTIES
+                          Name                #Grid1
+                          Width               #Column width
+                          Height              #Column height
+                          DataSource          #FIN_GroupLedgerMapping
+                        ENDPROPERTIES
+                        
+                          CONTAINER
+                            CONTROL STRINGEDIT
+                              PROPERTIES
+                                Name                #FIN_GroupLedgerMapping_FromEntityCode
+                                AllowEdit           #No
+                                Skip                #Yes
+                                ColorScheme         #RGB
+                                BackgroundColor     #230 230 230
+                                DataSource          #FIN_GroupLedgerMapping
+                                DataField           #FromEntityCode
+                              ENDPROPERTIES
+                              
+                            ENDCONTROL 
+                            
+                            CONTROL STRINGEDIT
+                              PROPERTIES
+                                Name                #FIN_GroupLedgerMapping_FromAcountNum
+                                DataSource          #FIN_GroupLedgerMapping
+                                DataField           #FromAcountNum
+                              ENDPROPERTIES
+                              
+                            ENDCONTROL 
+                            
+                            CONTROL STRINGEDIT
+                              PROPERTIES
+                                Name                #FromAccountName
+                                AllowEdit           #No
+                                DataSource          #FIN_GroupLedgerMapping
+                                DataMethod          #FromAccountName
+                              ENDPROPERTIES
+                              
+                            ENDCONTROL 
+                            
+                            CONTROL STRINGEDIT
+                              PROPERTIES
+                                Name                #FIN_GroupLedgerMapping_ToEntityCode
+                                DataSource          #FIN_GroupLedgerMapping
+                                DataField           #ToEntityCode
+                              ENDPROPERTIES
+                              
+                            ENDCONTROL 
+                            
+                            CONTROL STRINGEDIT
+                              PROPERTIES
+                                Name                #FIN_GroupLedgerMapping_ToAcountNum
+                                DataSource          #FIN_GroupLedgerMapping
+                                DataField           #ToAcountNum
+                              ENDPROPERTIES
+                              
+                            ENDCONTROL 
+                            
+                            CONTROL STRINGEDIT
+                              PROPERTIES
+                                Name                #ToAccountName
+                                AllowEdit           #No
+                                DataSource          #FIN_GroupLedgerMapping
+                                DataMethod          #ToAccountName
+                              ENDPROPERTIES
+                              
+                            ENDCONTROL 
+                            
+                            CONTROL STRINGEDIT
+                              PROPERTIES
+                                Name                #FIN_GroupLedgerMapping_createdBy
+                                AllowEdit           #No
+                                ColorScheme         #RGB
+                                BackgroundColor     #230 230 230
+                                DataSource          #FIN_GroupLedgerMapping
+                                DataField           #createdBy
+                              ENDPROPERTIES
+                              
+                            ENDCONTROL 
+                            
+                            CONTROL UTCDATETIMEEDIT
+                              PROPERTIES
+                                Name                #FIN_GroupLedgerMapping_createdDateTime
+                                AllowEdit           #No
+                                ColorScheme         #RGB
+                                BackgroundColor     #230 230 230
+                                DataSource          #FIN_GroupLedgerMapping
+                                DataField           #createdDateTime
+                              ENDPROPERTIES
+                              
+                            ENDCONTROL 
+                            
+                            CONTROL STRINGEDIT
+                              PROPERTIES
+                                Name                #FIN_GroupLedgerMapping_modifiedBy
+                                AllowEdit           #No
+                                ColorScheme         #RGB
+                                BackgroundColor     #230 230 230
+                                DataSource          #FIN_GroupLedgerMapping
+                                DataField           #modifiedBy
+                              ENDPROPERTIES
+                              
+                            ENDCONTROL 
+                            
+                            CONTROL UTCDATETIMEEDIT
+                              PROPERTIES
+                                Name                #FIN_GroupLedgerMapping_modifiedDateTime
+                                AllowEdit           #No
+                                ColorScheme         #RGB
+                                BackgroundColor     #230 230 230
+                                DataSource          #FIN_GroupLedgerMapping
+                                DataField           #modifiedDateTime
+                              ENDPROPERTIES
+                              
+                            ENDCONTROL 
+                            
+                          ENDCONTAINER
+                          
+                      ENDCONTROL 
+                      
+                    ENDCONTAINER
+                    
+                  ENDCONTROL 
+                  
+                  CONTROL TABPAGE
+                    PROPERTIES
+                      Name                #TabPageHistory
+                      Caption             #History
+                    ENDPROPERTIES
+                    
+                    CONTAINER
+                      CONTROL GRID
+                        PROPERTIES
+                          Name                #Grid2
+                          Width               #Column width
+                          Height              #Column height
+                          DataSource          #FIN_GroupLedgerMapHistory
+                        ENDPROPERTIES
+                        
+                          CONTAINER
+                            CONTROL DATEEDIT
+                              PROPERTIES
+                                Name                #FIN_GroupLedgerMapHistory_PeriodStart
+                                DataSource          #FIN_GroupLedgerMapHistory
+                                DataField           #PeriodStart
+                              ENDPROPERTIES
+                              
+                            ENDCONTROL 
+                            
+                            CONTROL DATEEDIT
+                              PROPERTIES
+                                Name                #FIN_GroupLedgerMapHistory_PeriodEnd
+                                DataSource          #FIN_GroupLedgerMapHistory
+                                DataField           #PeriodEnd
+                              ENDPROPERTIES
+                              
+                            ENDCONTROL 
+                            
+                            CONTROL STRINGEDIT
+                              PROPERTIES
+                                Name                #FIN_GroupLedgerMapHistory_FromEntityCode
+                                DataSource          #FIN_GroupLedgerMapHistory
+                                DataField           #FromEntityCode
+                              ENDPROPERTIES
+                              
+                            ENDCONTROL 
+                            
+                            CONTROL STRINGEDIT
+                              PROPERTIES
+                                Name                #FIN_GroupLedgerMapHistory_FromAcountNum
+                                DataSource          #FIN_GroupLedgerMapHistory
+                                DataField           #FromAcountNum
+                              ENDPROPERTIES
+                              
+                            ENDCONTROL 
+                            
+                            CONTROL STRINGEDIT
+                              PROPERTIES
+                                Name                #FromAccountNameHistory
+                                AllowEdit           #No
+                                DataSource          #FIN_GroupLedgerMapHistory
+                                DataMethod          #FromAccountName
+                              ENDPROPERTIES
+                              
+                            ENDCONTROL 
+                            
+                            CONTROL STRINGEDIT
+                              PROPERTIES
+                                Name                #FIN_GroupLedgerMapHistory_ToEntityCode
+                                DataSource          #FIN_GroupLedgerMapHistory
+                                DataField           #ToEntityCode
+                              ENDPROPERTIES
+                              
+                            ENDCONTROL 
+                            
+                            CONTROL STRINGEDIT
+                              PROPERTIES
+                                Name                #FIN_GroupLedgerMapHistory_ToAcountNum
+                                DataSource          #FIN_GroupLedgerMapHistory
+                                DataField           #ToAcountNum
+                              ENDPROPERTIES
+                              
+                            ENDCONTROL 
+                            
+                            CONTROL STRINGEDIT
+                              PROPERTIES
+                                Name                #ToAccountNameHistory
+                                AllowEdit           #No
+                                DataSource          #FIN_GroupLedgerMapHistory
+                                DataMethod          #ToAccountName
+                              ENDPROPERTIES
+                              
+                            ENDCONTROL 
+                            
+                          ENDCONTAINER
+                          
+                      ENDCONTROL 
+                      
+                    ENDCONTAINER
+                    
+                  ENDCONTROL 
+                  
+                ENDCONTAINER
+                
+              ENDCONTROL 
+              
+            ENDCONTAINER
+            
+          ENDCONTROL 
+          
+          CONTROL TABPAGE
+            PROPERTIES
+              Name                #TabPage_LedgerData
+              Width               #Column width
+              Height              #Column height
+              Caption             #Ledger Data
+            ENDPROPERTIES
+            
+            CONTAINER
+              CONTROL GRID
+                PROPERTIES
+                  Name                #Grid_LedgerData
+                  Width               #Column width
+                  Height              #Column height
+                  ColorScheme         #RGB
+                  BackgroundColor     #230 230 230
+                  DataSource          #FIN_GroupLedgerData
+                ENDPROPERTIES
+                
+                  CONTAINER
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupLedgerData_EntityCode
+                        AllowEdit           #No
+                        Skip                #Yes
+                        DataSource          #FIN_GroupLedgerData
+                        DataField           #EntityCode
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL DATEEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupLedgerData_TransDate
+                        DataSource          #FIN_GroupLedgerData
+                        DataField           #TransDate
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupLedgerData_ScenarioCode
+                        DataSource          #FIN_GroupLedgerData
+                        DataField           #ScenarioCode
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupLedgerData_AcountNum
+                        DataSource          #FIN_GroupLedgerData
+                        DataField           #AccountNum
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupLedgerData_CurrencyCode
+                        DataSource          #FIN_GroupLedgerData
+                        DataField           #CurrencyCode
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL REALEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupLedgerData_Amount
+                        DataSource          #FIN_GroupLedgerData
+                        DataField           #Amount
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL REALEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupLedgerData_AmountMST
+                        DataSource          #FIN_GroupLedgerData
+                        DataField           #AmountMST
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupLedgerData_CostCenter
+                        DataSource          #FIN_GroupLedgerData
+                        DataField           #CostCenter
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupLedgerData_Department
+                        DataSource          #FIN_GroupLedgerData
+                        DataField           #Department
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupLedgerData_Purpose
+                        DataSource          #FIN_GroupLedgerData
+                        DataField           #Purpose
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL DATEEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupLedgerData_PeriodStart
+                        DataSource          #FIN_GroupLedgerData
+                        DataField           #PeriodStart
+                      ENDPROPERTIES
+                      
+                      METHODS
+                        Version: 3
+                        SOURCE #lookup
+                          #public void lookup()
+                          #{
+                          #   ;
+                          #   FIN_GroupPeriod::lookupPeriodStart(this);
+                          #}
+                        ENDSOURCE
+                      ENDMETHODS
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupLedgerData_Category
+                        BackgroundColor     #
+                        DataSource          #FIN_GroupLedgerData
+                        DataField           #Category
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL CHECKBOX
+                      PROPERTIES
+                        Name                #FIN_GroupLedgerData_LockedByUser
+                        BackgroundColor     #
+                        DataSource          #FIN_GroupLedgerData
+                        DataField           #LockedByUser
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL CHECKBOX
+                      PROPERTIES
+                        Name                #FIN_GroupLedgerData_LockedByAdmin
+                        BackgroundColor     #
+                        DataSource          #FIN_GroupLedgerData
+                        DataField           #LockedByAdmin
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                  ENDCONTAINER
+                  
+              ENDCONTROL 
+              
+              CONTROL BUTTONGROUP
+                PROPERTIES
+                  Name                #ButtonGroup
+                ENDPROPERTIES
+                
+                CONTAINER
+                  CONTROL BUTTON
+                    PROPERTIES
+                      Name                #ButtonCopyLedgerData
+                      Text                #Load Data
+                    ENDPROPERTIES
+                    
+                    METHODS
+                      Version: 3
+                      SOURCE #clicked
+                        #void clicked()
+                        #{
+                        #    super();
+                        #
+                        #    FIN_GroupEntityDataSet::loadData(tabEntities.EntityCode,FIN_DataSet::LedgerData);
+                        #    FIN_GroupLedgerData_ds.executeQuery();
+                        #}
+                      ENDSOURCE
+                    ENDMETHODS
+                  ENDCONTROL 
+                  
+                  CONTROL BUTTON
+                    PROPERTIES
+                      Name                #ButtonCreateOpenBalances
+                      Text                #Create Open Balances
+                    ENDPROPERTIES
+                    
+                    METHODS
+                      Version: 3
+                      SOURCE #clicked
+                        #void clicked()
+                        #{
+                        #    super();
+                        #
+                        #    FIN_GroupEntities::createOpeningBalances(tabEntities.EntityCode);
+                        #    FIN_GroupLedgerData_ds.executeQuery();
+                        #}
+                      ENDSOURCE
+                    ENDMETHODS
+                  ENDCONTROL 
+                  
+                ENDCONTAINER
+                
+              ENDCONTROL 
+              
+            ENDCONTAINER
+            
+          ENDCONTROL 
+          
+          CONTROL TABPAGE
+            PROPERTIES
+              Name                #TabPage_InventoryData
+              Width               #Column width
+              Height              #Column height
+              Caption             #Inventory Data
+            ENDPROPERTIES
+            
+            CONTAINER
+              CONTROL GRID
+                PROPERTIES
+                  Name                #Grid_InventoryData
+                  Width               #Column width
+                  Height              #Column height
+                  ActiveBackColor     #Window background
+                  DataSource          #FIN_GroupInventoryData
+                ENDPROPERTIES
+                
+                  CONTAINER
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupInventoryData_EntityCode
+                        DataSource          #FIN_GroupInventoryData
+                        DataField           #EntityCode
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL DATEEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupInventoryData_TransDate
+                        DataSource          #FIN_GroupInventoryData
+                        DataField           #TransDate
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupInventoryData_Category
+                        DataSource          #FIN_GroupInventoryData
+                        DataField           #Category
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupInventoryData_ScenarioCode
+                        DataSource          #FIN_GroupInventoryData
+                        DataField           #ScenarioCode
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupInventoryData_CostCenter
+                        DataSource          #FIN_GroupInventoryData
+                        DataField           #CostCenter
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupInventoryData_Department
+                        DataSource          #FIN_GroupInventoryData
+                        DataField           #Department
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupInventoryData_Purpose
+                        DataSource          #FIN_GroupInventoryData
+                        DataField           #Purpose
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL DATEEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupInventoryData_PeriodStart
+                        DataSource          #FIN_GroupInventoryData
+                        DataField           #PeriodStart
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL CHECKBOX
+                      PROPERTIES
+                        Name                #FIN_GroupInventoryData_PeriodClosed
+                        BackgroundColor     #Window background
+                        DataSource          #FIN_GroupInventoryData
+                        DataField           #PeriodClosed
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupInventoryData_ProducerCountry
+                        DataSource          #FIN_GroupInventoryData
+                        DataField           #ProducerCountry
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupInventoryData_RegionName
+                        DataSource          #FIN_GroupInventoryData
+                        DataField           #RegionName
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupInventoryData_ProducerName
+                        DataSource          #FIN_GroupInventoryData
+                        DataField           #ProducerName
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupInventoryData_ProductName
+                        DataSource          #FIN_GroupInventoryData
+                        DataField           #ProductName
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupInventoryData_ColorName
+                        DataSource          #FIN_GroupInventoryData
+                        DataField           #ColorName
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupInventoryData_SizeCategory
+                        DataSource          #FIN_GroupInventoryData
+                        DataField           #SizeCategory
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupInventoryData_QtyUnits
+                        DataSource          #FIN_GroupInventoryData
+                        DataField           #QtyUnits
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL REALEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupInventoryData_Qty
+                        DataSource          #FIN_GroupInventoryData
+                        DataField           #Qty
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #FIN_GroupInventoryData_Grade
+                        DataSource          #FIN_GroupInventoryData
+                        DataField           #Grade
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                  ENDCONTAINER
+                  
+              ENDCONTROL 
+              
+            ENDCONTAINER
+            
+          ENDCONTROL 
+          
+        ENDCONTAINER
+        
+      ENDCONTROL 
+      
+    ENDCONTAINER
+    
+  ENDDESIGN
+  
+ENDFORM

@@ -1,0 +1,172 @@
+﻿  ENUMTYPE #FIN_LogEntryType
+    Id 50010
+    PROPERTIES
+      Name                #FIN_LogEntryType
+      Label               #Log Entry Type
+      UseEnumValue        #Yes
+    ENDPROPERTIES
+    
+    TYPEELEMENTS
+      #Entity_Inserted
+      PROPERTIES
+        Name                #Entity_Inserted
+        Label               #Entity_Inserted
+        EnumValue           #0
+      ENDPROPERTIES
+      
+      #Entity_Updated
+      PROPERTIES
+        Name                #Entity_Updated
+        Label               #Entity_Updated
+        EnumValue           #1
+      ENDPROPERTIES
+      
+      #Entity_Deleted
+      PROPERTIES
+        Name                #Entity_Deleted
+        Label               #Entity_Deleted
+        EnumValue           #2
+      ENDPROPERTIES
+      
+      #LedgerData_Imported
+      PROPERTIES
+        Name                #LedgerData_Imported
+        Label               #LedgerData_Imported
+        EnumValue           #3
+      ENDPROPERTIES
+      
+      #LedgerData_Deleted
+      PROPERTIES
+        Name                #LedgerData_Deleted
+        Label               #LedgerData_Deleted
+        EnumValue           #4
+      ENDPROPERTIES
+      
+      #LedgerData_Updated
+      PROPERTIES
+        Name                #LedgerData_Updated
+        Label               #LedgerData_Updated
+        EnumValue           #5
+      ENDPROPERTIES
+      
+      #LedgerData_LockAdmin
+      PROPERTIES
+        Name                #LedgerData_LockAdmin
+        Label               #LedgerData_LockAdmin
+        EnumValue           #6
+      ENDPROPERTIES
+      
+      #LedgerData_LockUser
+      PROPERTIES
+        Name                #LedgerData_LockUser
+        Label               #LedgerData_LockUser
+        EnumValue           #7
+      ENDPROPERTIES
+      
+      #InventData_Imported
+      PROPERTIES
+        Name                #InventData_Imported
+        Label               #InventData_Imported
+        EnumValue           #8
+      ENDPROPERTIES
+      
+      #InventData_Deleted
+      PROPERTIES
+        Name                #InventData_Deleted
+        Label               #InventData_Deleted
+        EnumValue           #9
+      ENDPROPERTIES
+      
+      #InventData_LockAdmin
+      PROPERTIES
+        Name                #InventData_LockAdmin
+        Label               #InventData_LockAdmin
+        EnumValue           #10
+      ENDPROPERTIES
+      
+      #InventData_LockUser
+      PROPERTIES
+        Name                #InventData_LockUser
+        Label               #InventData_LockUser
+        EnumValue           #11
+      ENDPROPERTIES
+      
+      #Accounts_Imported
+      PROPERTIES
+        Name                #Accounts_Imported
+        Label               #Accounts_Imported
+        EnumValue           #12
+      ENDPROPERTIES
+      
+      #Accounts_Deleted
+      PROPERTIES
+        Name                #Accounts_Deleted
+        Label               #Accounts_Deleted
+        EnumValue           #13
+      ENDPROPERTIES
+      
+      #Accounts_Locked
+      PROPERTIES
+        Name                #Accounts_Locked
+        Label               #Accounts_Locked
+        EnumValue           #14
+      ENDPROPERTIES
+      
+      #Accounts_UnLock
+      PROPERTIES
+        Name                #Accounts_UnLock
+        Label               #Accounts_UnLock
+        EnumValue           #15
+      ENDPROPERTIES
+      
+      #LedgerData_Forex
+      PROPERTIES
+        Name                #LedgerData_Forex
+        Label               #LedgerData_Forex
+        EnumValue           #16
+      ENDPROPERTIES
+      
+      #AdjData_Deleted
+      PROPERTIES
+        Name                #AdjData_Deleted
+        Label               #AdjData_Deleted
+        EnumValue           #17
+      ENDPROPERTIES
+      
+      #AdjData_Import
+      PROPERTIES
+        Name                #AdjData_Import
+        Label               #AdjData_Import
+        EnumValue           #18
+      ENDPROPERTIES
+      
+      #Mapping_Imported
+      PROPERTIES
+        Name                #Mapping_Imported
+        Label               #Mapping_Imported
+        EnumValue           #19
+      ENDPROPERTIES
+      
+      #Mapping_Deleted
+      PROPERTIES
+        Name                #Mapping_Deleted
+        Label               #Mapping_Deleted
+        EnumValue           #20
+      ENDPROPERTIES
+      
+      #Accounts_Inserted
+      PROPERTIES
+        Name                #Accounts_Inserted
+        Label               #Accounts_Inserted
+        EnumValue           #21
+      ENDPROPERTIES
+      
+      #Accounts_Updated
+      PROPERTIES
+        Name                #Accounts_Updated
+        Label               #Accounts_Updated
+        EnumValue           #22
+      ENDPROPERTIES
+      
+    ENDTYPEELEMENTS
+  ENDENUMTYPE

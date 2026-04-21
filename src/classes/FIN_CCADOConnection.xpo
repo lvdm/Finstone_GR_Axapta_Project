@@ -1,0 +1,80 @@
+﻿  CLASS #FIN_CCADOConnection
+    Id 50038
+    PROPERTIES
+      Name                #FIN_CCADOConnection
+      Extends             #
+      RunOn               #Called from
+    ENDPROPERTIES
+    
+    METHODS
+      Version: 3
+      SOURCE #classDeclaration
+        #class FIN_CCADOConnection
+        #{
+        #    COM  connection;
+        #    #CCADo
+        #}
+      ENDSOURCE
+      SOURCE #close
+        #void close()
+        #{
+        #    InteropPermission _perm;
+        #;
+        #    _perm = new InteropPermission(InteropKind::ComInterop);
+        #    _perm.assert();
+        #
+        #    connection.close();
+        #    connection = null;
+        #}
+      ENDSOURCE
+      SOURCE #commandTimeout
+        #int commandTimeout(int commandTimeout   = connection.commandTimeout())
+        #{
+        #;
+        #    connection.commandTimeout(commandTimeout);
+        #    return commandTimeout;
+        #}
+        #
+      ENDSOURCE
+      SOURCE #connection
+        #COM connection()
+        #{
+        #    return connection;
+        #}
+      ENDSOURCE
+      SOURCE #new
+        #void new()
+        #{
+        #    InteropPermission _perm;
+        #;
+        #
+        #    _perm = new InteropPermission(InteropKind::ComInterop);
+        #    _perm.assert();
+        #    connection = new COM('ADODB.Connection');
+        #}
+      ENDSOURCE
+      SOURCE #open
+        #void open(str connectionString = '',
+        #          int options = #adConnectUnspecified)
+        #{
+        #    InteropPermission _perm;
+        #;
+        #
+        #    _perm = new InteropPermission(InteropKind::ComInterop);
+        #    _perm.assert();
+        #
+        #    if (prmisdefault(connectionString))
+        #        connection.open(COMArgument::NoValue,
+        #                        COMArgument::NoValue,
+        #                        COMArgument::NoValue,
+        #                        options);
+        #    else
+        #        connection.open(connectionString,
+        #                        COMArgument::NoValue,
+        #                        COMArgument::NoValue,
+        #                        options);
+        #}
+        #
+      ENDSOURCE
+    ENDMETHODS
+  ENDCLASS

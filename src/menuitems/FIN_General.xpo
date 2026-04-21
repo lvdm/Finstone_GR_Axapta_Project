@@ -1,0 +1,9 @@
+﻿  MENUITEM #FIN_General
+    Type: 1
+    PROPERTIES
+      Name                #FIN_General
+      Label               #General
+      Object              #FIN_GroupGeneral
+    ENDPROPERTIES
+    
+  ENDMENUITEM

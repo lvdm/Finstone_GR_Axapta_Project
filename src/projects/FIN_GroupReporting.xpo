@@ -1,0 +1,834 @@
+﻿  PROJECT #FIN_GroupReporting
+   SHARED
+  PROPERTIES
+    Name                #FIN_GroupReporting
+  ENDPROPERTIES
+  
+    PROJECTCLASS ProjectNode
+    GROUP #Menus
+      PROPERTIES
+        Name                #Menus
+        ProjectGroupType    #Menus
+        GroupMask           #
+        PreventEditProperties #No
+      ENDPROPERTIES
+      
+      BEGINNODE
+        FILETYPE 0
+        UTILTYPE 16
+        UTILOBJECTID 0
+        NODETYPE 205
+        NAME #GroupFinancials
+      ENDNODE
+      GROUP #MenuItems
+        PROPERTIES
+          Name                #MenuItems
+          ProjectGroupType    #MenuItems
+          GroupMask           #
+          PreventEditProperties #No
+        ENDPROPERTIES
+        
+        GROUP #Action
+          PROPERTIES
+            Name                #Action
+            ProjectGroupType    #Action
+            GroupMask           #
+            PreventEditProperties #No
+          ENDPROPERTIES
+          
+          ENDGROUP
+          
+        GROUP #Output
+          PROPERTIES
+            Name                #Output
+            ProjectGroupType    #Output
+            GroupMask           #
+            PreventEditProperties #No
+          ENDPROPERTIES
+          
+          ENDGROUP
+          
+        GROUP #Display
+          PROPERTIES
+            Name                #Display
+            ProjectGroupType    #Display
+            GroupMask           #
+            PreventEditProperties #No
+          ENDPROPERTIES
+          
+          BEGINNODE
+            FILETYPE 0
+            UTILTYPE 1
+            UTILOBJECTID 0
+            NODETYPE 296
+            NAME #FIN_EntityAdjustments
+          ENDNODE
+          BEGINNODE
+            FILETYPE 0
+            UTILTYPE 1
+            UTILOBJECTID 0
+            NODETYPE 296
+            NAME #FIN_LedgerDataImport
+          ENDNODE
+          BEGINNODE
+            FILETYPE 0
+            UTILTYPE 1
+            UTILOBJECTID 0
+            NODETYPE 296
+            NAME #FIN_GroupExcelTemplates
+          ENDNODE
+          BEGINNODE
+            FILETYPE 0
+            UTILTYPE 1
+            UTILOBJECTID 0
+            NODETYPE 296
+            NAME #FIN_GroupUsers
+          ENDNODE
+          BEGINNODE
+            FILETYPE 0
+            UTILTYPE 1
+            UTILOBJECTID 0
+            NODETYPE 296
+            NAME #FIN_General
+          ENDNODE
+          BEGINNODE
+            FILETYPE 0
+            UTILTYPE 1
+            UTILOBJECTID 0
+            NODETYPE 296
+            NAME #FIN_GroupLedgers
+          ENDNODE
+          BEGINNODE
+            FILETYPE 0
+            UTILTYPE 1
+            UTILOBJECTID 0
+            NODETYPE 296
+            NAME #FIN_GroupEntities
+          ENDNODE
+          ENDGROUP
+          
+        ENDGROUP
+        
+      ENDGROUP
+      
+    GROUP #Classes
+      PROPERTIES
+        Name                #Classes
+        ProjectGroupType    #Classes
+        GroupMask           #
+        PreventEditProperties #No
+      ENDPROPERTIES
+      
+      BEGINNODE
+        FILETYPE 0
+        UTILTYPE 45
+        UTILOBJECTID 50042
+        NODETYPE 329
+        NAME #FIN_CCADOField
+      ENDNODE
+      BEGINNODE
+        FILETYPE 0
+        UTILTYPE 45
+        UTILOBJECTID 50041
+        NODETYPE 329
+        NAME #FIN_CCADOFields
+      ENDNODE
+      BEGINNODE
+        FILETYPE 0
+        UTILTYPE 45
+        UTILOBJECTID 50040
+        NODETYPE 329
+        NAME #FIN_CCADORecordSet
+      ENDNODE
+      BEGINNODE
+        FILETYPE 0
+        UTILTYPE 45
+        UTILOBJECTID 50039
+        NODETYPE 329
+        NAME #FIN_CCADOCommand
+      ENDNODE
+      BEGINNODE
+        FILETYPE 0
+        UTILTYPE 45
+        UTILOBJECTID 50038
+        NODETYPE 329
+        NAME #FIN_CCADOConnection
+      ENDNODE
+      BEGINNODE
+        FILETYPE 0
+        UTILTYPE 45
+        UTILOBJECTID 50037
+        NODETYPE 329
+        NAME #FIN_RunBatch_DataImport
+      ENDNODE
+      BEGINNODE
+        FILETYPE 0
+        UTILTYPE 45
+        UTILOBJECTID 50036
+        NODETYPE 329
+        NAME #FIN_FormTreeDatasource
+      ENDNODE
+      BEGINNODE
+        FILETYPE 0
+        UTILTYPE 45
+        UTILOBJECTID 50035
+        NODETYPE 329
+        NAME #FIN_DataConnection
+      ENDNODE
+      ENDGROUP
+      
+    GROUP #Jobs
+      PROPERTIES
+        Name                #Jobs
+        ProjectGroupType    #Jobs
+        GroupMask           #
+        PreventEditProperties #No
+      ENDPROPERTIES
+      
+      BEGINNODE
+        FILETYPE 0
+        UTILTYPE 5
+        UTILOBJECTID 0
+        NODETYPE 215
+        NAME #FIN_Group_CreateDATA_AccDimKey
+      ENDNODE
+      BEGINNODE
+        FILETYPE 0
+        UTILTYPE 5
+        UTILOBJECTID 0
+        NODETYPE 215
+        NAME #FIN_GROUP_Test_LatestDates
+      ENDNODE
+      BEGINNODE
+        FILETYPE 0
+        UTILTYPE 5
+        UTILOBJECTID 0
+        NODETYPE 215
+        NAME #FIN_Group_Create_AllEntities_User
+      ENDNODE
+      BEGINNODE
+        FILETYPE 0
+        UTILTYPE 5
+        UTILOBJECTID 0
+        NODETYPE 215
+        NAME #FIN_Group_CreateEntityPeriods
+      ENDNODE
+      BEGINNODE
+        FILETYPE 0
+        UTILTYPE 5
+        UTILOBJECTID 0
+        NODETYPE 215
+        NAME #FIN_Group_Data_Fix
+      ENDNODE
+      BEGINNODE
+        FILETYPE 0
+        UTILTYPE 5
+        UTILOBJECTID 0
+        NODETYPE 215
+        NAME #FIN_Group_Tree_test
+      ENDNODE
+      BEGINNODE
+        FILETYPE 0
+        UTILTYPE 5
+        UTILOBJECTID 0
+        NODETYPE 215
+        NAME #FIN_GroupExchTranslationTest
+      ENDNODE
+      BEGINNODE
+        FILETYPE 0
+        UTILTYPE 5
+        UTILOBJECTID 0
+        NODETYPE 215
+        NAME #FIN_GroupMappingTest
+      ENDNODE
+      BEGINNODE
+        FILETYPE 0
+        UTILTYPE 5
+        UTILOBJECTID 0
+        NODETYPE 215
+        NAME #SQLDirect
+      ENDNODE
+      BEGINNODE
+        FILETYPE 0
+        UTILTYPE 5
+        UTILOBJECTID 0
+        NODETYPE 215
+        NAME #SQLintegrate
+      ENDNODE
+      ENDGROUP
+      
+    GROUP #Forms
+      PROPERTIES
+        Name                #Forms
+        ProjectGroupType    #Forms
+        GroupMask           #
+        PreventEditProperties #No
+      ENDPROPERTIES
+      
+      BEGINNODE
+        FILETYPE 0
+        UTILTYPE 11
+        UTILOBJECTID 0
+        NODETYPE 201
+        NAME #FIN_RowsSets
+      ENDNODE
+      BEGINNODE
+        FILETYPE 0
+        UTILTYPE 11
+        UTILOBJECTID 0
+        NODETYPE 201
+        NAME #FIN_EntityAdjustments
+      ENDNODE
+      BEGINNODE
+        FILETYPE 0
+        UTILTYPE 11
+        UTILOBJECTID 0
+        NODETYPE 201
+        NAME #FIN_EntityPeriod
+      ENDNODE
+      BEGINNODE
+        FILETYPE 0
+        UTILTYPE 11
+        UTILOBJECTID 0
+        NODETYPE 201
+        NAME #FIN_DataImport
+      ENDNODE
+      BEGINNODE
+        FILETYPE 0
+        UTILTYPE 11
+        UTILOBJECTID 0
+        NODETYPE 201
+        NAME #FIN_UserMap
+      ENDNODE
+      BEGINNODE
+        FILETYPE 0
+        UTILTYPE 11
+        UTILOBJECTID 0
+        NODETYPE 201
+        NAME #FIN_GroupUsers
+      ENDNODE
+      GROUP #LookupForms
+        PROPERTIES
+          Name                #LookupForms
+          ProjectGroupType    #All
+          GroupMask           #
+          PreventEditProperties #No
+        ENDPROPERTIES
+        
+        BEGINNODE
+          FILETYPE 0
+          UTILTYPE 11
+          UTILOBJECTID 0
+          NODETYPE 201
+          NAME #FIN_EntityTreeLookup
+        ENDNODE
+        BEGINNODE
+          FILETYPE 0
+          UTILTYPE 11
+          UTILOBJECTID 0
+          NODETYPE 201
+          NAME #FIN_EntityLookup
+        ENDNODE
+        BEGINNODE
+          FILETYPE 0
+          UTILTYPE 11
+          UTILOBJECTID 0
+          NODETYPE 201
+          NAME #FIN_LedgerAccountLookup
+        ENDNODE
+        ENDGROUP
+        
+      BEGINNODE
+        FILETYPE 0
+        UTILTYPE 11
+        UTILOBJECTID 0
+        NODETYPE 201
+        NAME #FIN_GroupExcelTemplates
+      ENDNODE
+      BEGINNODE
+        FILETYPE 0
+        UTILTYPE 11
+        UTILOBJECTID 0
+        NODETYPE 201
+        NAME #FIN_EntityWorkings
+      ENDNODE
+      BEGINNODE
+        FILETYPE 0
+        UTILTYPE 11
+        UTILOBJECTID 0
+        NODETYPE 201
+        NAME #FIN_GroupLedgerData
+      ENDNODE
+      BEGINNODE
+        FILETYPE 0
+        UTILTYPE 11
+        UTILOBJECTID 0
+        NODETYPE 201
+        NAME #FIN_GroupExchLedgerAccounts
+      ENDNODE
+      BEGINNODE
+        FILETYPE 0
+        UTILTYPE 11
+        UTILOBJECTID 0
+        NODETYPE 201
+        NAME #FIN_GroupEntities
+      ENDNODE
+      BEGINNODE
+        FILETYPE 0
+        UTILTYPE 11
+        UTILOBJECTID 0
+        NODETYPE 201
+        NAME #FIN_GroupPeriods
+      ENDNODE
+      BEGINNODE
+        FILETYPE 0
+        UTILTYPE 11
+        UTILOBJECTID 0
+        NODETYPE 201
+        NAME #FIN_LedgerMappings
+      ENDNODE
+      BEGINNODE
+        FILETYPE 0
+        UTILTYPE 11
+        UTILOBJECTID 0
+        NODETYPE 201
+        NAME #FIN_GroupLedgers
+      ENDNODE
+      BEGINNODE
+        FILETYPE 0
+        UTILTYPE 11
+        UTILOBJECTID 0
+        NODETYPE 201
+        NAME #FIN_GroupGeneral
+      ENDNODE
+      ENDGROUP
+      
+    GROUP #DataDictionary
+      PROPERTIES
+        Name                #DataDictionary
+        ProjectGroupType    #DataDictionary
+        GroupMask           #
+        PreventEditProperties #No
+      ENDPROPERTIES
+      
+      GROUP #Views
+        PROPERTIES
+          Name                #Views
+          ProjectGroupType    #Views
+          GroupMask           #
+          PreventEditProperties #No
+        ENDPROPERTIES
+        
+        BEGINNODE
+          FILETYPE 0
+          UTILTYPE 44
+          UTILOBJECTID 50038
+          NODETYPE 243
+          NAME #FIN_Group_View_AccountData
+        ENDNODE
+        ENDGROUP
+        
+      GROUP #ExtendedDataTypes
+        PROPERTIES
+          Name                #ExtendedDataTypes
+          ProjectGroupType    #ExtendedDataTypes
+          GroupMask           #
+          PreventEditProperties #No
+        ENDPROPERTIES
+        
+        BEGINNODE
+          FILETYPE 0
+          UTILTYPE 41
+          UTILOBJECTID 50022
+          NODETYPE 234
+          NAME #FIN_ScheduleTemplateName
+        ENDNODE
+        BEGINNODE
+          FILETYPE 0
+          UTILTYPE 41
+          UTILOBJECTID 50021
+          NODETYPE 234
+          NAME #FIN_Position
+        ENDNODE
+        BEGINNODE
+          FILETYPE 0
+          UTILTYPE 41
+          UTILOBJECTID 50020
+          NODETYPE 234
+          NAME #FIN_UserName
+        ENDNODE
+        BEGINNODE
+          FILETYPE 0
+          UTILTYPE 41
+          UTILOBJECTID 50018
+          NODETYPE 232
+          NAME #FIN_RowLineNo
+        ENDNODE
+        BEGINNODE
+          FILETYPE 0
+          UTILTYPE 41
+          UTILOBJECTID 50015
+          NODETYPE 234
+          NAME #FIN_DataSource
+        ENDNODE
+        BEGINNODE
+          FILETYPE 0
+          UTILTYPE 41
+          UTILOBJECTID 50014
+          NODETYPE 234
+          NAME #FIN_Category
+        ENDNODE
+        BEGINNODE
+          FILETYPE 0
+          UTILTYPE 41
+          UTILOBJECTID 50011
+          NODETYPE 234
+          NAME #FIN_ScenarioCode
+        ENDNODE
+        BEGINNODE
+          FILETYPE 0
+          UTILTYPE 41
+          UTILOBJECTID 50013
+          NODETYPE 231
+          NAME #FIN_PeriodEnd
+        ENDNODE
+        BEGINNODE
+          FILETYPE 0
+          UTILTYPE 41
+          UTILOBJECTID 50012
+          NODETYPE 231
+          NAME #FIN_PeriodStart
+        ENDNODE
+        BEGINNODE
+          FILETYPE 0
+          UTILTYPE 41
+          UTILOBJECTID 50010
+          NODETYPE 234
+          NAME #FIN_AccountNum
+        ENDNODE
+        BEGINNODE
+          FILETYPE 0
+          UTILTYPE 41
+          UTILOBJECTID 50009
+          NODETYPE 234
+          NAME #FIN_EntityName
+        ENDNODE
+        BEGINNODE
+          FILETYPE 0
+          UTILTYPE 41
+          UTILOBJECTID 50016
+          NODETYPE 234
+          NAME #FIN_RowSetName
+        ENDNODE
+        BEGINNODE
+          FILETYPE 0
+          UTILTYPE 41
+          UTILOBJECTID 50019
+          NODETYPE 234
+          NAME #FIN_RowLineName
+        ENDNODE
+        BEGINNODE
+          FILETYPE 0
+          UTILTYPE 41
+          UTILOBJECTID 50008
+          NODETYPE 234
+          NAME #FIN_EntityCode
+        ENDNODE
+        BEGINNODE
+          FILETYPE 0
+          UTILTYPE 41
+          UTILOBJECTID 50017
+          NODETYPE 234
+          NAME #FIN_RowSetCode
+        ENDNODE
+        ENDGROUP
+        
+      GROUP #BaseEnums
+        PROPERTIES
+          Name                #BaseEnums
+          ProjectGroupType    #BaseEnums
+          GroupMask           #
+          PreventEditProperties #No
+        ENDPROPERTIES
+        
+        BEGINNODE
+          FILETYPE 0
+          UTILTYPE 40
+          UTILOBJECTID 50011
+          NODETYPE 209
+          NAME #FIN_RowMapping
+        ENDNODE
+        BEGINNODE
+          FILETYPE 0
+          UTILTYPE 40
+          UTILOBJECTID 50010
+          NODETYPE 209
+          NAME #FIN_LogEntryType
+        ENDNODE
+        BEGINNODE
+          FILETYPE 0
+          UTILTYPE 40
+          UTILOBJECTID 50009
+          NODETYPE 209
+          NAME #FIN_DataSourceType
+        ENDNODE
+        BEGINNODE
+          FILETYPE 0
+          UTILTYPE 40
+          UTILOBJECTID 50008
+          NODETYPE 209
+          NAME #FIN_ExchAdjType
+        ENDNODE
+        BEGINNODE
+          FILETYPE 0
+          UTILTYPE 40
+          UTILOBJECTID 50007
+          NODETYPE 209
+          NAME #FIN_DataSet
+        ENDNODE
+        ENDGROUP
+        
+      GROUP #Tables
+        PROPERTIES
+          Name                #Tables
+          ProjectGroupType    #Tables
+          GroupMask           #
+          PreventEditProperties #No
+        ENDPROPERTIES
+        
+        BEGINNODE
+          FILETYPE 0
+          UTILTYPE 44
+          UTILOBJECTID 50055
+          NODETYPE 204
+          NAME #FIN_GroupRowLink
+        ENDNODE
+        BEGINNODE
+          FILETYPE 0
+          UTILTYPE 44
+          UTILOBJECTID 50054
+          NODETYPE 204
+          NAME #FIN_GroupLedgerMapHistory
+        ENDNODE
+        BEGINNODE
+          FILETYPE 0
+          UTILTYPE 44
+          UTILOBJECTID 50053
+          NODETYPE 204
+          NAME #FIN_GroupEntityHistory
+        ENDNODE
+        BEGINNODE
+          FILETYPE 0
+          UTILTYPE 44
+          UTILOBJECTID 50052
+          NODETYPE 204
+          NAME #FIN_GroupEntityPeriod
+        ENDNODE
+        BEGINNODE
+          FILETYPE 0
+          UTILTYPE 44
+          UTILOBJECTID 50051
+          NODETYPE 204
+          NAME #FIN_GroupEntityLog
+        ENDNODE
+        BEGINNODE
+          FILETYPE 0
+          UTILTYPE 44
+          UTILOBJECTID 50049
+          NODETYPE 204
+          NAME #FIN_GroupScheduleTemplate
+        ENDNODE
+        BEGINNODE
+          FILETYPE 0
+          UTILTYPE 44
+          UTILOBJECTID 50048
+          NODETYPE 204
+          NAME #FIN_GroupUserLog
+        ENDNODE
+        BEGINNODE
+          FILETYPE 0
+          UTILTYPE 44
+          UTILOBJECTID 50047
+          NODETYPE 204
+          NAME #FIN_GroupUserPositions
+        ENDNODE
+        BEGINNODE
+          FILETYPE 0
+          UTILTYPE 44
+          UTILOBJECTID 50046
+          NODETYPE 204
+          NAME #FIN_GroupUserEntity
+        ENDNODE
+        BEGINNODE
+          FILETYPE 0
+          UTILTYPE 44
+          UTILOBJECTID 50045
+          NODETYPE 204
+          NAME #FIN_GroupUsers
+        ENDNODE
+        BEGINNODE
+          FILETYPE 0
+          UTILTYPE 44
+          UTILOBJECTID 50044
+          NODETYPE 204
+          NAME #FIN_GroupExcelTemplates
+        ENDNODE
+        BEGINNODE
+          FILETYPE 0
+          UTILTYPE 44
+          UTILOBJECTID 50043
+          NODETYPE 204
+          NAME #FIN_GroupRowMapping
+        ENDNODE
+        BEGINNODE
+          FILETYPE 0
+          UTILTYPE 44
+          UTILOBJECTID 50041
+          NODETYPE 204
+          NAME #FIN_GroupRowSet
+        ENDNODE
+        BEGINNODE
+          FILETYPE 0
+          UTILTYPE 44
+          UTILOBJECTID 50042
+          NODETYPE 204
+          NAME #FIN_GroupRowLine
+        ENDNODE
+        BEGINNODE
+          FILETYPE 0
+          UTILTYPE 44
+          UTILOBJECTID 50040
+          NODETYPE 204
+          NAME #FIN_GroupExcelReportMapping
+        ENDNODE
+        BEGINNODE
+          FILETYPE 0
+          UTILTYPE 44
+          UTILOBJECTID 50039
+          NODETYPE 204
+          NAME #FIN_GroupExcelReport
+        ENDNODE
+        BEGINNODE
+          FILETYPE 0
+          UTILTYPE 44
+          UTILOBJECTID 50037
+          NODETYPE 204
+          NAME #FIN_GroupExchLedgerAccRates
+        ENDNODE
+        BEGINNODE
+          FILETYPE 0
+          UTILTYPE 44
+          UTILOBJECTID 50036
+          NODETYPE 204
+          NAME #FIN_GroupDataSourcePassword
+        ENDNODE
+        BEGINNODE
+          FILETYPE 0
+          UTILTYPE 44
+          UTILOBJECTID 50035
+          NODETYPE 204
+          NAME #FIN_GroupExchangeRates
+        ENDNODE
+        BEGINNODE
+          FILETYPE 0
+          UTILTYPE 44
+          UTILOBJECTID 50034
+          NODETYPE 204
+          NAME #FIN_GroupEntityDataSetMap
+        ENDNODE
+        BEGINNODE
+          FILETYPE 0
+          UTILTYPE 44
+          UTILOBJECTID 50032
+          NODETYPE 204
+          NAME #FIN_GroupEntityDataSet
+        ENDNODE
+        BEGINNODE
+          FILETYPE 0
+          UTILTYPE 44
+          UTILOBJECTID 50056
+          NODETYPE 204
+          NAME #FIN_GroupEntityBatchJobs
+        ENDNODE
+        BEGINNODE
+          FILETYPE 0
+          UTILTYPE 44
+          UTILOBJECTID 50031
+          NODETYPE 204
+          NAME #FIN_GroupDataSource
+        ENDNODE
+        BEGINNODE
+          FILETYPE 0
+          UTILTYPE 44
+          UTILOBJECTID 50029
+          NODETYPE 204
+          NAME #FIN_GroupCategory
+        ENDNODE
+        BEGINNODE
+          FILETYPE 0
+          UTILTYPE 44
+          UTILOBJECTID 50026
+          NODETYPE 204
+          NAME #FIN_GroupScenario
+        ENDNODE
+        BEGINNODE
+          FILETYPE 0
+          UTILTYPE 44
+          UTILOBJECTID 50028
+          NODETYPE 204
+          NAME #FIN_GroupPeriod
+        ENDNODE
+        BEGINNODE
+          FILETYPE 0
+          UTILTYPE 44
+          UTILOBJECTID 50025
+          NODETYPE 204
+          NAME #FIN_GroupLedgerAdjustmentData
+        ENDNODE
+        BEGINNODE
+          FILETYPE 0
+          UTILTYPE 44
+          UTILOBJECTID 50024
+          NODETYPE 204
+          NAME #FIN_GroupLedgerImportData
+        ENDNODE
+        BEGINNODE
+          FILETYPE 0
+          UTILTYPE 44
+          UTILOBJECTID 50027
+          NODETYPE 204
+          NAME #FIN_GroupLedgerData
+        ENDNODE
+        BEGINNODE
+          FILETYPE 0
+          UTILTYPE 44
+          UTILOBJECTID 50050
+          NODETYPE 204
+          NAME #FIN_GroupInventoryData
+        ENDNODE
+        BEGINNODE
+          FILETYPE 0
+          UTILTYPE 44
+          UTILOBJECTID 50023
+          NODETYPE 204
+          NAME #FIN_GroupLedgerMapping
+        ENDNODE
+        BEGINNODE
+          FILETYPE 0
+          UTILTYPE 44
+          UTILOBJECTID 50021
+          NODETYPE 204
+          NAME #FIN_GroupEntities
+        ENDNODE
+        BEGINNODE
+          FILETYPE 0
+          UTILTYPE 44
+          UTILOBJECTID 50020
+          NODETYPE 204
+          NAME #FIN_GroupLedgerTable
+        ENDNODE
+        ENDGROUP
+        
+      ENDGROUP
+      
+  ENDPROJECT

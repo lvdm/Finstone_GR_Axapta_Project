@@ -1,0 +1,9 @@
+﻿  MENUITEM #FIN_GroupExcelTemplates
+    Type: 1
+    PROPERTIES
+      Name                #FIN_GroupExcelTemplates
+      Label               #Excel Templates
+      Object              #FIN_GroupExcelTemplates
+    ENDPROPERTIES
+    
+  ENDMENUITEM

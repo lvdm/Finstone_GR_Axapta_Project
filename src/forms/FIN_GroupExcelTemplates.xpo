@@ -1,0 +1,154 @@
+﻿FORM #FIN_GroupExcelTemplates
+  PROPERTIES
+    Name                #FIN_GroupExcelTemplates
+  ENDPROPERTIES
+  
+  METHODS
+    Version: 3
+    SOURCE #classDeclaration
+      #public class FormRun extends ObjectRun
+      #{
+      #}
+    ENDSOURCE
+  ENDMETHODS
+  OBJECTBANK
+    PROPERTIES
+    ENDPROPERTIES
+    
+    DATASOURCE
+      OBJECTPOOL
+        PROPERTIES
+          Name                #FIN_GroupExcelTemplates
+          Table               #FIN_GroupExcelTemplates
+        ENDPROPERTIES
+        
+        FIELDLIST
+        ENDFIELDLIST
+      ENDOBJECTPOOL
+    ENDDATASOURCE
+  ENDOBJECTBANK
+  
+  JOINS
+  ENDJOINS
+  
+  DESIGN
+    PROPERTIES
+      Caption             #Excel Templates
+    ENDPROPERTIES
+    
+    CONTAINER
+      CONTROL TAB
+        PROPERTIES
+          Name                #Tab
+          Width               #Column width
+          Height              #Column height
+        ENDPROPERTIES
+        
+        CONTAINER
+          CONTROL TABPAGE
+            PROPERTIES
+              Name                #TabOverview
+              Width               #Column width
+              Height              #Column height
+              Caption             #Overview
+            ENDPROPERTIES
+            
+            CONTAINER
+              CONTROL GRID
+                PROPERTIES
+                  Name                #Grid
+                  Width               #Column width
+                  Height              #Column height
+                  DataSource          #FIN_GroupExcelTemplates
+                  DataGroup           #GridGroup
+                ENDPROPERTIES
+                
+                  CONTAINER
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #Grid_Name
+                        DataSource          #FIN_GroupExcelTemplates
+                        DataField           #Name
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #Grid_Owner
+                        DataSource          #FIN_GroupExcelTemplates
+                        DataField           #Owner
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL CHECKBOX
+                      PROPERTIES
+                        Name                #Grid_IsPublic
+                        BackgroundColor     #Window background
+                        DataSource          #FIN_GroupExcelTemplates
+                        DataField           #IsPublic
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                    CONTROL STRINGEDIT
+                      PROPERTIES
+                        Name                #Grid_Description
+                        DataSource          #FIN_GroupExcelTemplates
+                        DataField           #Description
+                      ENDPROPERTIES
+                      
+                    ENDCONTROL 
+                    
+                  ENDCONTAINER
+                  
+              ENDCONTROL 
+              
+            ENDCONTAINER
+            
+          ENDCONTROL 
+          
+          CONTROL TABPAGE
+            PROPERTIES
+              Name                #TemplateData
+              Width               #Column width
+              Height              #Column height
+              Caption             #Template Data
+            ENDPROPERTIES
+            
+            CONTAINER
+              CONTROL STRINGEDIT
+                PROPERTIES
+                  Name                #FIN_GroupExcelTemplates_Sheets
+                  DataSource          #FIN_GroupExcelTemplates
+                  DataField           #Sheets
+                ENDPROPERTIES
+                
+              ENDCONTROL 
+              
+              CONTROL STRINGEDIT
+                PROPERTIES
+                  Name                #FIN_GroupExcelTemplates_TemplateData
+                  Width               #Column width
+                  Height              #Column height
+                  MultiLine           #Yes
+                  DataSource          #FIN_GroupExcelTemplates
+                  DataField           #TemplateData
+                ENDPROPERTIES
+                
+              ENDCONTROL 
+              
+            ENDCONTAINER
+            
+          ENDCONTROL 
+          
+        ENDCONTAINER
+        
+      ENDCONTROL 
+      
+    ENDCONTAINER
+    
+  ENDDESIGN
+  
+ENDFORM

@@ -1,0 +1,212 @@
+﻿  CLASS #FIN_FormTreeDatasource
+    Id 50036
+    PROPERTIES
+      Name                #FIN_FormTreeDatasource
+      Extends             #CCFormTreeDatasource
+      RunOn               #Client
+    ENDPROPERTIES
+    
+    METHODS
+      Version: 3
+      SOURCE #classDeclaration
+        #public class FIN_FormTreeDatasource extends CcFormTreeDatasource
+        #{
+        #    ImageListAppl_checkbox  imageList_checkbox;
+        #    map    checkedMap;
+        #    #resAppl
+        #}
+      ENDSOURCE
+      SOURCE #drawTree
+        #void drawTree(int node = tree.getRoot(), boolean set = false, boolean setValue = false)
+        #{
+        #    FormTreeItem        formTreeItem = tree.getItem(node);
+        #    boolean             enabled;
+        #    ;
+        #    startLengthyOperation();
+        #
+        #    while(formTreeItem)
+        #    {
+        #        if (formTreeItem && set)
+        #        {
+        #            this.enabled(formTreeItem.data(),setValue);
+        #        }
+        #
+        #        enabled = this.enabled(formTreeItem.data());
+        #        if (enabled)
+        #        {
+        #            formTreeItem.image(imageList_checkbox.image(#ImageCheckAll));
+        #            formTreeItem.selectedImage(imageList_checkbox.image(#ImageCheckAll));
+        #        }
+        #        else
+        #        {
+        #            formTreeItem.image(imageList_checkbox.image(#ImageCheckNone));
+        #            formTreeItem.selectedImage(imageList_checkbox.image(#ImageCheckNone));
+        #
+        #        }
+        #
+        #        tree.setItem(formTreeItem);
+        #
+        #        //if (!set)
+        #        //    this.markParent(tree.getParent(node));
+        #
+        #        if(formTreeItem.children())
+        #            this.drawTree(tree.getChild(formTreeItem.idx()),true,enabled);
+        #
+        #        formTreeItem = set ? tree.getItem(tree.getNextSibling(formTreeItem.idx())) : null ;
+        #    }
+        #    tree.setFocus();
+        #}
+      ENDSOURCE
+      SOURCE #enabled
+        #boolean enabled(str _id, boolean _enable = checkedMap.exists(_id))
+        #{
+        #
+        #    if (!prmisdefault(_enable))
+        #    {
+        #        if (!checkedMap.exists(_id) && _enable)  //Not exist and is enabled add
+        #        {
+        #            checkedMap.insert(_id, 'true');
+        #        }
+        #        else if (!_enable && checkedMap.exists(_id)) //Not enabled but exist so remove
+        #        {
+        #            checkedMap.remove(_id);
+        #        }
+        #
+        #    }
+        #
+        #    return _enable;
+        #}
+      ENDSOURCE
+      SOURCE #getSelectedMap
+        #map getSelectedMap()
+        #{
+        #    ;
+        #    return checkedMap;
+        #}
+      ENDSOURCE
+      SOURCE #image
+        #int image(Common childRecord)
+        #{
+        #    return 7; //unchecked checkbox
+        #}
+      ENDSOURCE
+      SOURCE #imageList
+        #Imagelist imageList()
+        #{
+        #
+        #    ;
+        #
+        #    checkedMap = new Map(Types::String,Types::String);
+        #    imageList_checkbox = new ImageListAppl_checkbox();
+        #    imagelist = imageList_checkbox.imageList();
+        #
+        #    return imagelist;
+        #}
+      ENDSOURCE
+      SOURCE #keyDown
+        #boolean keyDown(int vKey, boolean ctrl, boolean shift)
+        #{
+        #    FormTreeItem        parentNode, node;
+        #    int                 parentMode;
+        #    boolean             enabled;
+        #    int                 idx;
+        #
+        #    if (vKey == 32)
+        #    {
+        #        idx         = tree.getSelection();
+        #        parentNode  = tree.getItem(tree.getParent(idx));
+        #        node        = tree.getItem(idx);
+        #
+        #       if (node)
+        #        {
+        #            enabled = (this.enabled(tree.getItem(idx).data()) ? false : true);
+        #            this.enabled(tree.getItem(idx).data(), enabled);
+        #            this.drawTree(idx);
+        #        }
+        #    }
+        #    return 1;
+        #}
+      ENDSOURCE
+      SOURCE #markParent
+        #void markParent(int node)
+        #{
+        #    FormTreeItem    formTreeItem;
+        #    FormTreeItem    formTreeChildItem;
+        #    boolean         enabled;
+        #    int             countChecked = 0, countNotChecked = 0;
+        #
+        #    if (node)
+        #    {
+        #        formTreeItem = tree.getItem(node);
+        #
+        #        formTreeChildItem = tree.getItem(tree.getChild(formTreeItem.idx()));
+        #
+        #        while(formTreeChildItem)
+        #        {
+        #            if (this.enabled(formTreeChildItem.data()))
+        #                countChecked++;
+        #            else
+        #                countNotChecked++;
+        #
+        #            formTreeChildItem = tree.getItem(tree.getNextSibling(formTreeChildItem.idx()));
+        #        }
+        #
+        #        // All children checked
+        #        if (countChecked > 0 && countNotChecked == 0)
+        #        {
+        #            enabled  = this.enabled(formTreeItem.data(),true);
+        #
+        #            formTreeItem.image(imageList_checkbox.image(#ImageCheckAll));
+        #            formTreeItem.selectedImage(imageList_checkbox.image(#ImageCheckAll));
+        #        }
+        #        // Some checked
+        #        else if (countChecked > 0 && countNotChecked > 0 )
+        #        {
+        #            enabled  = this.enabled(formTreeItem.data(),true);
+        #            formTreeItem.image(imageList_checkbox.image(#ImageCheckSome));
+        #            formTreeItem.selectedImage(imageList_checkbox.image(#ImageCheckSome));
+        #        }
+        #        else
+        #        {
+        #            enabled  = this.enabled(formTreeItem.data(),false);
+        #            formTreeItem.image(imageList_checkbox.image(#ImageCheckNone));
+        #            formTreeItem.selectedImage(imageList_checkbox.image(#ImageCheckNone));
+        #        }
+        #
+        #        tree.setItem(formTreeItem);
+        #        this.markParent(tree.getParent(node));
+        #    }
+        #}
+      ENDSOURCE
+      SOURCE #mouseDown
+        #int mouseDown(int x, int y, int button, boolean ctrl, boolean shift)
+        #{
+        #    int idx,f;
+        #
+        #    FormTreeItem        parentNode, node;
+        #    int                 parentMode;
+        #    boolean             enabled;
+        #    #FormTreeControl;
+        #
+        #    [idx,f] = tree.hitTest(x,y);
+        #
+        #    parentNode  = tree.getItem(tree.getParent(idx));
+        #    node        = tree.getItem(idx);
+        #
+        #    if (node)
+        #    {
+        #        if ((f & #FTCHT_ONITEMICON))
+        #        {
+        #            enabled = (this.enabled(tree.getItem(idx).data()) ? false : true);
+        #            this.enabled(tree.getItem(idx).data(), enabled);
+        #            this.drawTree(idx);
+        #
+        #            return 1;
+        #        }
+        #
+        #    }
+        #    return 1;
+        #}
+      ENDSOURCE
+    ENDMETHODS
+  ENDCLASS

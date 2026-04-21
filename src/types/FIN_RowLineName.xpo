@@ -1,0 +1,16 @@
+﻿  USERTYPE #FIN_RowLineName
+  Id 50019
+  STRING
+    PROPERTIES
+      Name                #FIN_RowLineName
+      Label               #RowLine Name
+      StringSize          #100
+    ENDPROPERTIES
+    
+    TYPEELEMENTS
+    ENDTYPEELEMENTS
+    
+    TYPEREFERENCES
+    ENDTYPEREFERENCES
+    
+  ENDUSERTYPE

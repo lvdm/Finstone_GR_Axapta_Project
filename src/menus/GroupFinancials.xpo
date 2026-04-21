@@ -1,0 +1,92 @@
+﻿  MENU #GroupFinancials
+    PROPERTIES
+      Name                #GroupFinancials
+      Label               #Group Financials
+      SetCompany          #Yes
+    ENDPROPERTIES
+    
+    MENUITEM
+      PROPERTIES
+        Name                #Ledgers
+        MenuItemName        #FIN_GroupLedgers
+      ENDPROPERTIES
+      
+    ENDMENUITEM
+    MENUITEM
+      PROPERTIES
+        Name                #Ledger Data
+        MenuItemName        #FIN_GroupLedgerData
+      ENDPROPERTIES
+      
+    ENDMENUITEM
+    MENUITEM
+      PROPERTIES
+        Name                #Ledger Adjustments
+        MenuItemName        #FIN_EntityAdjustments
+      ENDPROPERTIES
+      
+    ENDMENUITEM
+    MENUITEM
+      PROPERTIES
+        Name                #Row Sets
+        MenuItemName        #FIN_RowsSets
+      ENDPROPERTIES
+      
+    ENDMENUITEM
+    MENUITEM
+      PROPERTIES
+        Name                #Entities
+        MenuItemName        #FIN_GroupEntities
+      ENDPROPERTIES
+      
+    ENDMENUITEM
+    MENUITEM
+      PROPERTIES
+        Name                #Entity Periods
+        MenuItemName        #FIN_EntityPeriod
+      ENDPROPERTIES
+      
+    ENDMENUITEM
+    MENUITEM
+      PROPERTIES
+        Name                #Users
+        MenuItemName        #FIN_GroupUsers
+      ENDPROPERTIES
+      
+    ENDMENUITEM
+    MENU #Periodic
+      PROPERTIES
+        Name                #Fin_GroupReport_Periodic
+        Label               #Periodic
+      ENDPROPERTIES
+      
+      MENUITEM
+        PROPERTIES
+          Name                #Data Import
+          MenuItemName        #FIN_LedgerDataImport
+        ENDPROPERTIES
+        
+      ENDMENUITEM
+      MENUITEM
+        PROPERTIES
+          Name                #Excel Templates
+          MenuItemName        #FIN_GroupExcelTemplates
+        ENDPROPERTIES
+        
+      ENDMENUITEM
+    ENDMENU
+    MENU #Setup
+      PROPERTIES
+        Name                #Setup
+        Label               #Setup
+      ENDPROPERTIES
+      
+      MENUITEM
+        PROPERTIES
+          Name                #General
+          MenuItemName        #FIN_General
+        ENDPROPERTIES
+        
+      ENDMENUITEM
+    ENDMENU
+  ENDMENU

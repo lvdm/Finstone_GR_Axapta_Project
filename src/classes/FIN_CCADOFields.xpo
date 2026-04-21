@@ -1,0 +1,47 @@
+﻿  CLASS #FIN_CCADOFields
+    Id 50041
+    PROPERTIES
+      Name                #FIN_CCADOFields
+      Extends             #
+      RunOn               #Called from
+    ENDPROPERTIES
+    
+    METHODS
+      Version: 3
+      SOURCE #classDeclaration
+        #class FIN_CCADOFields
+        #{
+        #    COM fields;
+        #}
+      ENDSOURCE
+      SOURCE #count
+        #int count()
+        #{
+        #    InteropPermission _perm;
+        #
+        #    ;
+        #    _perm = new InteropPermission(InteropKind::ComInterop);
+        #    _perm.assert();
+        #
+        #    return fields.count();
+        #}
+      ENDSOURCE
+      SOURCE #itemIdx
+        #FIN_CCADOField itemIdx(int strIdx)
+        #{
+        #    InteropPermission _perm;
+        #;
+        #    _perm = new InteropPermission(InteropKind::ComInterop);
+        #    _perm.assert();
+        #
+        #    return new FIN_CCADOField(fields.item(strIdx));
+        #}
+      ENDSOURCE
+      SOURCE #new
+        #void new(COM _fields)
+        #{
+        #    fields = _fields;
+        #}
+      ENDSOURCE
+    ENDMETHODS
+  ENDCLASS

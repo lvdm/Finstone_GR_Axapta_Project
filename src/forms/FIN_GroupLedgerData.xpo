@@ -1,0 +1,1166 @@
+﻿FORM #FIN_GroupLedgerData
+  PROPERTIES
+    Name                #FIN_GroupLedgerData
+  ENDPROPERTIES
+  
+  METHODS
+    Version: 3
+    SOURCE #classDeclaration
+      #public class FormRun extends ObjectRun
+      #{
+      #
+      #    FIN_GroupEntities   tabEntities;
+      #
+      #    NoYes               showBalance;
+      #
+      #
+      #
+      #}
+    ENDSOURCE
+    SOURCE #showBalances
+      #Edit NoYes showBalances(boolean Set, NoYes _showBalance)
+      #{
+      #    ;
+      #    if (Set)
+      #        showBalance = _showBalance;
+      #
+      #    return showBalance;
+      #}
+    ENDSOURCE
+    SOURCE #loadData
+      #void loadData()
+      #{
+      #    FIN_Group_View_AccountData  view;
+      #    FIN_PeriodStart             periodStart, periodEnd;
+      #    AmountMST                   subTotal_1,subTotal_2,subTotal_3,subTotal_4,subTotal_5,subTotal_6,subTotal_7,subTotal_8,subTotal_9,subTotal_10,subTotal_11,subTotal_12;
+      #    AmountMST                   total_1,total_2,total_3,total_4,total_5,total_6,total_7,total_8,total_9,total_10,total_11,total_12;
+      #    str                         totalType = 'BS';
+      #    int                         sortOrder;
+      #    ;
+      #
+      #
+      #    periodStart = str2date('01.01.' + comboxYear.valueStr(),123);
+      #    periodEnd   = str2date('31.12.' + comboxYear.valueStr(),123);
+      #
+      #
+      #    Delete_from TmpAccountSum;
+      #
+      #
+      #    while select * from view
+      #            order by EntityCode, Category,  Type, AccountNum,PeriodStart
+      #              where view.EntityCode == tabEntities.EntityCode
+      #                && view.PeriodStart >= periodStart
+      #                && view.PeriodStart <= periodEnd
+      #                && view.Category == ComboBoxCategory.valueStr()
+      #                && (view.ScenarioCode == ComboBoxScenario.valueStr() || ComboBoxScenario.valueStr() == 'ALL')
+      #                && view.ScenarioCode != 'CLS'
+      #
+      #    {
+      #
+      #        if (TmpAccountSum.AccountNum && TmpAccountSum.AccountNum != view.AccountNum)
+      #        {
+      #
+      #            // Insert Account line seeing that accountnum changed
+      #            sortOrder += 1;
+      #            TmpAccountSum.Qty03     = sortOrder;
+      #
+      #            if (showBalance)
+      #            {
+      #                TmpAccountSum.Balance02 += TmpAccountSum.Balance01;
+      #                TmpAccountSum.Balance03 += TmpAccountSum.Balance02;
+      #                TmpAccountSum.Balance04 += TmpAccountSum.Balance03;
+      #                TmpAccountSum.Balance05 += TmpAccountSum.Balance04;
+      #                TmpAccountSum.Balance06 += TmpAccountSum.Balance05;
+      #                TmpAccountSum.Balance07 += TmpAccountSum.Balance06;
+      #                TmpAccountSum.Balance08 += TmpAccountSum.Balance07;
+      #                TmpAccountSum.Balance09 += TmpAccountSum.Balance08;
+      #                TmpAccountSum.Balance10 += TmpAccountSum.Balance09;
+      #                TmpAccountSum.Balance11 += TmpAccountSum.Balance10;
+      #                TmpAccountSum.Balance12 += TmpAccountSum.Balance11;
+      #
+      #            }
+      #
+      #            TmpAccountSum.doInsert();
+      #
+      #
+      #
+      #            subTotal_1 += TmpAccountSum.Balance01;
+      #            subTotal_2 += TmpAccountSum.Balance02;
+      #            subTotal_3 += TmpAccountSum.Balance03;
+      #            subTotal_4 += TmpAccountSum.Balance04;
+      #            subTotal_5 += TmpAccountSum.Balance05;
+      #            subTotal_6 += TmpAccountSum.Balance06;
+      #            subTotal_7 += TmpAccountSum.Balance07;
+      #            subTotal_8 += TmpAccountSum.Balance08;
+      #            subTotal_9 += TmpAccountSum.Balance09;
+      #            subTotal_10 += TmpAccountSum.Balance10;
+      #            subTotal_11 += TmpAccountSum.Balance11;
+      #            subTotal_12 += TmpAccountSum.Balance12;
+      #
+      #            total_1 += TmpAccountSum.Balance01;
+      #            total_2 += TmpAccountSum.Balance02;
+      #            total_3 += TmpAccountSum.Balance03;
+      #            total_4 += TmpAccountSum.Balance04;
+      #            total_5 += TmpAccountSum.Balance05;
+      #            total_6 += TmpAccountSum.Balance06;
+      #            total_7 += TmpAccountSum.Balance07;
+      #            total_8 += TmpAccountSum.Balance08;
+      #            total_9 += TmpAccountSum.Balance09;
+      #            total_10 += TmpAccountSum.Balance10;
+      #            total_11 += TmpAccountSum.Balance11;
+      #            total_12 += TmpAccountSum.Balance12;
+      #
+      #            TmpAccountSum.clear();
+      #
+      #
+      #            //if also not BS anymore add subtotal line
+      #            if (view.Type != totalType)
+      #            {
+      #                totalType = view.Type;
+      #                sortOrder += 1;
+      #
+      #                TmpAccountSum.Txt = 'BALANCE SHEET TOTALS : ';
+      #                TmpAccountSum.Balance01 = subTotal_1;
+      #                TmpAccountSum.Balance02 = subTotal_2;
+      #                TmpAccountSum.Balance03 = subTotal_3;
+      #                TmpAccountSum.Balance04 = subTotal_4;
+      #                TmpAccountSum.Balance05 = subTotal_5;
+      #                TmpAccountSum.Balance06 = subTotal_6;
+      #                TmpAccountSum.Balance07 = subTotal_7;
+      #                TmpAccountSum.Balance08 = subTotal_8;
+      #                TmpAccountSum.Balance09 = subTotal_9;
+      #                TmpAccountSum.Balance10 = subTotal_10;
+      #                TmpAccountSum.Balance11 = subTotal_11;
+      #                TmpAccountSum.Balance12 = subTotal_12;
+      #                TmpAccountSum.Qty01     = 1;
+      #                TmpAccountSum.Qty03     = sortOrder;
+      #                TmpAccountSum.doInsert();
+      #
+      #                TmpAccountSum.clear();
+      #                sortOrder += 1;
+      #                TmpAccountSum.Qty03     = sortOrder;
+      #                TmpAccountSum.doInsert();  // Insert empty line
+      #                TmpAccountSum.clear();
+      #
+      #                subTotal_1 = 0;
+      #                subTotal_2 = 0;
+      #                subTotal_3 = 0;
+      #                subTotal_4 = 0;
+      #                subTotal_5 = 0;
+      #                subTotal_6 = 0;
+      #                subTotal_7 = 0;
+      #                subTotal_8 = 0;
+      #                subTotal_9 = 0;
+      #                subTotal_10 = 0;
+      #                subTotal_11 = 0;
+      #                subTotal_12 = 0;
+      #
+      #            }
+      #        }
+      #
+      #       // End of insert now continue to load the current entry
+      #
+      #
+      #
+      #        TmpAccountSum.Txt = '(' + view.AccountNum + ') ' + view.AccountName;
+      #
+      #        TmpAccountSum.AccountNum = view.AccountNum;
+      #
+      #        switch (mthofyr(view.PeriodStart))
+      #        {
+      #            case 1:
+      #                TmpAccountSum.Balance01 += view.AmountMST;
+      #                break;
+      #            case 2:
+      #                TmpAccountSum.Balance02 += view.AmountMST;
+      #                break;
+      #            case 3:
+      #                TmpAccountSum.Balance03 += view.AmountMST;
+      #                break;
+      #            case 4:
+      #                TmpAccountSum.Balance04 += view.AmountMST;
+      #                break;
+      #            case 5:
+      #                TmpAccountSum.Balance05 += view.AmountMST;
+      #                break;
+      #            case 6:
+      #                TmpAccountSum.Balance06 += view.AmountMST;
+      #                break;
+      #            case 7:
+      #                TmpAccountSum.Balance07 += view.AmountMST;
+      #                break;
+      #            case 8:
+      #                TmpAccountSum.Balance08 += view.AmountMST;
+      #                break;
+      #            case 9:
+      #                TmpAccountSum.Balance09 += view.AmountMST;
+      #                break;
+      #            case 10:
+      #                TmpAccountSum.Balance10 += view.AmountMST;
+      #                break;
+      #            case 11:
+      #                TmpAccountSum.Balance11 += view.AmountMST;
+      #                break;
+      #            case 12:
+      #                TmpAccountSum.Balance12 += view.AmountMST;
+      #                break;
+      #        }
+      #
+      #
+      #    }
+      #
+      #    //end while
+      #
+      #
+      #    if (showBalance)
+      #    {
+      #        TmpAccountSum.Balance02 += TmpAccountSum.Balance01;
+      #        TmpAccountSum.Balance03 += TmpAccountSum.Balance02;
+      #        TmpAccountSum.Balance04 += TmpAccountSum.Balance03;
+      #        TmpAccountSum.Balance05 += TmpAccountSum.Balance04;
+      #        TmpAccountSum.Balance06 += TmpAccountSum.Balance05;
+      #        TmpAccountSum.Balance07 += TmpAccountSum.Balance06;
+      #        TmpAccountSum.Balance08 += TmpAccountSum.Balance07;
+      #        TmpAccountSum.Balance09 += TmpAccountSum.Balance08;
+      #        TmpAccountSum.Balance10 += TmpAccountSum.Balance09;
+      #        TmpAccountSum.Balance11 += TmpAccountSum.Balance10;
+      #        TmpAccountSum.Balance12 += TmpAccountSum.Balance11;
+      #
+      #    }
+      #
+      #    sortOrder += 1;
+      #    TmpAccountSum.Qty03     = sortOrder;
+      #    TmpAccountSum.doInsert();
+      #
+      #
+      #    // add the final totals together
+      #    subTotal_1 += TmpAccountSum.Balance01;
+      #    subTotal_2 += TmpAccountSum.Balance02;
+      #    subTotal_3 += TmpAccountSum.Balance03;
+      #    subTotal_4 += TmpAccountSum.Balance04;
+      #    subTotal_5 += TmpAccountSum.Balance05;
+      #    subTotal_6 += TmpAccountSum.Balance06;
+      #    subTotal_7 += TmpAccountSum.Balance07;
+      #    subTotal_8 += TmpAccountSum.Balance08;
+      #    subTotal_9 += TmpAccountSum.Balance09;
+      #    subTotal_10 += TmpAccountSum.Balance10;
+      #    subTotal_11 += TmpAccountSum.Balance11;
+      #    subTotal_12 += TmpAccountSum.Balance12;
+      #
+      #    total_1 += TmpAccountSum.Balance01;
+      #    total_2 += TmpAccountSum.Balance02;
+      #    total_3 += TmpAccountSum.Balance03;
+      #    total_4 += TmpAccountSum.Balance04;
+      #    total_5 += TmpAccountSum.Balance05;
+      #    total_6 += TmpAccountSum.Balance06;
+      #    total_7 += TmpAccountSum.Balance07;
+      #    total_8 += TmpAccountSum.Balance08;
+      #    total_9 += TmpAccountSum.Balance09;
+      #    total_10 += TmpAccountSum.Balance10;
+      #    total_11 += TmpAccountSum.Balance11;
+      #    total_12 += TmpAccountSum.Balance12;
+      #
+      #
+      #
+      #    //Load total line
+      #    sortOrder += 1;
+      #
+      #    if (totalType == 'BS')
+      #        TmpAccountSum.Txt = 'BALANCE SHEET TOTALS : ';
+      #    else
+      #        TmpAccountSum.Txt = 'INCOME STATMENT TOTALS : ';
+      #
+      #    TmpAccountSum.Balance01 = subTotal_1;
+      #    TmpAccountSum.Balance02 = subTotal_2;
+      #    TmpAccountSum.Balance03 = subTotal_3;
+      #    TmpAccountSum.Balance04 = subTotal_4;
+      #    TmpAccountSum.Balance05 = subTotal_5;
+      #    TmpAccountSum.Balance06 = subTotal_6;
+      #    TmpAccountSum.Balance07 = subTotal_7;
+      #    TmpAccountSum.Balance08 = subTotal_8;
+      #    TmpAccountSum.Balance09 = subTotal_9;
+      #    TmpAccountSum.Balance10 = subTotal_10;
+      #    TmpAccountSum.Balance11 = subTotal_11;
+      #    TmpAccountSum.Balance12 = subTotal_12;
+      #    TmpAccountSum.Qty01     = 1;
+      #    TmpAccountSum.Qty03     = sortOrder;
+      #    TmpAccountSum.doInsert();
+      #
+      #    TmpAccountSum.clear();
+      #    sortOrder += 1;
+      #    TmpAccountSum.Qty03     = sortOrder;
+      #    TmpAccountSum.doInsert();   // Insert Blank line
+      #
+      #    sortOrder += 1;
+      #    TmpAccountSum.Txt = 'TOTALS : ';
+      #    TmpAccountSum.Balance01 = total_1;
+      #    TmpAccountSum.Balance02 = total_2;
+      #    TmpAccountSum.Balance03 = total_3;
+      #    TmpAccountSum.Balance04 = total_4;
+      #    TmpAccountSum.Balance05 = total_5;
+      #    TmpAccountSum.Balance06 = total_6;
+      #    TmpAccountSum.Balance07 = total_7;
+      #    TmpAccountSum.Balance08 = total_8;
+      #    TmpAccountSum.Balance09 = total_9;
+      #    TmpAccountSum.Balance10 = total_10;
+      #    TmpAccountSum.Balance11 = total_11;
+      #    TmpAccountSum.Balance12 = total_12;
+      #    TmpAccountSum.Qty01     = 2;
+      #    TmpAccountSum.Qty03     = sortOrder;
+      #    TmpAccountSum.doInsert();
+      #
+      #
+      #    TmpAccountSum_ds.executeQuery();
+      #
+      #}
+    ENDSOURCE
+    SOURCE #loadDataMapped
+      #void loadDataMapped()
+      #{
+      #    FIN_Group_View_AccountData  view;
+      #    FIN_GroupLedgerMapping      tabMapped;
+      #    FIN_GroupLedgerTable        tabLedger;
+      #
+      #    FIN_PeriodStart             periodStart, periodEnd;
+      #    AmountMST                   subTotal_1,subTotal_2,subTotal_3,subTotal_4,subTotal_5,subTotal_6,subTotal_7,subTotal_8,subTotal_9,subTotal_10,subTotal_11,subTotal_12;
+      #    AmountMST                   total_1,total_2,total_3,total_4,total_5,total_6,total_7,total_8,total_9,total_10,total_11,total_12;
+      #    str                         totalType = 'BS';
+      #    int                         sortOrder;
+      #    ;
+      #
+      #
+      #    periodStart = str2date('01.01.' + comboxYear.valueStr(),123);
+      #    periodEnd   = str2date('31.12.' + comboxYear.valueStr(),123);
+      #
+      #
+      #    Delete_from TmpAccountSum;
+      #
+      #
+      #    while select sum(AmountMST) from view
+      #                join tabMapped
+      #                join tabLedger
+      #              group by tabLedger.Type,tabLedger.Level0_Sort, tabLedger.Level1_Sort, tabLedger.Level2_Sort, tabLedger.Level3_Sort,
+      #                         tabLedger.AccountNum, tabLedger.AccountName, view.PeriodStart, view.ScenarioCode
+      #              order by  tabLedger.Type,tabLedger.Level0_Sort, tabLedger.Level1_Sort, tabLedger.Level2_Sort, tabLedger.Level3_Sort
+      #                        ,tabLedger.AccountNum, view.PeriodStart
+      #              where tabMapped.ToEntityCode  == '_002'
+      #                && tabMapped.FromEntityCode  == tabEntities.EntityCode
+      #                && tabMapped.FromAcountNum  == view.AccountNum
+      #                && tabLedger.EntityCode == tabMapped.ToEntityCode
+      #                && tabLedger.AccountNum == tabMapped.ToAcountNum
+      #                && view.EntityCode == tabEntities.EntityCode
+      #                && view.PeriodStart >= periodStart
+      #                && view.PeriodStart <= periodEnd
+      #                && view.Category == ComboBoxCategory.valueStr()
+      #                && (view.ScenarioCode == ComboBoxScenario.valueStr() || ComboBoxScenario.valueStr() == 'ALL')
+      #                && view.ScenarioCode != 'CLS'
+      #
+      #    {
+      #
+      #        if (TmpAccountSum.AccountNum && TmpAccountSum.AccountNum != tabLedger.AccountNum)
+      #        {
+      #
+      #            // Insert Account line seeing that accountnum changed
+      #            sortOrder += 1;
+      #            TmpAccountSum.Qty03     = sortOrder;
+      #            if (showBalance)
+      #            {
+      #                TmpAccountSum.Balance02 += TmpAccountSum.Balance01;
+      #                TmpAccountSum.Balance03 += TmpAccountSum.Balance02;
+      #                TmpAccountSum.Balance04 += TmpAccountSum.Balance03;
+      #                TmpAccountSum.Balance05 += TmpAccountSum.Balance04;
+      #                TmpAccountSum.Balance06 += TmpAccountSum.Balance05;
+      #                TmpAccountSum.Balance07 += TmpAccountSum.Balance06;
+      #                TmpAccountSum.Balance08 += TmpAccountSum.Balance07;
+      #                TmpAccountSum.Balance09 += TmpAccountSum.Balance08;
+      #                TmpAccountSum.Balance10 += TmpAccountSum.Balance09;
+      #                TmpAccountSum.Balance11 += TmpAccountSum.Balance10;
+      #                TmpAccountSum.Balance12 += TmpAccountSum.Balance11;
+      #
+      #            }
+      #
+      #            TmpAccountSum.doInsert();
+      #
+      #            subTotal_1 += TmpAccountSum.Balance01;
+      #            subTotal_2 += TmpAccountSum.Balance02;
+      #            subTotal_3 += TmpAccountSum.Balance03;
+      #            subTotal_4 += TmpAccountSum.Balance04;
+      #            subTotal_5 += TmpAccountSum.Balance05;
+      #            subTotal_6 += TmpAccountSum.Balance06;
+      #            subTotal_7 += TmpAccountSum.Balance07;
+      #            subTotal_8 += TmpAccountSum.Balance08;
+      #            subTotal_9 += TmpAccountSum.Balance09;
+      #            subTotal_10 += TmpAccountSum.Balance10;
+      #            subTotal_11 += TmpAccountSum.Balance11;
+      #            subTotal_12 += TmpAccountSum.Balance12;
+      #
+      #            total_1 += TmpAccountSum.Balance01;
+      #            total_2 += TmpAccountSum.Balance02;
+      #            total_3 += TmpAccountSum.Balance03;
+      #            total_4 += TmpAccountSum.Balance04;
+      #            total_5 += TmpAccountSum.Balance05;
+      #            total_6 += TmpAccountSum.Balance06;
+      #            total_7 += TmpAccountSum.Balance07;
+      #            total_8 += TmpAccountSum.Balance08;
+      #            total_9 += TmpAccountSum.Balance09;
+      #            total_10 += TmpAccountSum.Balance10;
+      #            total_11 += TmpAccountSum.Balance11;
+      #            total_12 += TmpAccountSum.Balance12;
+      #
+      #            TmpAccountSum.clear();
+      #
+      #            //if not BS anymore add subtotal line
+      #            if ( tabLedger.Type != totalType)
+      #            {
+      #                totalType =  tabLedger.Type;
+      #                sortOrder += 1;
+      #
+      #                TmpAccountSum.Txt = 'BALANCE SHEET TOTALS : ';
+      #                TmpAccountSum.Balance01 = subTotal_1;
+      #                TmpAccountSum.Balance02 = subTotal_2;
+      #                TmpAccountSum.Balance03 = subTotal_3;
+      #                TmpAccountSum.Balance04 = subTotal_4;
+      #                TmpAccountSum.Balance05 = subTotal_5;
+      #                TmpAccountSum.Balance06 = subTotal_6;
+      #                TmpAccountSum.Balance07 = subTotal_7;
+      #                TmpAccountSum.Balance08 = subTotal_8;
+      #                TmpAccountSum.Balance09 = subTotal_9;
+      #                TmpAccountSum.Balance10 = subTotal_10;
+      #                TmpAccountSum.Balance11 = subTotal_11;
+      #                TmpAccountSum.Balance12 = subTotal_12;
+      #                TmpAccountSum.Qty01     = 1;
+      #                TmpAccountSum.Qty03     = sortOrder;
+      #                TmpAccountSum.doInsert();
+      #
+      #                TmpAccountSum.clear();
+      #                sortOrder += 1;
+      #                TmpAccountSum.Qty03     = sortOrder;
+      #                TmpAccountSum.doInsert();
+      #
+      #
+      #                subTotal_1 = 0;
+      #                subTotal_2 = 0;
+      #                subTotal_3 = 0;
+      #                subTotal_4 = 0;
+      #                subTotal_5 = 0;
+      #                subTotal_6 = 0;
+      #                subTotal_7 = 0;
+      #                subTotal_8 = 0;
+      #                subTotal_9 = 0;
+      #                subTotal_10 = 0;
+      #                subTotal_11 = 0;
+      #                subTotal_12 = 0;
+      #
+      #            }
+      #        }
+      #
+      #        TmpAccountSum.Txt = '(' +tabLedger.AccountNum + ') ' + tabLedger.AccountName;
+      #
+      #        TmpAccountSum.AccountNum = tabLedger.AccountNum;
+      #
+      #        switch (mthofyr(view.PeriodStart))
+      #        {
+      #            case 1:
+      #                TmpAccountSum.Balance01 += view.AmountMST;
+      #                break;
+      #            case 2:
+      #                TmpAccountSum.Balance02 += view.AmountMST;
+      #                break;
+      #            case 3:
+      #                TmpAccountSum.Balance03 += view.AmountMST;
+      #                break;
+      #            case 4:
+      #                TmpAccountSum.Balance04 += view.AmountMST;
+      #                break;
+      #            case 5:
+      #                TmpAccountSum.Balance05 += view.AmountMST;
+      #                break;
+      #            case 6:
+      #                TmpAccountSum.Balance06 += view.AmountMST;
+      #                break;
+      #            case 7:
+      #                TmpAccountSum.Balance07 += view.AmountMST;
+      #                break;
+      #            case 8:
+      #                TmpAccountSum.Balance08 += view.AmountMST;
+      #                break;
+      #            case 9:
+      #                TmpAccountSum.Balance09 += view.AmountMST;
+      #                break;
+      #            case 10:
+      #                TmpAccountSum.Balance10 += view.AmountMST;
+      #                break;
+      #            case 11:
+      #                TmpAccountSum.Balance11 += view.AmountMST;
+      #                break;
+      #            case 12:
+      #                TmpAccountSum.Balance12 += view.AmountMST;
+      #                break;
+      #        }
+      #
+      #    }
+      #    sortOrder += 1;
+      #    TmpAccountSum.Qty03     = sortOrder;
+      #
+      #    if (showBalance)
+      #    {
+      #        TmpAccountSum.Balance02 += TmpAccountSum.Balance01;
+      #        TmpAccountSum.Balance03 += TmpAccountSum.Balance02;
+      #        TmpAccountSum.Balance04 += TmpAccountSum.Balance03;
+      #        TmpAccountSum.Balance05 += TmpAccountSum.Balance04;
+      #        TmpAccountSum.Balance06 += TmpAccountSum.Balance05;
+      #        TmpAccountSum.Balance07 += TmpAccountSum.Balance06;
+      #        TmpAccountSum.Balance08 += TmpAccountSum.Balance07;
+      #        TmpAccountSum.Balance09 += TmpAccountSum.Balance08;
+      #        TmpAccountSum.Balance10 += TmpAccountSum.Balance09;
+      #        TmpAccountSum.Balance11 += TmpAccountSum.Balance10;
+      #        TmpAccountSum.Balance12 += TmpAccountSum.Balance11;
+      #
+      #    }
+      #
+      #    TmpAccountSum.doInsert();
+      #
+      #
+      #    // add the final totals together
+      #    subTotal_1 += TmpAccountSum.Balance01;
+      #    subTotal_2 += TmpAccountSum.Balance02;
+      #    subTotal_3 += TmpAccountSum.Balance03;
+      #    subTotal_4 += TmpAccountSum.Balance04;
+      #    subTotal_5 += TmpAccountSum.Balance05;
+      #    subTotal_6 += TmpAccountSum.Balance06;
+      #    subTotal_7 += TmpAccountSum.Balance07;
+      #    subTotal_8 += TmpAccountSum.Balance08;
+      #    subTotal_9 += TmpAccountSum.Balance09;
+      #    subTotal_10 += TmpAccountSum.Balance10;
+      #    subTotal_11 += TmpAccountSum.Balance11;
+      #    subTotal_12 += TmpAccountSum.Balance12;
+      #
+      #    total_1 += TmpAccountSum.Balance01;
+      #    total_2 += TmpAccountSum.Balance02;
+      #    total_3 += TmpAccountSum.Balance03;
+      #    total_4 += TmpAccountSum.Balance04;
+      #    total_5 += TmpAccountSum.Balance05;
+      #    total_6 += TmpAccountSum.Balance06;
+      #    total_7 += TmpAccountSum.Balance07;
+      #    total_8 += TmpAccountSum.Balance08;
+      #    total_9 += TmpAccountSum.Balance09;
+      #    total_10 += TmpAccountSum.Balance10;
+      #    total_11 += TmpAccountSum.Balance11;
+      #    total_12 += TmpAccountSum.Balance12;
+      #
+      #
+      #
+      #    //Load total line
+      #    sortOrder += 1;
+      #
+      #    if (totalType == 'BS')
+      #        TmpAccountSum.Txt = 'BALANCE SHEET TOTALS : ';
+      #    else
+      #        TmpAccountSum.Txt = 'INCOME STATMENT TOTALS : ';
+      #
+      #    TmpAccountSum.Balance01 = subTotal_1;
+      #    TmpAccountSum.Balance02 = subTotal_2;
+      #    TmpAccountSum.Balance03 = subTotal_3;
+      #    TmpAccountSum.Balance04 = subTotal_4;
+      #    TmpAccountSum.Balance05 = subTotal_5;
+      #    TmpAccountSum.Balance06 = subTotal_6;
+      #    TmpAccountSum.Balance07 = subTotal_7;
+      #    TmpAccountSum.Balance08 = subTotal_8;
+      #    TmpAccountSum.Balance09 = subTotal_9;
+      #    TmpAccountSum.Balance10 = subTotal_10;
+      #    TmpAccountSum.Balance11 = subTotal_11;
+      #    TmpAccountSum.Balance12 = subTotal_12;
+      #    TmpAccountSum.Qty01     = 1;
+      #    TmpAccountSum.Qty03     = sortOrder;
+      #    TmpAccountSum.doInsert();
+      #
+      #    TmpAccountSum.clear();
+      #    sortOrder += 1;
+      #    TmpAccountSum.Qty03     = sortOrder;
+      #    TmpAccountSum.doInsert();
+      #
+      #    sortOrder += 1;
+      #    TmpAccountSum.Txt = 'TOTALS : ';
+      #    TmpAccountSum.Balance01 = total_1;
+      #    TmpAccountSum.Balance02 = total_2;
+      #    TmpAccountSum.Balance03 = total_3;
+      #    TmpAccountSum.Balance04 = total_4;
+      #    TmpAccountSum.Balance05 = total_5;
+      #    TmpAccountSum.Balance06 = total_6;
+      #    TmpAccountSum.Balance07 = total_7;
+      #    TmpAccountSum.Balance08 = total_8;
+      #    TmpAccountSum.Balance09 = total_9;
+      #    TmpAccountSum.Balance10 = total_10;
+      #    TmpAccountSum.Balance11 = total_11;
+      #    TmpAccountSum.Balance12 = total_12;
+      #    TmpAccountSum.Qty01     = 2;
+      #    TmpAccountSum.Qty03     = sortOrder;
+      #    TmpAccountSum.doInsert();
+      #
+      #
+      #    TmpAccountSum_ds.executeQuery();
+      #
+      #}
+    ENDSOURCE
+    SOURCE #run
+      #public void run()
+      #{
+      #    super();
+      #
+      #    comboxYear.add("2018");
+      #    comboxYear.add("2019");
+      #    comboxYear.add("2020");
+      #    comboxYear.add("2021");
+      #    comboxYear.add("2022");
+      #    comboxYear.add("2023");
+      #    comboxYear.add("2024");
+      #    comboxYear.add("2025");
+      #    comboxYear.add("2026");
+      #    comboxYear.add("2027");
+      #
+      #    this.fillCombo();
+      #
+      #
+      #}
+    ENDSOURCE
+    SOURCE #fillCombo
+      # public void fillCombo()
+      # {
+      #    FIN_GroupCategory   tabCategory;
+      #    FIN_GroupScenario   tabScenario;
+      #    ;
+      #
+      #    ComboBoxEntity.clear();
+      #
+      #    while select * from tabEntities
+      #    {
+      #       ComboBoxEntity.add(tabEntities.EntityName);
+      #    }
+      #    ComboBoxEntity.selection(0);
+      #
+      #
+      #    ComboBoxCategory.clear();
+      #    while select * from tabCategory
+      #    {
+      #       ComboBoxCategory.add(tabCategory.Category);
+      #    }
+      #    ComboBoxCategory.selection(0);
+      #
+      #    ComboBoxScenario.clear();
+      #    ComboBoxScenario.add('ALL');
+      #    while select * from tabScenario
+      #    {
+      #       ComboBoxScenario.add(tabScenario.ScenarioCode);
+      #    }
+      #    ComboBoxScenario.selection(0);
+      #
+      # }
+    ENDSOURCE
+  ENDMETHODS
+  OBJECTBANK
+    PROPERTIES
+    ENDPROPERTIES
+    
+    DATASOURCE
+      OBJECTPOOL
+        PROPERTIES
+          Name                #TmpAccountSum
+          Table               #TmpAccountSum
+        ENDPROPERTIES
+        
+        FIELDLIST
+        ENDFIELDLIST
+      ENDOBJECTPOOL
+      METHODS
+        Version: 3
+        SOURCE #write
+          #public void write()
+          #{
+          #    super();
+          #
+          #}
+        ENDSOURCE
+        SOURCE #displayOption
+          #public void displayOption(Common _record, FormRowDisplayOption _options)
+          #{
+          #
+          #    if (_record.(fieldnum(TmpAccountSum,Qty01))>0)
+          #    {
+          #        _options.backColor(WinAPI::RGB2int(161,161,255));
+          #    }
+          #    super(_record, _options);
+          #}
+        ENDSOURCE
+        SOURCE #init
+          #public void init()
+          #{
+          #    super();
+          #
+          #    this.query().dataSourceNo(1).addSortField(fieldnum(TmpAccountSum,Qty03));
+          #
+          #}
+        ENDSOURCE
+        SOURCE #rowTotal
+          #display AmountMST rowTotal(tmpAccountSum _tmpAccountSum)
+          #{
+          #    ;
+          #
+          #//   if (_tmpAccountSum.Qty02 == #conBankOpen) // && tmpAccountSum.Qty01 == -1 && tmpAccountSum.Qty03 == #conIsHeader && tmpAccountSum.Voucher == "BankBalance")
+          #//        return _tmpAccountSum.Balance01;
+          #
+          #//    if (_tmpAccountSum.Qty02 == #conBankTotal)
+          #//        return _tmpAccountSum.Balance12;
+          #    if (showBalance)
+          #        return _tmpAccountSum.Balance12;
+          #
+          #
+          #    return _tmpAccountSum.Balance01 + _tmpAccountSum.Balance02 + _tmpAccountSum.Balance03 + _tmpAccountSum.Balance04
+          #            + _tmpAccountSum.Balance05 + _tmpAccountSum.Balance06 + _tmpAccountSum.Balance07 + _tmpAccountSum.Balance08
+          #            + _tmpAccountSum.Balance09 + _tmpAccountSum.Balance10 + _tmpAccountSum.Balance11 + _tmpAccountSum.Balance12;
+          #}
+        ENDSOURCE
+      ENDMETHODS
+    ENDDATASOURCE
+  ENDOBJECTBANK
+  
+  JOINS
+  ENDJOINS
+  
+  DESIGN
+    PROPERTIES
+      Caption             #Ledger Data
+    ENDPROPERTIES
+    
+    CONTAINER
+      CONTROL GROUP
+        PROPERTIES
+          Name                #Group
+          Width               #Column width
+          Columns             #7
+          ArrangeGuide        
+            ARRAY INDEX Columns 
+              #0
+              #0
+              #0
+              #0
+              #0
+              #0
+              #0
+            ENDARRAY
+        ENDPROPERTIES
+        
+          CONTAINER
+            CONTROL COMBOBOX
+              PROPERTIES
+                Name                #comboxYear
+                AutoDeclaration     #Yes
+                FontSize            #12
+                Label               #Year
+                LabelFontSize       #12
+                LabelBold           #Bold
+              ENDPROPERTIES
+              
+            ENDCONTROL 
+            
+            CONTROL COMBOBOX
+              PROPERTIES
+                Name                #ComboBoxEntity
+                AutoDeclaration     #Yes
+                Width               #400
+                FontSize            #12
+                Label               #Entity
+                LabelFontSize       #12
+                LabelBold           #Bold
+              ENDPROPERTIES
+              
+              METHODS
+                Version: 3
+                SOURCE #modified
+                  #public boolean modified()
+                  #{
+                  #
+                  #    boolean ret;
+                  #
+                  #    ret = super();
+                  #
+                  #    if (ret)
+                  #    {
+                  #        if (this.valueStr() != tabEntities.EntityName)
+                  #        {
+                  #            Select EntityCode from tabEntities where tabEntities.EntityName == this.valueStr(); // this.selection();
+                  #            if (tabEntities.EntityCode)
+                  #            {
+                  #//               startlengthyoperation();
+                  #//                element.loadData();
+                  #//                endlengthyoperation();
+                  #            }
+                  #        }
+                  #    }
+                  #
+                  #    return ret;
+                  #}
+                  #
+                  #
+                ENDSOURCE
+              ENDMETHODS
+            ENDCONTROL 
+            
+            CONTROL COMBOBOX
+              PROPERTIES
+                Name                #ComboBoxCategory
+                AutoDeclaration     #Yes
+                Width               #90
+                Label               #Category
+              ENDPROPERTIES
+              
+              METHODS
+                Version: 3
+                SOURCE #modified
+                  #public boolean modified()
+                  #{
+                  #
+                  #    boolean ret;
+                  #
+                  #    ret = super();
+                  #
+                  #    if (ret)
+                  #    {
+                  #//       startlengthyoperation();
+                  #//        element.loadData();
+                  #//        endlengthyoperation();
+                  #    }
+                  #
+                  #    return ret;
+                  #}
+                  #
+                  #
+                ENDSOURCE
+              ENDMETHODS
+            ENDCONTROL 
+            
+            CONTROL COMBOBOX
+              PROPERTIES
+                Name                #ComboBoxScenario
+                AutoDeclaration     #Yes
+                Width               #80
+                Label               #Scenario
+              ENDPROPERTIES
+              
+              METHODS
+                Version: 3
+                SOURCE #modified
+                  #public boolean modified()
+                  #{
+                  #
+                  #    boolean ret;
+                  #
+                  #    ret = super();
+                  #
+                  #    if (ret)
+                  #    {
+                  #//       startlengthyoperation();
+                  #//        element.loadData();
+                  #//        endlengthyoperation();
+                  #    }
+                  #
+                  #    return ret;
+                  #}
+                  #
+                  #
+                ENDSOURCE
+              ENDMETHODS
+            ENDCONTROL 
+            
+            CONTROL BUTTON
+              PROPERTIES
+                Name                #Button
+                Text                #Load
+              ENDPROPERTIES
+              
+              METHODS
+                Version: 3
+                SOURCE #clicked
+                  #void clicked()
+                  #{
+                  #    super();
+                  #    startlengthyoperation();
+                  #    element.loadData();
+                  #    endlengthyoperation();
+                  #}
+                ENDSOURCE
+              ENDMETHODS
+            ENDCONTROL 
+            
+            CONTROL BUTTON
+              PROPERTIES
+                Name                #ButtonMapped
+                Text                #Load Mapped
+              ENDPROPERTIES
+              
+              METHODS
+                Version: 3
+                SOURCE #clicked
+                  #void clicked()
+                  #{
+                  #    super();
+                  #    startlengthyoperation();
+                  #    element.loadDataMapped();
+                  #    endlengthyoperation();
+                  #}
+                ENDSOURCE
+              ENDMETHODS
+            ENDCONTROL 
+            
+            CONTROL CHECKBOX
+              PROPERTIES
+                Name                #CheckBox
+                Label               #Show Balances YTD
+                DataMethod          #showBalances
+              ENDPROPERTIES
+              
+            ENDCONTROL 
+            
+          ENDCONTAINER
+          
+      ENDCONTROL 
+      
+      CONTROL GRID
+        PROPERTIES
+          Name                #Grid
+          AutoDeclaration     #Yes
+          AllowEdit           #No
+          Width               #Column width
+          Height              #Column height
+          DataSource          #TmpAccountSum
+        ENDPROPERTIES
+        
+          CONTAINER
+            CONTROL STRINGEDIT
+              PROPERTIES
+                Name                #TmpAccountSum_Txt
+                Width               #120
+                Label               #Account
+                DataSource          #TmpAccountSum
+                DataField           #Txt
+              ENDPROPERTIES
+              
+            ENDCONTROL 
+            
+            CONTROL REALEDIT
+              PROPERTIES
+                Name                #Sum_Balance01
+                AutoDeclaration     #Yes
+                Width               #80
+                SignDisplay         #Sign shown using parentheses
+                ShowZero            #No
+                Label               #Jan
+                LabelAlignment      #Center
+                DataSource          #TmpAccountSum
+                DataField           #Balance01
+              ENDPROPERTIES
+              
+            ENDCONTROL 
+            
+            CONTROL REALEDIT
+              PROPERTIES
+                Name                #Sum_Balance02
+                AutoDeclaration     #Yes
+                Width               #80
+                SignDisplay         #Sign shown using parentheses
+                ShowZero            #No
+                Label               #Feb
+                LabelPosition       #Above
+                LabelAlignment      #Center
+                DataSource          #TmpAccountSum
+                DataField           #Balance02
+              ENDPROPERTIES
+              
+            ENDCONTROL 
+            
+            CONTROL REALEDIT
+              PROPERTIES
+                Name                #Sum_Balance03
+                AutoDeclaration     #Yes
+                Width               #80
+                SignDisplay         #Sign shown using parentheses
+                ShowZero            #No
+                Label               #Mar
+                LabelAlignment      #Center
+                DataSource          #TmpAccountSum
+                DataField           #Balance03
+              ENDPROPERTIES
+              
+            ENDCONTROL 
+            
+            CONTROL REALEDIT
+              PROPERTIES
+                Name                #Sum_Balance04
+                AutoDeclaration     #Yes
+                Width               #80
+                SignDisplay         #Sign shown using parentheses
+                ShowZero            #No
+                Label               #Apr
+                LabelAlignment      #Center
+                DataSource          #TmpAccountSum
+                DataField           #Balance04
+              ENDPROPERTIES
+              
+            ENDCONTROL 
+            
+            CONTROL REALEDIT
+              PROPERTIES
+                Name                #Sum_Balance05
+                AutoDeclaration     #Yes
+                Width               #80
+                SignDisplay         #Sign shown using parentheses
+                ShowZero            #No
+                Label               #May
+                LabelAlignment      #Center
+                DataSource          #TmpAccountSum
+                DataField           #Balance05
+              ENDPROPERTIES
+              
+            ENDCONTROL 
+            
+            CONTROL REALEDIT
+              PROPERTIES
+                Name                #Sum_Balance06
+                AutoDeclaration     #Yes
+                Width               #80
+                SignDisplay         #Sign shown using parentheses
+                ShowZero            #No
+                Label               #Jun
+                LabelAlignment      #Center
+                DataSource          #TmpAccountSum
+                DataField           #Balance06
+              ENDPROPERTIES
+              
+            ENDCONTROL 
+            
+            CONTROL REALEDIT
+              PROPERTIES
+                Name                #Sum_Balance07
+                AutoDeclaration     #Yes
+                Width               #80
+                SignDisplay         #Sign shown using parentheses
+                ShowZero            #No
+                Label               #Jul
+                LabelAlignment      #Center
+                DataSource          #TmpAccountSum
+                DataField           #Balance07
+              ENDPROPERTIES
+              
+            ENDCONTROL 
+            
+            CONTROL REALEDIT
+              PROPERTIES
+                Name                #Sum_Balance08
+                AutoDeclaration     #Yes
+                Width               #80
+                SignDisplay         #Sign shown using parentheses
+                ShowZero            #No
+                Label               #Aug
+                LabelAlignment      #Center
+                DataSource          #TmpAccountSum
+                DataField           #Balance08
+              ENDPROPERTIES
+              
+            ENDCONTROL 
+            
+            CONTROL REALEDIT
+              PROPERTIES
+                Name                #Sum_Balance09
+                AutoDeclaration     #Yes
+                Width               #80
+                SignDisplay         #Sign shown using parentheses
+                ShowZero            #No
+                Label               #Sep
+                LabelAlignment      #Center
+                DataSource          #TmpAccountSum
+                DataField           #Balance09
+              ENDPROPERTIES
+              
+            ENDCONTROL 
+            
+            CONTROL REALEDIT
+              PROPERTIES
+                Name                #Sum_Balance10
+                AutoDeclaration     #Yes
+                Width               #80
+                SignDisplay         #Sign shown using parentheses
+                ShowZero            #No
+                Label               #Oct
+                LabelAlignment      #Center
+                DataSource          #TmpAccountSum
+                DataField           #Balance10
+              ENDPROPERTIES
+              
+            ENDCONTROL 
+            
+            CONTROL REALEDIT
+              PROPERTIES
+                Name                #Sum_Balance11
+                AutoDeclaration     #Yes
+                Width               #80
+                SignDisplay         #Sign shown using parentheses
+                ShowZero            #No
+                Label               #Nov
+                LabelAlignment      #Center
+                DataSource          #TmpAccountSum
+                DataField           #Balance11
+              ENDPROPERTIES
+              
+            ENDCONTROL 
+            
+            CONTROL REALEDIT
+              PROPERTIES
+                Name                #Sum_Balance12
+                AutoDeclaration     #Yes
+                Width               #80
+                SignDisplay         #Sign shown using parentheses
+                ShowZero            #No
+                BackgroundColor     #
+                Label               #Dec
+                LabelAlignment      #Center
+                DataSource          #TmpAccountSum
+                DataField           #Balance12
+              ENDPROPERTIES
+              
+            ENDCONTROL 
+            
+            CONTROL REALEDIT
+              PROPERTIES
+                Name                #rowTotal
+                AllowEdit           #No
+                SignDisplay         #Sign shown using parentheses
+                ShowZero            #No
+                ColorScheme         #RGB
+                BackgroundColor     #204 242 253
+                Bold                #Medium
+                Label               #Total
+                LabelAlignment      #Center
+                DataSource          #TmpAccountSum
+                DataMethod          #rowTotal
+              ENDPROPERTIES
+              
+            ENDCONTROL 
+            
+            CONTROL REALEDIT
+              PROPERTIES
+                Name                #TmpAccountSum_Qty03
+                Label               #SortOrder
+                DataSource          #TmpAccountSum
+                DataField           #Qty03
+              ENDPROPERTIES
+              
+            ENDCONTROL 
+            
+          ENDCONTAINER
+          
+      ENDCONTROL 
+      
+    ENDCONTAINER
+    
+  ENDDESIGN
+  
+ENDFORM

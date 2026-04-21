@@ -1,0 +1,571 @@
+﻿  TABLE #FIN_GroupEntityPeriod
+    Id 50052
+    PROPERTIES
+      Name                #FIN_GroupEntityPeriod
+      Label               #Entity Periods
+      ModifiedDateTime    #Yes
+      ModifiedBy          #Yes
+      CreatedDateTime     #Yes
+      CreatedBy           #Yes
+    ENDPROPERTIES
+    
+    FIELDS
+      FIELD #EntityCode
+        Id 50001
+        STRING
+        PROPERTIES
+          Name                #EntityCode
+          Table               #FIN_GroupEntityPeriod
+          ExtendedDataType    
+            ARRAY 
+              #FIN_EntityCode
+              #
+            ENDARRAY
+        ENDPROPERTIES
+        
+      FIELD #PeriodEnd
+        Id 50003
+        DATE
+        PROPERTIES
+          Name                #PeriodEnd
+          Table               #FIN_GroupEntityPeriod
+          ExtendedDataType    
+            ARRAY 
+              #FIN_PeriodEnd
+              #
+            ENDARRAY
+        ENDPROPERTIES
+        
+      FIELD #LockedByUser
+        Id 50004
+        ENUM
+        PROPERTIES
+          Name                #LockedByUser
+          Label               #Locked User
+          Table               #FIN_GroupEntityPeriod
+          EnumType            #NoYes
+        ENDPROPERTIES
+        
+      FIELD #LockedByAdmin
+        Id 50005
+        ENUM
+        PROPERTIES
+          Name                #LockedByAdmin
+          Label               #Locked Admin
+          Table               #FIN_GroupEntityPeriod
+          EnumType            #NoYes
+        ENDPROPERTIES
+        
+      FIELD #NotesByUser
+        Id 50006
+        STRING
+        PROPERTIES
+          Name                #NotesByUser
+          Label               #Note by User
+          Table               #FIN_GroupEntityPeriod
+          ExtendedDataType    
+            ARRAY 
+              #Notes
+              #
+            ENDARRAY
+          StringSize          #(Memo)
+        ENDPROPERTIES
+        
+      FIELD #NotesByAdmin
+        Id 50007
+        STRING
+        PROPERTIES
+          Name                #NotesByAdmin
+          Label               #Note by Admin
+          Table               #FIN_GroupEntityPeriod
+          ExtendedDataType    
+            ARRAY 
+              #Notes
+              #
+            ENDARRAY
+          StringSize          #(Memo)
+        ENDPROPERTIES
+        
+      FIELD #PeriodStatus
+        Id 50008
+        ENUM
+        PROPERTIES
+          Name                #PeriodStatus
+          Label               #@SYS25587
+          HelpText            #@SYS16820
+          Table               #FIN_GroupEntityPeriod
+          EnumType            #LedgerPeriodStatus
+        ENDPROPERTIES
+        
+      FIELD #HasData
+        Id 50009
+        ENUM
+        PROPERTIES
+          Name                #HasData
+          Label               #Has Data
+          Table               #FIN_GroupEntityPeriod
+          EnumType            #NoYes
+        ENDPROPERTIES
+        
+      FIELD #HasAdjustments
+        Id 50010
+        ENUM
+        PROPERTIES
+          Name                #HasAdjustments
+          Label               #Has Adjustments
+          Table               #FIN_GroupEntityPeriod
+          EnumType            #NoYes
+        ENDPROPERTIES
+        
+      FIELD #HasForex
+        Id 50011
+        ENUM
+        PROPERTIES
+          Name                #HasForex
+          Label               #Has Forex Translation
+          Table               #FIN_GroupEntityPeriod
+          EnumType            #NoYes
+        ENDPROPERTIES
+        
+      FIELD #LockedByUserOn
+        Id 50013
+        DATETIME
+        PROPERTIES
+          Name                #LockedByUserOn
+          Label               #Locked by User On
+          Table               #FIN_GroupEntityPeriod
+        ENDPROPERTIES
+        
+      FIELD #LockedByAdminOn
+        Id 50014
+        DATETIME
+        PROPERTIES
+          Name                #LockedByAdminOn
+          Label               #Locked by Admin On
+          Table               #FIN_GroupEntityPeriod
+        ENDPROPERTIES
+        
+      FIELD #Active
+        Id 50015
+        ENUM
+        PROPERTIES
+          Name                #Active
+          HelpText            #Current Active Period
+          Table               #FIN_GroupEntityPeriod
+          EnumType            #NoYes
+        ENDPROPERTIES
+        
+      FIELD #PeriodStart
+        Id 50016
+        DATE
+        PROPERTIES
+          Name                #PeriodStart
+          Label               #Period Start
+          HelpText            #@SYS428
+          Mandatory           #Yes
+          AllowEdit           #No
+          Table               #FIN_GroupEntityPeriod
+          ExtendedDataType    
+            ARRAY 
+              #FIN_PeriodStart
+              #
+            ENDARRAY
+        ENDPROPERTIES
+        
+    ENDFIELDS
+    GROUPS
+    ENDGROUPS
+    
+    INDICES
+    ENDINDICES
+    REFERENCES
+      REFERENCE #FIN_GroupEntities
+        PROPERTIES
+          Name                #FIN_GroupEntities
+          Table               #FIN_GroupEntities
+        ENDPROPERTIES
+        
+        FIELDREFERENCES
+          REFERENCETYPE NORMAL
+          PROPERTIES
+            Field               #EntityCode
+            RelatedField        #EntityCode
+          ENDPROPERTIES
+          
+        ENDFIELDREFERENCES
+      ENDREFERENCE
+      REFERENCE #FIN_GroupPeriod
+        PROPERTIES
+          Name                #FIN_GroupPeriod
+          Table               #FIN_GroupPeriod
+        ENDPROPERTIES
+        
+        FIELDREFERENCES
+          REFERENCETYPE NORMAL
+          PROPERTIES
+            Field               #PeriodEnd
+            RelatedField        #PeriodEnd
+          ENDPROPERTIES
+          
+        ENDFIELDREFERENCES
+      ENDREFERENCE
+    ENDREFERENCES
+    
+    DELETEACTIONS
+    ENDDELETEACTIONS
+    
+    METHODS
+      Version: 3
+      SOURCE #EntityName
+        #display FIN_EntityName EntityName()
+        #{
+        #       FIN_GroupEntities tabEntities;
+        #       ;
+        #
+        #       if (this.EntityCode)
+        #       {
+        #            Select EntityName from tabEntities where tabEntities.EntityCode == this.EntityCode;
+        #            return tabEntities.EntityName;
+        #       }
+        #       else
+        #            return "";
+        #
+        # }
+      ENDSOURCE
+      SOURCE #lockByAdmin
+        #void lockByAdmin()
+        #{
+        #    FIN_GroupLedgerData     tabData;
+        #
+        #    ;
+        #
+        #    if (box::yesNo('Are you sure you want to Lock Entity Period By Administrator?'
+        #                        , dialogButton::Yes, 'Confirmation') == dialogButton::No)
+        #    {
+        #        return;
+        #    }
+        #
+        #    startlengthyoperation();
+        #
+        #    ttsbegin;
+        #
+        #    while select forupdate * from tabData
+        #        where tabData.EntityCode == this.EntityCode
+        #                && tabData.PeriodStart == this.PeriodStart
+        #                && tabData.Category == 'MAIN'
+        #    {
+        #
+        #        tabData.LockedByAdmin = 1;
+        #        tabData.update();
+        #
+        #    }
+        #
+        #    this.LockedByAdmin = 1;
+        #    this.LockedByAdminOn = DateTimeUtil::getSystemDateTime();
+        #    this.update();
+        #    ttscommit;
+        #
+        #    endlengthyoperation();
+        #
+        #
+        #}
+      ENDSOURCE
+      SOURCE #lockByUser
+        #void lockByUser()
+        #{
+        #    FIN_GroupLedgerData     tabData;
+        #
+        #    ;
+        #
+        #    if (box::yesNo('Are you sure you want to Lock Entity Period By User?'
+        #                        , dialogButton::Yes, 'Confirmation') == dialogButton::No)
+        #    {
+        #        return;
+        #    }
+        #
+        #
+        #    startlengthyoperation();
+        #
+        #    ttsbegin;
+        #
+        #    while select forupdate * from tabData
+        #        where tabData.EntityCode == this.EntityCode
+        #                && tabData.PeriodStart == this.PeriodStart
+        #                && tabData.Category == 'MAIN'
+        #    {
+        #
+        #        tabData.LockedByUser = 1;
+        #        tabData.update();
+        #
+        #    }
+        #
+        #    this.LockedByUser = 1;
+        #    this.LockedByUserOn = DateTimeUtil::getSystemDateTime();
+        #    this.update();
+        #    ttscommit;
+        #
+        #    endlengthyoperation();
+        #
+        #
+        #}
+      ENDSOURCE
+      SOURCE #unlockByAdmin
+        #void unlockByAdmin()
+        #{
+        #    FIN_GroupLedgerData     tabData;
+        #
+        #    ;
+        #
+        #    if (box::yesNo('Are you sure you want to UnLock Entity Period By Administrator?'
+        #                        , dialogButton::Yes, 'Confirmation') == dialogButton::No)
+        #    {
+        #        return;
+        #    }
+        #
+        #    startlengthyoperation();
+        #
+        #    ttsbegin;
+        #
+        #    while select forupdate * from tabData
+        #        where tabData.EntityCode == this.EntityCode
+        #                && tabData.PeriodStart == this.PeriodStart
+        #                && tabData.Category == 'MAIN'
+        #    {
+        #
+        #        tabData.LockedByAdmin = 0;
+        #        tabData.update();
+        #
+        #    }
+        #
+        #    this.LockedByAdmin = 0;
+        #    this.update();
+        #    ttscommit;
+        #
+        #    endlengthyoperation();
+        #
+        #
+        #}
+      ENDSOURCE
+      SOURCE #unlockByUser
+        #void unlockByUser()
+        #{
+        #    FIN_GroupLedgerData     tabData;
+        #
+        #    ;
+        #    if (box::yesNo('Are you sure you want to UnLock Entity Period By User?'
+        #                        , dialogButton::Yes, 'Confirmation') == dialogButton::No)
+        #    {
+        #        return;
+        #    }
+        #
+        #    startlengthyoperation();
+        #
+        #    ttsbegin;
+        #
+        #    while select forupdate * from tabData
+        #        where tabData.EntityCode == this.EntityCode
+        #                && tabData.PeriodStart == this.PeriodStart
+        #                && tabData.Category == 'MAIN'
+        #    {
+        #
+        #        tabData.LockedByUser = 0;
+        #        tabData.update();
+        #
+        #    }
+        #
+        #    this.LockedByUser = 0;
+        #    this.update();
+        #
+        #    ttscommit;
+        #
+        #    endlengthyoperation();
+        #
+        #
+        #}
+      ENDSOURCE
+      SOURCE #updateEntityStatus
+        #void updateEntityStatus()
+        #{
+        #
+        #    ;
+        #
+        #    this.HasData        = FIN_GroupLedgerData::dataExist(this.EntityCode,this.PeriodEnd,'ACT');
+        #    this.HasAdjustments = FIN_GroupLedgerData::dataExist(this.EntityCode,this.PeriodEnd,'ADJ');
+        #    this.update();
+        #
+        #
+        #}
+      ENDSOURCE
+      SOURCE #createEntityPeriodsByEntity
+        #static void createEntityPeriodsByEntity(FIN_EntityCode _entityCode)
+        #{
+        #    FIN_GroupEntityPeriod   tabEntityPeriod;
+        #    FIN_GroupPeriod         tabPeriod;
+        #    FIN_PeriodEnd           minPeriodEnd;
+        #
+        #    ;
+        #
+        #    minPeriodEnd = str2date('31 Dec 2015',123);
+        #
+        #
+        #    startlengthyoperation();
+        #
+        #    ttsbegin;
+        #
+        #    while select * from tabPeriod where tabPeriod.PeriodEnd > minPeriodEnd
+        #    {
+        #
+        #
+        #        tabEntityPeriod = FIN_GroupEntityPeriod::find(_entityCode,tabPeriod.PeriodEnd);
+        #
+        #        //If no period entry found create one
+        #        if (! tabEntityPeriod)
+        #        {
+        #
+        #            tabEntityPeriod.clear();
+        #
+        #            tabEntityPeriod.EntityCode   = _entityCode;
+        #            tabEntityPeriod.PeriodStart  = tabPeriod.PeriodStart;
+        #            tabEntityPeriod.PeriodEnd    = tabPeriod.PeriodEnd;
+        #            tabEntityPeriod.PeriodStatus = tabPeriod.PeriodStatus;
+        #            tabEntityPeriod.Active       = tabPeriod.Active;
+        #            tabEntityPeriod.insert();
+        #
+        #        }
+        #
+        #    }
+        #
+        #    ttscommit;
+        #
+        #    endlengthyoperation();
+        #
+        #
+        #}
+      ENDSOURCE
+      SOURCE #createEntityPeriodsByPeriod
+        #static void createEntityPeriodsByPeriod(FIN_GroupPeriod _groupPeriod)
+        #{
+        #    FIN_GroupEntityPeriod   tabEntityPeriod;
+        #    FIN_GroupEntities       tabEntities;
+        #
+        #    ;
+        #
+        #    startlengthyoperation();
+        #
+        #    ttsbegin;
+        #
+        #    while select * from tabEntities
+        #    {
+        #        tabEntityPeriod = FIN_GroupEntityPeriod::find(tabEntities.EntityCode,_groupPeriod.PeriodEnd);
+        #
+        #        //If no period entry found create one
+        #        if (! tabEntityPeriod)
+        #        {
+        #
+        #            tabEntityPeriod.clear();
+        #
+        #            tabEntityPeriod.EntityCode   = tabEntities.EntityCode;
+        #            tabEntityPeriod.PeriodStart  = _groupPeriod.PeriodStart;
+        #            tabEntityPeriod.PeriodEnd    = _groupPeriod.PeriodEnd;
+        #            tabEntityPeriod.PeriodStatus = _groupPeriod.PeriodStatus;
+        #            tabEntityPeriod.Active       = _groupPeriod.Active;
+        #            tabEntityPeriod.insert();
+        #
+        #        }
+        #
+        #    }
+        #
+        #    ttscommit;
+        #
+        #    endlengthyoperation();
+        #
+        #
+        #}
+      ENDSOURCE
+      SOURCE #find
+        #static FIN_GroupEntityPeriod find(FIN_EntityCode entityCode ,FIN_PeriodEnd periodEnd,
+        #                             boolean         _forUpdate = false)
+        #{
+        #    FIN_GroupEntityPeriod  fin_GroupEntityPeriod;
+        #
+        #    if (entityCode && periodEnd)
+        #    {
+        #        fin_GroupEntityPeriod.selectForUpdate(_forUpdate);
+        #
+        #        select firstonly *
+        #            from fin_GroupEntityPeriod
+        #                where fin_GroupEntityPeriod.entityCode == entityCode
+        #                      && fin_GroupEntityPeriod.PeriodEnd == periodEnd;
+        #    }
+        #
+        #    return fin_GroupEntityPeriod;
+        #}
+      ENDSOURCE
+      SOURCE #updateEntityPeriodsbyPeriod
+        #static void updateEntityPeriodsbyPeriod(FIN_GroupPeriod _groupPeriod)
+        #{
+        #    FIN_GroupEntityPeriod   tabEntityPeriod;
+        #    FIN_GroupEntities       tabEntities;
+        #    ;
+        #
+        #    startlengthyoperation();
+        #
+        #    ttsbegin;
+        #
+        #    while select * from tabEntities
+        #    {
+        #        tabEntityPeriod = FIN_GroupEntityPeriod::find(tabEntities.EntityCode,_groupPeriod.PeriodEnd,true);
+        #
+        #        //If period entry found update it
+        #        if (tabEntityPeriod)
+        #        {
+        #            tabEntityPeriod.PeriodStatus = _groupPeriod.PeriodStatus;
+        #            tabEntityPeriod.PeriodStart  = _groupPeriod.PeriodStart;
+        #            tabEntityPeriod.Active       = _groupPeriod.Active;
+        #            tabEntityPeriod.update();
+        #        }
+        #        else
+        #        {
+        #            //If not found insert
+        #            tabEntityPeriod.clear();
+        #
+        #            tabEntityPeriod.EntityCode   = tabEntities.EntityCode;
+        #            tabEntityPeriod.PeriodStart  = _groupPeriod.PeriodStart;
+        #            tabEntityPeriod.PeriodEnd    = _groupPeriod.PeriodEnd;
+        #            tabEntityPeriod.PeriodStatus = _groupPeriod.PeriodStatus;
+        #            tabEntityPeriod.Active       = _groupPeriod.Active;
+        #            tabEntityPeriod.insert();
+        #
+        #        }
+        #
+        #    }
+        #
+        #    ttscommit;
+        #
+        #    endlengthyoperation();
+        #
+        #
+        #}
+      ENDSOURCE
+      SOURCE #updateEntityStatusByPeriod
+        #static void updateEntityStatusByPeriod(FIN_PeriodEnd _periodEnd)
+        #{
+        #    FIN_GroupEntityPeriod   tabEntityPeriod;
+        #
+        #    ;
+        #
+        #
+        #    startlengthyoperation();
+        #    ttsbegin;
+        #    while select forupdate * from tabEntityPeriod where tabEntityPeriod.PeriodEnd == _periodEnd
+        #    {
+        #        tabEntityPeriod.updateEntityStatus();
+        #        tabEntityPeriod.update();
+        #    }
+        #
+        #    ttscommit;
+        #    endlengthyoperation();
+        #}
+      ENDSOURCE
+    ENDMETHODS
+  ENDTABLE

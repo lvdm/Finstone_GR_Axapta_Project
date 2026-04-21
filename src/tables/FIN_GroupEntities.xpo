@@ -1,0 +1,1354 @@
+﻿  TABLE #FIN_GroupEntities
+    Id 50021
+    PROPERTIES
+      Name                #FIN_GroupEntities
+      Label               #Group Entities
+      TitleField1         #EntityCode
+      TitleField2         #EntityName
+      TableContents       #Default data
+      CacheLookup         #EntireTable
+      CreateRecIdIndex    #Yes
+      PrimaryIndex        #EntityCodeIdx
+      ClusterIndex        #EntityCodeIdx
+      ModifiedDateTime    #Yes
+      ModifiedBy          #Yes
+      CreatedDateTime     #Yes
+      CreatedBy           #Yes
+    ENDPROPERTIES
+    
+    FIELDS
+      FIELD #EntityName
+        Id 50001
+        STRING
+        PROPERTIES
+          Name                #EntityName
+          Mandatory           #Yes
+          Table               #FIN_GroupEntities
+          ExtendedDataType    
+            ARRAY 
+              #FIN_EntityName
+              #
+            ENDARRAY
+          StringSize          #100
+        ENDPROPERTIES
+        
+      FIELD #EntityCode
+        Id 50002
+        STRING
+        PROPERTIES
+          Name                #EntityCode
+          Mandatory           #Yes
+          AllowEdit           #No
+          Table               #FIN_GroupEntities
+          ExtendedDataType    
+            ARRAY 
+              #FIN_EntityCode
+              #
+            ENDARRAY
+        ENDPROPERTIES
+        
+      FIELD #IsStructure
+        Id 50008
+        ENUM
+        PROPERTIES
+          Name                #IsStructure
+          Label               #Is Reporing Structure
+          HelpText            #Is this Entity only used for a Reporting Structure
+          Table               #FIN_GroupEntities
+          EnumType            #NoYes
+        ENDPROPERTIES
+        
+      FIELD #CurrencyCode
+        Id 50009
+        STRING
+        PROPERTIES
+          Name                #CurrencyCode
+          Table               #FIN_GroupEntities
+          ExtendedDataType    
+            ARRAY 
+              #CurrencyCode
+              #
+            ENDARRAY
+          StringSize          #3
+        ENDPROPERTIES
+        
+      FIELD #CountryRegionId
+        Id 50010
+        STRING
+        PROPERTIES
+          Name                #CountryRegionId
+          Label               #Country
+          Table               #FIN_GroupEntities
+          ExtendedDataType    
+            ARRAY 
+              #AddressCountryRegionId
+              #
+            ENDARRAY
+        ENDPROPERTIES
+        
+      FIELD #ExchAdjAccountNum
+        Id 50013
+        STRING
+        PROPERTIES
+          Name                #ExchAdjAccountNum
+          Label               #Exchange Adjustment Account
+          Table               #FIN_GroupEntities
+          ExtendedDataType    
+            ARRAY 
+              #FIN_AccountNum
+              #
+            ENDARRAY
+          StringSize          #30
+        ENDPROPERTIES
+        
+      FIELD #ShortCode
+        Id 50014
+        STRING
+        PROPERTIES
+          Name                #ShortCode
+          Label               #Short code
+          Mandatory           #Yes
+          Table               #FIN_GroupEntities
+          StringSize          #5
+        ENDPROPERTIES
+        
+      FIELD #ParentEntityCode
+        Id 50015
+        STRING
+        PROPERTIES
+          Name                #ParentEntityCode
+          Label               #Parent
+          Table               #FIN_GroupEntities
+          ExtendedDataType    
+            ARRAY 
+              #FIN_EntityCode
+              #
+            ENDARRAY
+        ENDPROPERTIES
+        
+      FIELD #PercOwned
+        Id 50016
+        REAL
+        PROPERTIES
+          Name                #PercOwned
+          Label               #Percentage Owned
+          Table               #FIN_GroupEntities
+          ExtendedDataType    
+            ARRAY 
+              #Percent
+              #
+            ENDARRAY
+        ENDPROPERTIES
+        
+      FIELD #RetainEarningsAccountNum
+        Id 50017
+        STRING
+        PROPERTIES
+          Name                #RetainEarningsAccountNum
+          Label               #Retained Earnings Account
+          Table               #FIN_GroupEntities
+          ExtendedDataType    
+            ARRAY 
+              #FIN_AccountNum
+              #
+            ENDARRAY
+          StringSize          #30
+        ENDPROPERTIES
+        
+      FIELD #LastLedgerDataRefreshed
+        Id 50018
+        DATETIME
+        PROPERTIES
+          Name                #LastLedgerDataRefreshed
+          Label               #Last LedgerData Refreshed
+          HelpText            #The last date and time the Ledger Data was refresehed.
+          Table               #FIN_GroupEntities
+        ENDPROPERTIES
+        
+      FIELD #RequestToRefreshLedgerData
+        Id 50019
+        ENUM
+        PROPERTIES
+          Name                #RequestToRefreshLedgerData
+          Label               #Request to Refresh Ledger Data
+          HelpText            #A user requested Ledger Data to be refreshed
+          Table               #FIN_GroupEntities
+          EnumType            #NoYes
+        ENDPROPERTIES
+        
+    ENDFIELDS
+    GROUPS
+      GROUP #AutoLookup
+        PROPERTIES
+          Name                #AutoLookup
+        ENDPROPERTIES
+        
+        GROUPFIELDS
+          #EntityCode
+          #EntityName
+        ENDGROUPFIELDS
+      ENDGROUP
+    ENDGROUPS
+    
+    INDICES
+      #EntityCodeIdx
+      Id 50001
+      PROPERTIES
+        Name                #EntityCodeIdx
+        AllowDuplicates     #No
+      ENDPROPERTIES
+      
+      INDEXFIELDS
+        #EntityCode
+      ENDINDEXFIELDS
+      
+    ENDINDICES
+    REFERENCES
+    ENDREFERENCES
+    
+    DELETEACTIONS
+      #FIN_GroupEntityPeriod
+      PROPERTIES
+        Table               #FIN_GroupEntityPeriod
+        DeleteAction        #Restricted
+      ENDPROPERTIES
+      
+      #FIN_GroupEntityDataSet
+      PROPERTIES
+        Table               #FIN_GroupEntityDataSet
+        DeleteAction        #Restricted
+      ENDPROPERTIES
+      
+      #FIN_GroupDataSource
+      PROPERTIES
+        Table               #FIN_GroupDataSource
+        DeleteAction        #Restricted
+      ENDPROPERTIES
+      
+      #FIN_GroupLedgerImportData
+      PROPERTIES
+        Table               #FIN_GroupLedgerImportData
+        DeleteAction        #Restricted
+      ENDPROPERTIES
+      
+      #FIN_GroupLedgerMapping
+      PROPERTIES
+        Table               #FIN_GroupLedgerMapping
+        DeleteAction        #Restricted
+      ENDPROPERTIES
+      
+      #FIN_GroupLedgerAdjustmentData
+      PROPERTIES
+        Table               #FIN_GroupLedgerAdjustmentData
+        DeleteAction        #Restricted
+      ENDPROPERTIES
+      
+      #FIN_GroupLedgerData
+      PROPERTIES
+        Table               #FIN_GroupLedgerData
+        DeleteAction        #Restricted
+      ENDPROPERTIES
+      
+      #FIN_GroupLedgerTable
+      PROPERTIES
+        Table               #FIN_GroupLedgerTable
+        DeleteAction        #Restricted
+      ENDPROPERTIES
+      
+    ENDDELETEACTIONS
+    
+    METHODS
+      Version: 3
+      SOURCE #delete
+        #public void delete()
+        #{
+        #    super();
+        #
+        #    FIN_GroupEntityLog::addEntry(this.EntityCode,FIN_LogEntryType::Entity_Deleted);
+        #}
+      ENDSOURCE
+      SOURCE #insert
+        #public void insert()
+        #{
+        #    super();
+        #
+        #    FIN_GroupEntityLog::addEntry(this.EntityCode,FIN_LogEntryType::Entity_Inserted);
+        #
+        #    // Create the entity period records
+        #    FIN_GroupEntityPeriod::createEntityPeriodsByEntity(this.EntityCode);
+        #
+        #}
+      ENDSOURCE
+      SOURCE #update
+        #public void update()
+        #{
+        #    super();
+        #
+        #    FIN_GroupEntityLog::addEntry(this.EntityCode,FIN_LogEntryType::Entity_Updated);
+        #}
+      ENDSOURCE
+      SOURCE #createClosingBalances
+        #static void createClosingBalances(FIN_EntityCode _entityCode = '')
+        #{
+        #    // This function creates the closing balances.
+        #    FIN_GroupLedgerData     tabLedgerData;
+        #    FIN_GroupLedgerTable    tabAccounts;
+        #    FIN_GroupEntityPeriod   tabEntityPeriod;
+        #    TransDate               dateCloseBalance;
+        #    TransDate               dateStartYear, dateEndYear;
+        #    FIN_GroupLedgerData     tabLedgerDataSource;
+        #
+        #    Date                    endDate;
+        #    dialogField             dialogEndDate;
+        #    dialogField             dialogEnityCode;
+        #    Dialog                  dialog;
+        #
+        #    #AviFiles
+        #    // Progress Bar
+        #    SysOperationProgress progress = new SysOperationProgress(1, NoYes::Yes);
+        #    int                     counter;
+        #
+        #
+        #    ;
+        #
+        #    dialog = new Dialog("Create Closing Balance");
+        #    dialog.caption("Create Closing Balances");
+        #
+        #    dialogEnityCode     =   dialog.addField(typeId(FIN_EntityCode));
+        #    dialogEndDate       =   dialog.addField(typeId(TransDate),"Use Period End");
+        #
+        #    dialogEnityCode.value(_entityCode);
+        #
+        #
+        #    if(!dialog.run())
+        #        return;
+        #
+        #    endDate             =   dialogEndDate.value();
+        #    _entityCode         =   dialogEnityCode.value();
+        #
+        #
+        #
+        #    if (! FIN_GroupEntities::find(_entityCode))
+        #        throw error(strfmt('Unable to find Entity : %1',_entityCode));
+        #
+        #    tabEntityPeriod = FIN_GroupEntityPeriod::find(_entityCode,endDate);
+        #
+        #    if (! tabEntityPeriod)
+        #        throw error(strfmt('Unable to find period %2 for  Entity : %1', _entityCode, date2str(endDate,123,1,1,3,1,4) ));
+        #
+        #    dateStartYear = mkdate(1,1,year(endDate));
+        #    dateEndYear = mkdate(31,12,year(endDate));
+        #    dateCloseBalance = dateEndYear;
+        #
+        #    // Check if opening Balance already exist
+        #    if (FIN_GroupLedgerData::dataExist(_entityCode,dateCloseBalance,'CLS'))
+        #       throw error('Closing Balances already exist for period %1',date2str(dateCloseBalance,123,1,1,3,1,4));
+        #
+        #
+        #    startlengthyoperation();
+        #
+        #    // Progress Caption & Animation
+        #    progress.setCaption("Create closing Balances...");
+        #    progress.setAnimation(#AviUpdate);
+        #
+        #    try
+        #    {
+        #
+        #       ttsbegin;
+        #
+        #       while select EntityCode,
+        #                    Category,
+        #                    AccountNum,
+        #                    CostCenter,
+        #                    Department,
+        #                    Purpose,
+        #                    CurrencyCode,
+        #                    sum(AmountMST),
+        #                    sum(Amount)
+        #             from tabLedgerDataSource
+        #             group by EntityCode,
+        #                    Category,
+        #                    AccountNum,
+        #                    CostCenter,
+        #                    Department,
+        #                    Purpose,
+        #                    CurrencyCode
+        #             join tabAccounts
+        #             where  tabAccounts.AccountNum == tabLedgerDataSource.AccountNum
+        #                    && tabAccounts.EntityCode == _entityCode
+        #                    && (tabAccounts.Type  == 'BS' || tabAccounts.Type  == 'IS')
+        #
+        #                   && tabLedgerDataSource.TransDate >= dateStartYear
+        #                   && tabLedgerDataSource.TransDate <= dateEndYear
+        #                   && tabLedgerDataSource.EntityCode == _entityCode
+        #                   && tabLedgerDataSource.Category == 'MAIN'
+        #                   && (tabLedgerDataSource.ScenarioCode == 'OBA' || tabLedgerDataSource.ScenarioCode == 'ACT'
+        #                        || tabLedgerDataSource.ScenarioCode == 'ADJ'  || tabLedgerDataSource.ScenarioCode == 'CLS')
+        #
+        #
+        #
+        #       {
+        #
+        #            tabLedgerData.clear();
+        #
+        #            if (tabLedgerDataSource.AmountMST == 0)
+        #               continue;
+        #
+        #            tabLedgerData.EntityCode    = tabLedgerDataSource.EntityCode;
+        #            tabLedgerData.AccountNum    = tabLedgerDataSource.AccountNum;
+        #            tabLedgerData.Category      = tabLedgerDataSource.Category;
+        #            tabledgerData.CostCenter    = tabLedgerDataSource.CostCenter;
+        #            tabledgerData.Department    = tabLedgerDataSource.Department;
+        #            tabledgerData.Purpose       = tabLedgerDataSource.Purpose;
+        #            tabledgerData.CurrencyCode  = tabLedgerDataSource.CurrencyCode;
+        #            tabledgerData.ScenarioCode  = 'CLS';
+        #            tabledgerData.TransDate     = dateCloseBalance;
+        #            tabledgerData.AmountMST     = -tabLedgerDataSource.AmountMST;
+        #            tabledgerData.Amount        = -tabLedgerDataSource.Amount;
+        #
+        #
+        #            //debug::assert(tabLedgerData.AccountNum != "010.P.08");
+        #
+        #            //print (strfmt("Acccount : %1  Amount : %2 ",tabLedgerData.AccountNum, num2str(tabLedgerData.AmountMST,0,2,1,1))) ;
+        #            tabledgerData.insert();
+        #
+        #
+        #            counter++;
+        #
+        #            // Refresh every 10th cycle
+        #            if ((counter mod 10) == 0)
+        #            {
+        #                progress.setText(strfmt("Creating entry : %1", counter));
+        #                progress.setTotal(counter, 1);
+        #            }
+        #       }
+        #       ttscommit;
+        #    }
+        #    catch
+        #    {
+        #        error("Error occured creating opening balances!");
+        #    }
+        #
+        #
+        #
+        #
+        #
+        #
+        #
+        #
+        #}
+      ENDSOURCE
+      SOURCE #createOpeningBalances
+        #static void createOpeningBalances(FIN_EntityCode _entityCode = '')
+        #{
+        #    // This function creates the opening balances from the previous years ending balances.
+        #    FIN_GroupLedgerData     tabLedgerData;
+        #    FIN_GroupLedgerTable    tabAccounts;
+        #    FIN_GroupEntityPeriod   tabEntityPeriod;
+        #    TransDate               dateOpenBalance;
+        #    TransDate               dateStartPriorYear, dateEndPriorYear;
+        #    FIN_GroupLedgerData     tabLedgerDataSource;
+        #
+        #    Date                    endDate;
+        #    dialogField             dialogEndDate;
+        #    dialogField             dialogEnityCode;
+        #    Dialog                  dialog;
+        #
+        #    FIN_AccountNum          retainEarningsAccount;
+        #
+        #    #AviFiles
+        #    // Progress Bar
+        #    SysOperationProgress progress = new SysOperationProgress(1, NoYes::Yes);
+        #    int                     counter;
+        #
+        #
+        #    ;
+        #
+        #    dialog = new Dialog("Create Opening Balance");
+        #    dialog.caption("Create Opening Balances");
+        #
+        #    dialogEnityCode     =   dialog.addField(typeId(FIN_EntityCode));
+        #    dialogEndDate       =   dialog.addField(typeId(TransDate),"Use Period End");
+        #
+        #    dialogEnityCode.value(_entityCode);
+        #
+        #
+        #    if(!dialog.run())
+        #        return;
+        #
+        #    endDate             =   dialogEndDate.value();
+        #    _entityCode         =   dialogEnityCode.value();
+        #
+        #
+        #
+        #    if (! FIN_GroupEntities::find(_entityCode))
+        #        throw error(strfmt('Unable to find Entity : %1',_entityCode));
+        #
+        #    tabEntityPeriod = FIN_GroupEntityPeriod::find(_entityCode,endDate);
+        #
+        #    if (! tabEntityPeriod)
+        #        throw error(strfmt('Unable to find period %2 for  Entity : %1', _entityCode, date2str(endDate,123,1,1,3,1,4) ));
+        #
+        #
+        #    // Check if retained earnings account setup
+        #    retainEarningsAccount = FIN_GroupEntities::find(_entityCode,false).RetainEarningsAccountNum;
+        #    if (! retainEarningsAccount )
+        #         throw error(strfmt('No Retained Earnings account setup for Entity : %1',_entityCode));
+        #
+        #
+        #    dateStartPriorYear = mkdate(1,1,year(endDate));
+        #    dateEndPriorYear = mkdate(31,12,year(endDate));
+        #    dateOpenBalance = mkdate(1,1,year(endDate) + 1);
+        #
+        #    // Check if opening Balance already exist
+        #    if (FIN_GroupLedgerData::dataExist(_entityCode,dateOpenBalance,'OBA'))
+        #       throw error('Opening Balances already exist for period %1',date2str(dateOpenBalance,123,1,1,3,1,4));
+        #
+        #
+        #    startlengthyoperation();
+        #
+        #    // Progress Caption & Animation
+        #    progress.setCaption("Create opening Balances...");
+        #    progress.setAnimation(#AviUpdate);
+        #
+        #    try
+        #    {
+        #
+        #       ttsbegin;
+        #
+        #       // Process the Balance sheet
+        #       while select EntityCode,
+        #                    Category,
+        #                    AccountNum,
+        #                    CostCenter,
+        #                    Department,
+        #                    Purpose,
+        #                    CurrencyCode,
+        #                    sum(AmountMST),
+        #                    sum(Amount)
+        #             from tabLedgerDataSource
+        #             group by EntityCode,
+        #                    Category,
+        #                    AccountNum,
+        #                    CostCenter,
+        #                    Department,
+        #                    Purpose,
+        #                    CurrencyCode
+        #             join tabAccounts
+        #             where  tabAccounts.AccountNum == tabLedgerDataSource.AccountNum
+        #                    && tabAccounts.EntityCode == _entityCode
+        #                    && tabAccounts.Type  == 'BS'
+        #
+        #                   && tabLedgerDataSource.TransDate >= dateStartPriorYear
+        #                   && tabLedgerDataSource.TransDate <= dateEndPriorYear
+        #                   && tabLedgerDataSource.EntityCode == _entityCode
+        #                   && tabLedgerDataSource.Category == 'MAIN'
+        #                   && (tabLedgerDataSource.ScenarioCode == 'OBA' || tabLedgerDataSource.ScenarioCode == 'ACT'
+        #                        || tabLedgerDataSource.ScenarioCode == 'ADJ'  || tabLedgerDataSource.ScenarioCode == 'CLS')
+        #
+        #
+        #
+        #       {
+        #
+        #            tabLedgerData.clear();
+        #
+        #            if (tabLedgerDataSource.AmountMST == 0)
+        #               continue;
+        #
+        #            tabLedgerData.EntityCode    = tabLedgerDataSource.EntityCode;
+        #            tabLedgerData.AccountNum    = tabLedgerDataSource.AccountNum;
+        #            tabLedgerData.Category      = tabLedgerDataSource.Category;
+        #            tabledgerData.CostCenter    = tabLedgerDataSource.CostCenter;
+        #            tabledgerData.Department    = tabLedgerDataSource.Department;
+        #            tabledgerData.Purpose       = tabLedgerDataSource.Purpose;
+        #            tabledgerData.CurrencyCode  = tabLedgerDataSource.CurrencyCode;
+        #            tabledgerData.ScenarioCode  = 'OBA';
+        #            tabledgerData.TransDate     = dateOpenBalance;
+        #            tabledgerData.AmountMST     = tabLedgerDataSource.AmountMST;
+        #            tabledgerData.Amount        = tabLedgerDataSource.Amount;
+        #
+        #
+        #            //debug::assert(tabLedgerData.AccountNum != "010.P.08");
+        #
+        #            //print (strfmt("Acccount : %1  Amount : %2 ",tabLedgerData.AccountNum, num2str(tabLedgerData.AmountMST,0,2,1,1))) ;
+        #            tabledgerData.insert();
+        #
+        #
+        #            counter++;
+        #
+        #            // Refresh every 10th cycle
+        #            if ((counter mod 10) == 0)
+        #            {
+        #                progress.setText(strfmt("Creating entry : %1", counter));
+        #                progress.setTotal(counter, 1);
+        #            }
+        #       }
+        #
+        #
+        #       // Process the Income Statement
+        #       while select EntityCode,
+        #                    Category,
+        #                    CostCenter,
+        #                    Department,
+        #                    Purpose,
+        #                    CurrencyCode,
+        #                    sum(AmountMST),
+        #                    sum(Amount)
+        #             from tabLedgerDataSource
+        #             group by EntityCode,
+        #                    Category,
+        #                    CostCenter,
+        #                    Department,
+        #                    Purpose,
+        #                    CurrencyCode
+        #             join tabAccounts
+        #             where  tabAccounts.AccountNum == tabLedgerDataSource.AccountNum
+        #                    && tabAccounts.EntityCode == _entityCode
+        #                    && tabAccounts.Type  == 'IS'
+        #
+        #                   && tabLedgerDataSource.TransDate >= dateStartPriorYear
+        #                   && tabLedgerDataSource.TransDate <= dateEndPriorYear
+        #                   && tabLedgerDataSource.EntityCode == _entityCode
+        #                   && tabLedgerDataSource.Category == 'MAIN'
+        #                   && (tabLedgerDataSource.ScenarioCode == 'OBA' || tabLedgerDataSource.ScenarioCode == 'ACT'
+        #                        || tabLedgerDataSource.ScenarioCode == 'ADJ'  || tabLedgerDataSource.ScenarioCode == 'CLS')
+        #
+        #
+        #
+        #       {
+        #
+        #            tabLedgerData.clear();
+        #
+        #            if (tabLedgerDataSource.AmountMST == 0)
+        #               continue;
+        #
+        #            tabLedgerData.EntityCode    = tabLedgerDataSource.EntityCode;
+        #            tabLedgerData.AccountNum    = retainEarningsAccount;
+        #            tabLedgerData.Category      = tabLedgerDataSource.Category;
+        #            tabledgerData.CostCenter    = tabLedgerDataSource.CostCenter;
+        #            tabledgerData.Department    = tabLedgerDataSource.Department;
+        #            tabledgerData.Purpose       = tabLedgerDataSource.Purpose;
+        #            tabledgerData.CurrencyCode  = tabLedgerDataSource.CurrencyCode;
+        #            tabledgerData.ScenarioCode  = 'OBA';
+        #            tabledgerData.TransDate     = dateOpenBalance;
+        #            tabledgerData.AmountMST     = tabLedgerDataSource.AmountMST;
+        #            tabledgerData.Amount        = tabLedgerDataSource.Amount;
+        #
+        #
+        #            //debug::assert(tabLedgerData.AccountNum != "010.P.08");
+        #
+        #            //print (strfmt("Acccount : %1  Amount : %2 ",tabLedgerData.AccountNum, num2str(tabLedgerData.AmountMST,0,2,1,1))) ;
+        #            tabledgerData.insert();
+        #
+        #
+        #            counter++;
+        #
+        #            // Refresh every 10th cycle
+        #            if ((counter mod 10) == 0)
+        #            {
+        #                progress.setText(strfmt("Creating entry : %1", counter));
+        #                progress.setTotal(counter, 1);
+        #            }
+        #       }
+        #
+        #       ttscommit;
+        #    }
+        #    catch
+        #    {
+        #        error("Error occured creating opening balances!");
+        #    }
+        #
+        #
+        #
+        #
+        #
+        #
+        #
+        #
+        #}
+      ENDSOURCE
+      SOURCE #doExchAdjustments
+        #public static void doExchAdjustments(FIN_EntityCode _entityCode,
+        #                                     CurrencyCode _toCurrencyCode,
+        #                                     FIN_PeriodStart _forPeriod,
+        #                                     FIN_Category   _fromCategory,
+        #                                     NoYes _deleteExisting = NoYes::No)
+        #{
+        #
+        #    FIN_GroupLedgerTable    tabLedgerTable;
+        #    FIN_GroupExchangeRates  tabExchRate;
+        #    FIN_GroupLedgerData     tabData;
+        #    FIN_GroupLedgerData     tabNewData;
+        #    FIN_GroupCategory       tabCategory;
+        #    FIN_GroupPeriod         tabPeriod;
+        #    FIN_GroupEntities       tabEntity;
+        #    FIN_Category            strCategory;
+        #    ExchRate                edtRate;
+        #    ExchRate                edtHistoricRate;
+        #    ;
+        #    strCategory = 'FX_' + strupr(_toCurrencyCode);
+        #
+        #    // Get the period record
+        #    tabPeriod = FIN_GroupPeriod::find(_forPeriod);
+        #    if (!tabPeriod.RecId)
+        #        throw error(strfmt('Period %1 does not exist!',date2str(_forPeriod,123,2,1,3,1,4)));
+        #
+        #
+        #    // Get the entity record
+        #    tabEntity = FIN_GroupEntities::find(_entityCode);
+        #    if (!tabEntity.RecId)
+        #        throw error(strfmt('Entity %1 not not found!',_entityCode));
+        #
+        #    if (!tabEntity.ExchAdjAccountNum)
+        #        throw error(strfmt('No currency Translation account specified for entity: %1',tabEntity.EntityCode));
+        #
+        #    // Get exchrate record
+        #    //-------------------------
+        #    //Get exchange rate for period for entity currency
+        #    tabExchRate = FIN_GroupExchangeRates::find(tabEntity.CurrencyCode,_forPeriod,NoYes::Yes);
+        #
+        #    // if destination rate is the GROUP base rate or not
+        #    if (strupr(_toCurrencyCode) != 'EUR')
+        #    {
+        #       // Get rate between entity currency and toCurrency
+        #        edtRate = FIN_GroupExchangeRates::find(_toCurrencyCode,_forPeriod,NoYes::Yes).ClosingExchRate;
+        #        if (!edtRate || edtRate <= 0)
+        #            throw error(strfmt('No exchange rate found for currency : %1 and period :  %2',_toCurrencyCode,date2str(_forPeriod,123,2,1,3,1,4)));
+        #
+        #        edtRate = tabExchRate.ClosingExchRate / edtRate;
+        #    }
+        #    else
+        #    {
+        #        edtRate = tabExchRate.ClosingExchRate;
+        #    }
+        #
+        #    if (!edtRate || edtRate <= 0)
+        #        throw error(strfmt('No exchange rate found for currency : %1 and period :  %2',tabEntity.CurrencyCode,date2str(_forPeriod,123,2,1,3,1,4)));
+        #
+        #    startlengthyoperation();
+        #
+        #    try
+        #    {
+        #        // Check if already exists
+        #        select RecId from tabData
+        #            where   tabData.EntityCode      == _entityCode &&
+        #                    tabData.PeriodStart     == _forPeriod &&
+        #                    tabData.Category        == strCategory;
+        #
+        #        if (tabData.RecId)
+        #        {
+        #            // If data found but should not delete just return
+        #            if (!_deleteExisting)
+        #                return;
+        #
+        #            Delete_from tabData
+        #            where   tabData.EntityCode      == _entityCode &&
+        #                    tabData.PeriodStart     == _forPeriod &&
+        #                    tabData.Category        == strCategory;
+        #
+        #        }
+        #
+        #
+        #        // Check if Category exists and add if not
+        #        if (!FIN_GroupCategory::find(strCategory).RecId)
+        #        {
+        #            ttsbegin;
+        #            tabCategory.initValue();
+        #            tabCategory.Category        = strCategory;
+        #            tabCategory.Descriptoin     = 'FX - Translation  - ' + strupr(_toCurrencyCode);
+        #            tabCategory.insert();
+        #            ttscommit;
+        #        }
+        #
+        #        // Do adjustment
+        #        ttsbegin;
+        #
+        #        FIN_GroupEntityLog::addEntry(_entityCode,FIN_LogEntryType::LedgerData_Forex);
+        #
+        #        // Balance Sheet always take from start of year
+        #        while select EntityCode, Category, PeriodStart, AccountNum, CostCenter,
+        #                     Department, Purpose, ScenarioCode, sum(AmountMST)
+        #            from tabData
+        #            group by tabData.EntityCode, tabData.Category,
+        #                     tabData.PeriodStart, tabData.AccountNum,
+        #                     tabData.CostCenter, tabData.Department,
+        #                     tabData.Purpose, tabData.ScenarioCode
+        #                where   tabData.EntityCode      == _entityCode &&
+        #                        tabData.PeriodStart     >= DateStartYr(_forPeriod) &&
+        #                        tabData.PeriodStart     <= _forPeriod &&
+        #                        tabData.Category        == _fromCategory
+        #
+        #           {
+        #
+        #            tabLedgerTable = FIN_GroupLedgerTable::find(_entityCode,tabData.AccountNum);
+        #            if (!tabLedgerTable.RecId)
+        #                throw error ('Unable to find Ledger Account number : ' + tabData.AccountNum);
+        #
+        #            if (tabLedgerTable.Type != 'BS' || tabLedgerTable.IsHeading || tabLedgerTable.IsTotal)
+        #                continue;
+        #
+        #            tabNewData.initValue();
+        #            tabNewData.Category     = strCategory; //Assign new category
+        #            tabNewData.CurrencyCode = tabEntity.CurrencyCode;
+        #            tabNewData.EntityCode   = tabEntity.EntityCode;
+        #            tabNewData.ScenarioCode = tabData.ScenarioCode;
+        #            tabNewData.TransDate    = tabPeriod.PeriodEnd;
+        #            tabNewData.PeriodStart  = _forPeriod;
+        #            tabNewData.CostCenter   = tabData.CostCenter;
+        #            tabNewData.Department   = tabData.Department;
+        #            tabNewData.Purpose      = tabData.Purpose;
+        #            tabNewData.AccountNum    = tabData.AccountNum;
+        #            tabNewData.Amount       = tabData.AmountMST;
+        #
+        #            if (tabLedgerTable.ExchAdjType == FIN_ExchAdjType::Historic)
+        #            {
+        #                //Need to get rate from historic rate table.
+        #                edtHistoricRate = FIN_GroupExchLedgerAccRates::find(tabEntity.EntityCode,tabData.AccountNum, _toCurrencyCode,_forPeriod,NoYes::No).ClosingExchRate;
+        #                if (!edtHistoricRate || edtHistoricRate == 0)
+        #                    throw error(strfmt('No historic rate exists for account: %1!',tabData.AccountNum));
+        #
+        #                tabnewData.AmountMST = tabData.AmountMST * edtHistoricRate;
+        #
+        #            }
+        #            else
+        #            {
+        #                tabnewData.AmountMST = tabData.AmountMST * edtRate;
+        #            }
+        #            tabNewData.doInsert();
+        #
+        #        }
+        #
+        #        // Income statement only take monthly movement
+        #        while select EntityCode, Category, PeriodStart, AccountNum, CostCenter,
+        #                     Department, Purpose, ScenarioCode, sum(AmountMST)
+        #            from tabData
+        #            group by tabData.EntityCode, tabData.Category,
+        #                     tabData.PeriodStart, tabData.AccountNum,
+        #                     tabData.CostCenter, tabData.Department,
+        #                     tabData.Purpose, tabData.ScenarioCode
+        #                where   tabData.EntityCode      == _entityCode &&
+        #                        tabData.PeriodStart     == _forPeriod &&
+        #                        tabData.Category        == _fromCategory
+        #
+        #           {
+        #
+        #            tabLedgerTable = FIN_GroupLedgerTable::find(_entityCode,tabData.AccountNum);
+        #            if (!tabLedgerTable.RecId)
+        #                throw error ('Unable to find Ledger Account number : ' + tabData.AccountNum);
+        #
+        #            if (tabLedgerTable.Type != 'IS' || tabLedgerTable.IsHeading || tabLedgerTable.IsTotal)
+        #                continue;
+        #
+        #            tabNewData.initValue();
+        #            tabNewData.Category     = strCategory; //Assign new category
+        #            tabNewData.CurrencyCode = tabEntity.CurrencyCode;
+        #            tabNewData.EntityCode   = tabEntity.EntityCode;
+        #            tabNewData.ScenarioCode = tabData.ScenarioCode;
+        #            tabNewData.TransDate    = tabPeriod.PeriodEnd;
+        #            tabNewData.PeriodStart  = _forPeriod;
+        #            tabNewData.CostCenter   = tabData.CostCenter;
+        #            tabNewData.Department   = tabData.Department;
+        #            tabNewData.Purpose      = tabData.Purpose;
+        #            tabNewData.AccountNum    = tabData.AccountNum;
+        #            tabNewData.Amount       = tabData.AmountMST;
+        #
+        #            if (tabLedgerTable.ExchAdjType == FIN_ExchAdjType::Historic)
+        #            {
+        #                //Need to get rate from historic rate table.
+        #                edtHistoricRate = FIN_GroupExchLedgerAccRates::find(tabEntity.EntityCode,tabData.AccountNum, _toCurrencyCode,_forPeriod,NoYes::No).ClosingExchRate;
+        #                if (!edtHistoricRate || edtHistoricRate == 0)
+        #                    throw error(strfmt('No historic rate exists for account: %1!',tabData.AccountNum));
+        #
+        #                tabnewData.AmountMST = tabData.AmountMST * edtHistoricRate;
+        #
+        #            }
+        #            else
+        #            {
+        #                tabnewData.AmountMST = tabData.AmountMST * edtRate;
+        #            }
+        #            tabNewData.doInsert();
+        #
+        #        }
+        #
+        #
+        #        //Book Adjustment balance to specified translation account
+        #        //Balance sheet take from year start
+        #        while select EntityCode, Category, PeriodStart, CostCenter,
+        #                     Department, Purpose, ScenarioCode, sum(AmountMST)
+        #            from tabData
+        #            join tabLedgerTable
+        #            group by tabData.EntityCode, tabData.Category,
+        #                     tabData.PeriodStart, tabData.CostCenter, tabData.Department,
+        #                     tabData.Purpose, tabData.ScenarioCode
+        #                where   tabData.AccountNum      == tabLedgerTable.AccountNum &&
+        #                        tabData.EntityCode      == tabLedgerTable.EntityCode &&
+        #                        tabData.EntityCode      == _entityCode &&
+        #                        tabData.PeriodStart     == _forPeriod &&
+        #                        tabData.PeriodStart     >= DateStartYr(_forPeriod) &&
+        #                        tabData.Category        == strCategory &&
+        #                        tabData.AccountNum      != tabEntity.ExchAdjAccountNum &&
+        #                        tabLedgerTable.Type     == 'BS' &&
+        #                        tabLedgerTable.IsHeading  == NoYes::No &&
+        #                        tabLedgerTable.IsTotal  == NoYes::No
+        #        {
+        #
+        #
+        #
+        #            tabNewData.initValue();
+        #            tabNewData.Category     = strCategory; //Assign new category
+        #            tabNewData.AccountNum   = tabEntity.ExchAdjAccountNum; // Use Entity Exch Adj Account
+        #            tabNewData.CurrencyCode = tabEntity.CurrencyCode;
+        #            tabNewData.EntityCode   = tabEntity.EntityCode;
+        #            tabNewData.ScenarioCode = tabData.ScenarioCode;
+        #            tabNewData.TransDate    = tabPeriod.PeriodEnd;
+        #            tabNewData.PeriodStart  = _forPeriod;
+        #            tabNewData.CostCenter   = tabData.CostCenter;
+        #            tabNewData.Department   = tabData.Department;
+        #            tabNewData.Purpose      = tabData.Purpose;
+        #            tabNewData.Amount       = 0;
+        #            tabNewData.AmountMST    = tabData.AmountMST * -1;
+        #
+        #            tabnewData.doInsert();
+        #
+        #
+        #        }
+        #
+        #        //Income statement takes movement only
+        #        while select EntityCode, Category, PeriodStart, CostCenter,
+        #                     Department, Purpose, ScenarioCode, sum(AmountMST)
+        #            from tabData
+        #            join tabLedgerTable
+        #            group by tabData.EntityCode, tabData.Category,
+        #                     tabData.PeriodStart, tabData.CostCenter, tabData.Department,
+        #                     tabData.Purpose, tabData.ScenarioCode
+        #                where   tabData.AccountNum      == tabLedgerTable.AccountNum &&
+        #                        tabData.EntityCode      == tabLedgerTable.EntityCode &&
+        #                        tabData.EntityCode      == _entityCode &&
+        #                        tabData.PeriodStart     == _forPeriod &&
+        #                        tabData.Category        == strCategory &&
+        #                        tabData.AccountNum      != tabEntity.ExchAdjAccountNum &&
+        #                        tabLedgerTable.Type     == 'IS' &&
+        #                        tabLedgerTable.IsHeading  == NoYes::No &&
+        #                        tabLedgerTable.IsTotal  == NoYes::No
+        #        {
+        #
+        #
+        #
+        #            tabNewData.initValue();
+        #            tabNewData.Category     = strCategory; //Assign new category
+        #            tabNewData.AccountNum   = tabEntity.ExchAdjAccountNum; // Use Entity Exch Adj Account
+        #            tabNewData.CurrencyCode = tabEntity.CurrencyCode;
+        #            tabNewData.EntityCode   = tabEntity.EntityCode;
+        #            tabNewData.ScenarioCode = tabData.ScenarioCode;
+        #            tabNewData.TransDate    = tabPeriod.PeriodEnd;
+        #            tabNewData.PeriodStart  = _forPeriod;
+        #            tabNewData.CostCenter   = tabData.CostCenter;
+        #            tabNewData.Department   = tabData.Department;
+        #            tabNewData.Purpose      = tabData.Purpose;
+        #            tabNewData.Amount       = 0;
+        #            tabNewData.AmountMST    = tabData.AmountMST * -1;
+        #
+        #            tabnewData.doInsert();
+        #
+        #
+        #        }
+        #
+        #
+        #
+        #
+        #
+        #        ttscommit;
+        #        endlengthyoperation();
+        #
+        #
+        #    }// end try
+        #    catch
+        #    {
+        #        throw error('Error doing exchange rate translation!');
+        #
+        #    }
+        #
+        #}
+      ENDSOURCE
+      SOURCE #doTranslationAdj
+        #public static void doTranslationAdj(FIN_EntityCode _entityCode,
+        #                                     CurrencyCode _toCurrencyCode,
+        #                                     FIN_PeriodStart _forPeriod,
+        #                                     FIN_Category   _fromCategory,
+        #                                     NoYes _deleteExisting = NoYes::No)
+        #{
+        #
+        #    FIN_GroupLedgerTable    tabLedgerTable;
+        #    FIN_GroupExchangeRates  tabExchRate;
+        #    FIN_GroupLedgerData     tabData;
+        #    FIN_GroupLedgerData     tabNewData;
+        #    FIN_GroupCategory       tabCategory;
+        #    FIN_GroupPeriod         tabPeriod;
+        #    FIN_GroupEntities       tabEntity;
+        #    FIN_Category            strCategory;
+        #    FIN_GroupEntityPeriod   tabEntityPeriod;
+        #    ExchRate                edtRate;
+        #    ExchRate                edtHistoricRate;
+        #
+        #    Container               conPrevAmounts;
+        #    AmountMST               prevAmountMST;
+        #    Amount                  prevAmount;
+        #    Date                    dateYrStart;
+        #
+        #
+        #    #AviFiles
+        #    // Progress Bar
+        #    SysOperationProgress progress = new SysOperationProgress(1, NoYes::Yes);
+        #    int                  row;
+        #
+        #    ;
+        #    strCategory = 'FX_' + strupr(_toCurrencyCode);
+        #
+        #    // Get the period record
+        #    tabPeriod = FIN_GroupPeriod::find(_forPeriod);
+        #    if (!tabPeriod.RecId)
+        #        throw error(strfmt('Period %1 does not exist!',date2str(_forPeriod,123,2,1,3,1,4)));
+        #
+        #    dateYrStart = DateStartYr(tabPeriod.PeriodStart);
+        #
+        #    // Get the entity record
+        #    tabEntity = FIN_GroupEntities::find(_entityCode);
+        #    if (!tabEntity.RecId)
+        #        throw error(strfmt('Entity %1 not not found!',_entityCode));
+        #
+        #    if (!tabEntity.ExchAdjAccountNum)
+        #        throw error(strfmt('No currency Translation account specified for entity: %1',tabEntity.EntityCode));
+        #
+        #    // Get exchrate record
+        #    //-------------------------
+        #    //Get exchange rate for period for entity currency
+        #    tabExchRate = FIN_GroupExchangeRates::find(tabEntity.CurrencyCode,_forPeriod,NoYes::Yes);
+        #
+        #    // if destination rate is the GROUP base rate or not
+        #    if (strupr(_toCurrencyCode) != 'EUR')
+        #    {
+        #       // Get rate between entity currency and toCurrency
+        #        edtRate = FIN_GroupExchangeRates::find(_toCurrencyCode,_forPeriod,NoYes::Yes).ClosingExchRate;
+        #        if (!edtRate || edtRate <= 0)
+        #            throw error(strfmt('No exchange rate found for currency : %1 and period :  %2',_toCurrencyCode,date2str(_forPeriod,123,2,1,3,1,4)));
+        #
+        #        edtRate = tabExchRate.ClosingExchRate / edtRate;
+        #
+        #    }
+        #    else
+        #    {
+        #        edtRate = tabExchRate.ClosingExchRate;
+        #    }
+        #
+        #    if (!edtRate || edtRate <= 0)
+        #        throw error(strfmt('No exchange rate found for currency : %1 and period :  %2',tabEntity.CurrencyCode,date2str(_forPeriod,123,2,1,3,1,4)));
+        #
+        #   // Progress Caption & Animation
+        #    progress.setCaption(strfmt("Translations for period %1 ...",date2str(tabPeriod.PeriodStart,123,0,1,3,1,4)));
+        #    progress.setAnimation(#AviUpdate);
+        #    startlengthyoperation();
+        #
+        #    try
+        #    {
+        #        // Check if already exists
+        #        select RecId from tabData
+        #            where   tabData.EntityCode      == _entityCode &&
+        #                    tabData.PeriodStart     == _forPeriod &&
+        #                    tabData.Category        == strCategory;
+        #
+        #        if (tabData.RecId)
+        #        {
+        #            // If data found but should not delete just return
+        #            if (!_deleteExisting)
+        #                return;
+        #
+        #            Delete_from tabData
+        #            where   tabData.EntityCode      == _entityCode &&
+        #                    tabData.PeriodStart     == _forPeriod &&
+        #                    tabData.Category        == strCategory;
+        #
+        #        }
+        #
+        #
+        #        // Check if Category exists and add if not
+        #        if (!FIN_GroupCategory::find(strCategory).RecId)
+        #        {
+        #            ttsbegin;
+        #            tabCategory.initValue();
+        #            tabCategory.Category        = strCategory;
+        #            tabCategory.Descriptoin     = 'FX - Translation  - ' + strupr(_toCurrencyCode);
+        #            tabCategory.insert();
+        #            ttscommit;
+        #        }
+        #
+        #
+        #
+        #        // Do adjustment
+        #        ttsbegin;
+        #
+        #        FIN_GroupEntityLog::addEntry(_entityCode,FIN_LogEntryType::LedgerData_Forex);
+        #
+        #        // Balance Sheet always take from start of year
+        #        while select EntityCode, Category,  AccountNum, CostCenter,
+        #                     Department, Purpose, ScenarioCode, sum(AmountMST)
+        #           from tabData
+        #            join tabLedgerTable
+        #            group by tabLedgerTable.ExchAdjType,
+        #                     tabData.EntityCode, tabData.Category,
+        #                      tabData.AccountNum,
+        #                     tabData.CostCenter, tabData.Department,
+        #                     tabData.Purpose, tabData.ScenarioCode
+        #                where   tabData.EntityCode      == _entityCode &&
+        #                        tabData.PeriodStart     >= dateYrStart &&
+        #                        tabData.PeriodStart     <= _forPeriod &&
+        #                        tabData.Category        == _fromCategory &&
+        #                        tabData.AccountNum      != tabEntity.ExchAdjAccountNum &&
+        #                        tabData.AccountNum      == tabLedgerTable.AccountNum &&
+        #                        tabData.EntityCode      == tabLedgerTable.EntityCode &&
+        #                        tabLedgerTable.Type     == 'BS' &&
+        #                        tabLedgerTable.IsHeading  == NoYes::No &&
+        #                        tabLedgerTable.IsTotal  == NoYes::No
+        #
+        #           {
+        #
+        #
+        #//           if (tabData.AccountNum == '1.2.03.02.01.000001')   //2.3.01.02.02.000001
+        #//            {
+        #//                print 'here';
+        #//            }
+        #
+        #            tabNewData.initValue();
+        #            tabNewData.Category     = strCategory; //Assign new category
+        #            tabNewData.CurrencyCode = tabEntity.CurrencyCode;
+        #            tabNewData.EntityCode   = tabEntity.EntityCode;
+        #            tabNewData.ScenarioCode = tabData.ScenarioCode;
+        #            tabNewData.TransDate    = tabPeriod.PeriodEnd;
+        #            tabNewData.PeriodStart  = _forPeriod;
+        #            tabNewData.CostCenter   = tabData.CostCenter;
+        #            tabNewData.Department   = tabData.Department;
+        #            tabNewData.Purpose      = tabData.Purpose;
+        #            tabNewData.AccountNum   = tabData.AccountNum;
+        #
+        #
+        #            // Only get pervious period balances if not year start
+        #            if (tabPeriod.PeriodStart != dateYrStart)
+        #            {
+        #                conPrevAmounts           = FIN_GroupLedgerTable::getAccountBalance(tabEntity.EntityCode,
+        #                                                    tabData.AccountNum,tabPeriod.PeriodStart-1,
+        #                                                    strCategory,tabData.ScenarioCode,
+        #                                                    tabData.CostCenter,tabData.Department,
+        #                                                    tabData.Purpose);
+        #                if (!conPrevAmounts)
+        #                    throw error('Unable to retrieve perious period balances!');
+        #
+        #                prevAmount      = conpeek(conPrevAmounts,1);
+        #                prevAmountMST   = conpeek(conPrevAmounts,2);
+        #
+        #            }
+        #            else
+        #            {
+        #
+        #                prevAmount = 0;
+        #                prevAmountMST = 0;
+        #
+        #            }
+        #
+        #            tabNewData.Amount       = tabData.AmountMST - prevAmount;
+        #
+        #            if (tabLedgerTable.ExchAdjType == FIN_ExchAdjType::Historic)
+        #            {
+        #                //Need to get rate from historic rate table.
+        #                edtHistoricRate = FIN_GroupExchLedgerAccRates::find(tabEntity.EntityCode,tabData.AccountNum, _toCurrencyCode,_forPeriod,NoYes::No).ClosingExchRate;
+        #                if (!edtHistoricRate || edtHistoricRate == 0)
+        #                    throw error(strfmt('No historic rate exists for account: %1!',tabData.AccountNum));
+        #
+        #                tabnewData.AmountMST = (tabData.AmountMST * edtHistoricRate) - prevAmountMST;
+        #
+        #            }
+        #            else
+        #            {
+        #                tabnewData.AmountMST = (tabData.AmountMST * edtRate) - prevAmountMST;
+        #            }
+        #
+        #            row ++;
+        #            if (row mod 10 == 0)
+        #            {
+        #                progress.setText(strfmt("Balance sheet entries : %1", row));
+        #                progress.setTotal(row, 1);
+        #            }
+        #
+        #            if (tabnewData.AmountMST == 0 && tabnewData.Amount == 0)
+        #                continue;
+        #
+        #           // Debug::assert( tabnewData.Amount - tabnewData.AmountMST == 0  );
+        #
+        #            tabNewData.doInsert();
+        #
+        #
+        #
+        #        }
+        #
+        #        row = 0;
+        #
+        #        // Income statement only take monthly movement
+        #        while select EntityCode, Category, PeriodStart, AccountNum, CostCenter,
+        #                     Department, Purpose, ScenarioCode, sum(AmountMST)
+        #            from tabData
+        #            join tabLedgerTable
+        #            group by tabData.EntityCode, tabData.Category,
+        #                     tabData.PeriodStart, tabData.AccountNum,
+        #                     tabData.CostCenter, tabData.Department,
+        #                     tabData.Purpose, tabData.ScenarioCode
+        #                where   tabData.EntityCode      == _entityCode &&
+        #                        tabData.PeriodStart     == _forPeriod &&
+        #                        tabData.Category        == _fromCategory &&
+        #                        tabData.AccountNum      == tabLedgerTable.AccountNum &&
+        #                        tabData.EntityCode      == tabLedgerTable.EntityCode &&
+        #                        tabLedgerTable.Type     == 'IS' &&
+        #                        tabLedgerTable.IsHeading  == NoYes::No &&
+        #                        tabLedgerTable.IsTotal  == NoYes::No
+        #
+        #           {
+        #
+        #
+        #            tabNewData.initValue();
+        #            tabNewData.Category     = strCategory; //Assign new category
+        #            tabNewData.CurrencyCode = tabEntity.CurrencyCode;
+        #            tabNewData.EntityCode   = tabEntity.EntityCode;
+        #            tabNewData.ScenarioCode = tabData.ScenarioCode;
+        #            tabNewData.TransDate    = tabPeriod.PeriodEnd;
+        #            tabNewData.PeriodStart  = _forPeriod;
+        #            tabNewData.CostCenter   = tabData.CostCenter;
+        #            tabNewData.Department   = tabData.Department;
+        #            tabNewData.Purpose      = tabData.Purpose;
+        #            tabNewData.AccountNum    = tabData.AccountNum;
+        #            tabNewData.Amount       = tabData.AmountMST;
+        #
+        #            if (tabLedgerTable.ExchAdjType == FIN_ExchAdjType::Historic)
+        #            {
+        #                //Need to get rate from historic rate table.
+        #                edtHistoricRate = FIN_GroupExchLedgerAccRates::find(tabEntity.EntityCode,tabData.AccountNum, _toCurrencyCode,_forPeriod,NoYes::No).ClosingExchRate;
+        #                if (!edtHistoricRate || edtHistoricRate == 0)
+        #                    throw error(strfmt('No historic rate exists for account: %1!',tabData.AccountNum));
+        #
+        #                tabnewData.AmountMST = tabData.AmountMST * edtHistoricRate;
+        #
+        #            }
+        #            else
+        #            {
+        #                tabnewData.AmountMST = tabData.AmountMST * edtRate;
+        #            }
+        #
+        #            row ++;
+        #            if (row mod 10 == 0)
+        #            {
+        #                progress.setText(strfmt("Income statement entries : %1", row));
+        #                progress.setTotal(row, 1);
+        #            }
+        #
+        #            if (tabnewData.AmountMST == 0 && tabnewData.Amount == 0)
+        #                continue;
+        #
+        #           // Debug::assert( tabnewData.Amount - tabnewData.AmountMST == 0 );
+        #
+        #            tabNewData.doInsert();
+        #
+        #
+        #
+        #        }
+        #
+        #
+        #        row = 0;
+        #
+        #        //Book Adjustment balance to specified translation account
+        #
+        #        while select EntityCode, Category, PeriodStart, CostCenter,
+        #                     Department, Purpose, ScenarioCode, sum(AmountMST)
+        #            from tabData
+        #            join tabLedgerTable
+        #            group by tabData.EntityCode, tabData.Category,
+        #                     tabData.PeriodStart, tabData.CostCenter, tabData.Department,
+        #                     tabData.Purpose, tabData.ScenarioCode
+        #                where   tabData.AccountNum      == tabLedgerTable.AccountNum &&
+        #                        tabData.EntityCode      == tabLedgerTable.EntityCode &&
+        #                        tabData.EntityCode      == _entityCode &&
+        #                        tabData.PeriodStart     == _forPeriod &&
+        #                        tabData.Category        == strCategory &&
+        #                        tabData.AccountNum      != tabEntity.ExchAdjAccountNum &&
+        #  //                    tabLedgerTable.Type     == 'IS' &&
+        #                        tabLedgerTable.IsHeading  == NoYes::No &&
+        #                        tabLedgerTable.IsTotal  == NoYes::No
+        #        {
+        #
+        #             row ++;
+        #            if (row mod 10 == 0)
+        #            {
+        #                progress.setText(strfmt("Calculating translation adjusment amount : %1", row));
+        #                progress.setTotal(row, 1);
+        #            }
+        #
+        #            if (tabData.AmountMST == 0)
+        #                continue;
+        #
+        #            tabNewData.initValue();
+        #            tabNewData.Category     = strCategory; //Assign new category
+        #            tabNewData.AccountNum   = tabEntity.ExchAdjAccountNum; // Use Entity Exch Adj Account
+        #            tabNewData.CurrencyCode = tabEntity.CurrencyCode;
+        #            tabNewData.EntityCode   = tabEntity.EntityCode;
+        #            tabNewData.ScenarioCode = tabData.ScenarioCode;
+        #            tabNewData.TransDate    = tabPeriod.PeriodEnd;
+        #            tabNewData.PeriodStart  = _forPeriod;
+        #            tabNewData.CostCenter   = tabData.CostCenter;
+        #            tabNewData.Department   = tabData.Department;
+        #            tabNewData.Purpose      = tabData.Purpose;
+        #            tabNewData.Amount       = 0;
+        #            tabNewData.AmountMST    = tabData.AmountMST * -1;
+        #
+        #            tabnewData.doInsert();
+        #
+        #
+        #        }
+        #
+        #       //Update EntityPeriod record
+        #        tabEntityPeriod = FIN_GroupEntityPeriod::find(_entityCode,endMth(_forPeriod),true);
+        #        if (tabEntityPeriod)
+        #        {
+        #            tabEntityPeriod.HasForex = NoYes::Yes;
+        #            tabEntityPeriod.update();
+        #        }
+        #
+        #        ttscommit;
+        #        endlengthyoperation();
+        #        progress.kill();
+        #
+        #
+        #
+        #    }// end try
+        #    catch
+        #    {
+        #        throw error('Error doing exchange rate translation!');
+        #
+        #    }
+        #
+        #}
+      ENDSOURCE
+      SOURCE #find
+        #static FIN_GroupEntities find(FIN_EntityCode entityCode ,
+        #                             boolean         _forUpdate = false)
+        #{
+        #    FIN_GroupEntities  fin_GroupEntities;
+        #
+        #    if (entityCode)
+        #    {
+        #        fin_GroupEntities.selectForUpdate(_forUpdate);
+        #
+        #        select firstonly *
+        #            from fin_GroupEntities
+        #                where fin_GroupEntities.entityCode == entityCode;
+        #    }
+        #
+        #    return fin_GroupEntities;
+        #}
+      ENDSOURCE
+    ENDMETHODS
+  ENDTABLE
