@@ -111,6 +111,7 @@ Main entries:
 - `FIN_GroupEntityPeriod`: per-entity period state. Provides lock/unlock by user/admin, status update, and bulk create/update methods from entity or period setup.
 - `FIN_GroupEntityDataSet`: dataset/query setup and main import engine. Also resolves dataset target tables, builds maps, deletes existing data, tracks latest locked date, and updates executed timestamps.
 - `FIN_GroupEntityDataSetMap`: maps query fields/defaults to target fields. `initValue` and `find` support setup.
+- `FIN_GroupEntityBatchJobs`: maps an entity/dataset to the currently configured AX batch job that refreshes that entity's data. It stores `AllowUserTrigger`, `BatchId`, and `BatchJobId` so a batch listener can execute the correct existing batch job when a user-initiated refresh is allowed. This does not replace `FIN_GroupEntityDataSet`.
 - `FIN_GroupEntityHistory`: tracks time-bound changes to entity attributes, such as base currency changes. During extraction/reporting, rows that fall inside a history period can be marked with a different entity code so one legal entity can be distinguished across historical reporting bases, for example `CompA` and `CompA_ZAR`.
 - `FIN_GroupDataSource`: external source metadata and helpers for copy, lookup, password access, and ADO test execution.
 - `FIN_GroupDataSourcePassword`: stores password per AOS/entity/data source.
@@ -121,6 +122,7 @@ Main entries:
 - `FIN_GroupInventoryData`: inventory fact table with import/delete/lock validation similar to ledger data.
 - `FIN_GroupLedgerMapping` and `FIN_GroupLedgerMapHistory`: map account numbers across entities and preserve mapping history.
 - `FIN_GroupRowSet`, `FIN_GroupRowLine`, `FIN_GroupRowLink`, `FIN_GroupRowMapping`: reporting row structure and row/account mapping.
+- `FIN_GroupScheduleTemplate`: reminder/deadline notification template setup, including enabled flag and first/second reminder day offsets.
 - `FIN_GroupExchangeRates` and `FIN_GroupExchLedgerAccRates`: period exchange rates, including account-specific exchange adjustment rates.
 - `FIN_GroupEntityLog`: entity/data import/delete/lock/activity audit log with typed events from `FIN_LogEntryType`.
 - `FIN_GroupUserLog`: user action audit log. It also receives actions from external systems, which are outside the current XPO context and need separate documentation later.
