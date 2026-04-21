@@ -46,6 +46,22 @@ The extractor was adjusted during the first pass so it defaults to this project'
 5. `FIN_GroupEntityDataSet::loadData_bulk` finds the active dataset setup, optionally deletes existing data for the selected entity/dataset/date range, opens an external SQL connection, executes the configured query, maps each returned row into the dataset target table, inserts the records, logs the import, and reports elapsed time/record count.
 6. Locks in `FIN_GroupEntityPeriod` and data tables prevent changing reported/closed data.
 
+## External Reporting Architecture
+
+Detailed frontend/backend context is captured in `docs/external-systems-context.md`.
+
+The AX application is the central group reporting data store and the maintenance/admin interface used by group accountants. Local company users do not access AX directly. Their reporting workflow, and much of the group accountant/manager reporting workflow, is through the Finstone Group Reporting Excel Add-in.
+
+External architecture summary:
+
+- Excel Task Pane Add-in: Vue 3 + TypeScript frontend running in Excel.
+- Node middleware API: Express/TypeScript server used by the add-in frontend.
+- Finstone backend API: .NET service that talks to the AX SQL database.
+- SQL reporting layer: SQL Server 2008-compatible views, table-valued functions, and stored procedures do much of the heavy mapping/reporting work.
+- Active SQL view naming uses `GR_*` for v2 objects. Legacy `BI_*` views remain for older/direct Excel usage.
+- `GR_SEC_DomainUser_Entity` is the row-level security gate for direct SQL access. The backend API service account can see all data and is expected to filter by JWT/user context in code.
+- Main API output views include `GR_OUT_GL_GroupData`, `GR_OUT_Invent_GroupData`, and `GR_OUT_RowSet_Data`.
+
 ## Ledger Structures, Mappings, And Row Sets
 
 Each real company keeps its native GL structure in `FIN_GroupLedgerTable`. The design does not require local companies to adopt a group chart of accounts.
