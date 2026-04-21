@@ -34,8 +34,8 @@ The extractor was adjusted during the first pass so it defaults to this project'
 - Adjustments: manual/imported consolidation adjustment data in `FIN_GroupLedgerAdjustmentData`; these become `ADJ` scenario entries.
 - Inventory facts: operational inventory reporting data in `FIN_GroupInventoryData`, with a similar entity/period/category/dimension model plus product/inventory detail fields.
 - Row set: reporting row definitions and account-to-row mappings in `FIN_GroupRowSet`, `FIN_GroupRowLine`, `FIN_GroupRowLink`, and `FIN_GroupRowMapping`.
-- Excel templates: stored template blobs and mapping metadata in `FIN_GroupExcelTemplates`, `FIN_GroupExcelReport`, and `FIN_GroupExcelReportMapping`.
-- User access: user setup and entity assignment in `FIN_GroupUsers`, `FIN_GroupUserEntity`, `FIN_GroupUserPositions`, and audit log `FIN_GroupUserLog`.
+- Excel templates: Excel report templates stored as blob data in `FIN_GroupExcelTemplates`, used by the Group Reporting Excel Add-in. `FIN_GroupExcelReport` and `FIN_GroupExcelReportMapping` hold report/mapping metadata.
+- User access: user setup and entity assignment in `FIN_GroupUsers`, `FIN_GroupUserEntity`, `FIN_GroupUserPositions`, and user action audit log `FIN_GroupUserLog`.
 
 ## Main Process Flow
 
@@ -111,17 +111,19 @@ Main entries:
 - `FIN_GroupEntityPeriod`: per-entity period state. Provides lock/unlock by user/admin, status update, and bulk create/update methods from entity or period setup.
 - `FIN_GroupEntityDataSet`: dataset/query setup and main import engine. Also resolves dataset target tables, builds maps, deletes existing data, tracks latest locked date, and updates executed timestamps.
 - `FIN_GroupEntityDataSetMap`: maps query fields/defaults to target fields. `initValue` and `find` support setup.
+- `FIN_GroupEntityHistory`: tracks time-bound changes to entity attributes, such as base currency changes. During extraction/reporting, rows that fall inside a history period can be marked with a different entity code so one legal entity can be distinguished across historical reporting bases, for example `CompA` and `CompA_ZAR`.
 - `FIN_GroupDataSource`: external source metadata and helpers for copy, lookup, password access, and ADO test execution.
 - `FIN_GroupDataSourcePassword`: stores password per AOS/entity/data source.
 - `FIN_GroupLedgerTable`: group ledger account setup, lookup, import helpers, and balance/movement calculations.
 - `FIN_GroupLedgerData`: ledger fact table. Builds account dimension key, auto-creates missing accounts on insert, and validates locked/closed records.
 - `FIN_GroupLedgerAdjustmentData`: adjustment import/staging table with validation, import, conversion, and delete-in-period logic.
-- `FIN_GroupLedgerImportData`: ledger import staging table with conversion logic.
+- `FIN_GroupLedgerImportData`: legacy ledger import staging table with conversion logic. Current imports go directly into `FIN_GroupLedgerData`.
 - `FIN_GroupInventoryData`: inventory fact table with import/delete/lock validation similar to ledger data.
 - `FIN_GroupLedgerMapping` and `FIN_GroupLedgerMapHistory`: map account numbers across entities and preserve mapping history.
 - `FIN_GroupRowSet`, `FIN_GroupRowLine`, `FIN_GroupRowLink`, `FIN_GroupRowMapping`: reporting row structure and row/account mapping.
 - `FIN_GroupExchangeRates` and `FIN_GroupExchLedgerAccRates`: period exchange rates, including account-specific exchange adjustment rates.
-- `FIN_GroupEntityLog`: import/delete/lock/activity log with typed events from `FIN_LogEntryType`.
+- `FIN_GroupEntityLog`: entity/data import/delete/lock/activity audit log with typed events from `FIN_LogEntryType`.
+- `FIN_GroupUserLog`: user action audit log. It also receives actions from external systems, which are outside the current XPO context and need separate documentation later.
 
 ## Key Forms
 
@@ -135,7 +137,7 @@ Main entries:
 - `FIN_RowsSets`: row set, row line, row link, and row mapping setup.
 - `FIN_GroupGeneral`: general setup for categories, scenarios, periods, exchange rates, and user positions.
 - `FIN_GroupUsers`, `FIN_UserMap`: user master and user-to-entity assignment.
-- `FIN_GroupExcelTemplates`: Excel template storage/maintenance.
+- `FIN_GroupExcelTemplates`: Excel template blob storage/maintenance for the Group Reporting Excel Add-in.
 
 ## Enums And Types
 
@@ -179,6 +181,7 @@ Month-end usage model:
 - Query date tokens are literal `<STARTDATE>` and `<ENDDATE>`.
 - `FIN_GroupEntityDataSet::loadData_bulk` uses a single transaction around the record insert loop.
 - Batch data import only imports `FIN_DataSet::LedgerData`.
+- Current ledger data import writes directly to `FIN_GroupLedgerData`; `FIN_GroupLedgerImportData` is legacy staging and should not be treated as the active import path.
 - The batch start date is max of the suggested period start and one day after `latest_LockedDate`.
 - Several hard-coded scenario/category values appear in business rules: `ACT`, `ADJ`, `OBA`, `CLS`, and `MAIN`.
 - `FIN_GroupLedgerData.insert` creates missing ledger accounts with name `NEW FROM IMPORT!! PLEASE UPDATE!`.
